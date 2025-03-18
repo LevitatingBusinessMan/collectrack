@@ -95,12 +95,17 @@ class Instance
     @plugin = plugin
   end
 
-  def to_s
+  def dir
     "#{@plugin.name}" + (@name ? "-#{@name}" : "")
   end
+  alias to_s dir
 
   def link
-    File.join(@plugin.link, to_s)
+    File.join(@plugin.link, dir)
+  end
+
+  def path
+    File.join(@host.path, dir)
   end
 
 end
