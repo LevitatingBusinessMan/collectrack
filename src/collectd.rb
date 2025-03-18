@@ -85,8 +85,8 @@ class Plugin
   alias_method :has_instance?, :has_key?
 
   def yaml
-    if Dir["*", base: Config.plugin_config_dir].include? "#{self}.yaml"
-      YAML.load_file File.join(Config.plugin_config_dir, "#{self}.yaml"), symbolize_names: true
+    @yaml || if Dir["*", base: Config.plugin_config_dir].include? "#{self}.yaml"
+      @yaml = YAML.load_file File.join(Config.plugin_config_dir, "#{self}.yaml"), symbolize_names: true
     end
   end
 end
