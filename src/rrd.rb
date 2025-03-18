@@ -46,3 +46,14 @@ class Instance
     ]
   end
 end
+
+class Host
+  def load
+    if self["load"]&.[]("load")
+      instance = self["load"]["load"]
+      rrd = File.join(instance.path, instance.files.first)
+      info = RRD.info(rrd)
+      [info["ds[shortterm].last_ds"]&.to_f, info["ds[midterm].last_ds"]&.to_f, info["ds[longterm].last_ds"]&.to_f]
+    end
+  end
+end

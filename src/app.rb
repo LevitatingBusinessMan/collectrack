@@ -45,6 +45,17 @@ get "/:host/:plugin/:instance" do
   slim :instance
 end
 
+get "/:host/:plugin/:instance/:file" do
+  @host = Host.new(params[:host])
+  pass if !@host.has_plugin? params[:plugin]
+  @plugin = @host[params[:plugin]]
+  pass if !@plugin.has_instance? params[:instance]
+  @instance = @plugin[params[:instance]]
+  # pass if the file is missing
+  slim :file
+end
+
+
 not_found do
   slim "h1 #{request.path} was not found"
 end

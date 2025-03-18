@@ -34,3 +34,12 @@ class Instance
     self.graph.map { "<img src=\"data:image;base64,#{it}\"/>".html_safe }
   end
 end
+
+class Host
+  def load_spans
+    load = self.load
+    if load
+      load.map { "<span id=\"load\">#{sprintf '%.2f', it}</span>" }.join.html_safe
+    end
+  end
+end

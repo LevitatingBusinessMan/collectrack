@@ -19,3 +19,7 @@ ul#instances {
   padding-left: 0;
   margin-bottom: 10px;
 }
+
+span#load {
+  margin-right: 10px;
+}

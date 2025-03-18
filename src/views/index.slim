@@ -1,4 +1,4 @@
 h2 Hosts
 ul
   - for host in Config.hosts
-    li#host: a[href=host.link title=host.plugins.join(", ")]= host
+    li#host #{host.a} #{host.load_spans}

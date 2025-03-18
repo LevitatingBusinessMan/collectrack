@@ -8,7 +8,7 @@ ul#instances
     summary YAML
     pre=@plugin.yaml
 - else
-  p this plugin is not setup to be graphed
+  p this plugin has no configuration
 
 - for instance in @plugin.instances
   = instance.graph_imgs.join.html_safe
