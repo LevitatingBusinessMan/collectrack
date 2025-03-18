@@ -1,0 +1,10 @@
+---
+title: Load
+vertical_label: Load
+lines:
+  - legend: 1m
+    ds: shortterm
+  - legend: 5m
+    ds: midterm
+  - legend: 15m
+    ds: longterm

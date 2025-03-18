@@ -24,6 +24,11 @@ span#load {
   margin-right: 10px;
 }
 
+li#host a {
+  width: 200px;
+  display: inline-block;
+}
+
 pre#code {
   /* background-color: DarkSlateGray; */
   color: crimson;

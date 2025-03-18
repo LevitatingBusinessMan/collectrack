@@ -1,4 +1,4 @@
-h2 #{@host.a}/#{@plugin}
+h2 <a href="/">.</a>/#{@host.a}/#{@plugin}
 ul#instances
   - for instance in @plugin.instances.sort_by { it.name.to_i || it.name }
     li#instance: a[href=instance.link]= instance

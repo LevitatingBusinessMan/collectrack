@@ -1,2 +1,7 @@
-base_dir = "/var/lib/collectd"
+base_dir = "/tmp/x18"
 plugin_config_dir = "./plugins"
+
+[colors]
+text = "DarkSlateGray"
+body = "WhiteSmoke"
+link = "crimson"
