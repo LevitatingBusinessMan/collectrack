@@ -86,7 +86,8 @@ class Plugin
 
   def yaml
     @yaml || if File.exist? yaml_path
-      @yaml = YAML.load_file yaml_path, symbolize_names: true
+      @yaml = YAML.load_stream File.read(yaml_path), filename: yaml_path, symbolize_names: true
+      # in case I regret splitting the documents: @yaml = YAML.load_file yaml_path, symbolize_names: true
     end
   end
 

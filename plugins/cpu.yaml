@@ -1,4 +1,4 @@
--
-  title: CPU usage
-  opts: ["-upper-limit=100"]
-  vertical_label: Jiffies
+---
+title: CPU usage
+opts: ["-upper-limit=100"]
+vertical_label: Jiffies
