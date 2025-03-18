@@ -1,3 +1,9 @@
 h2 #{@host}/#{@plugin}/#{@instance}
 
 p imagine graphs for this instance '#{@instance}' of the '#{@plugin}' plugin type
+
+details
+  summary Files
+  ul
+    - for file in @instance.files
+      li#file= file

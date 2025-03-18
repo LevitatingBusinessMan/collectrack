@@ -2,7 +2,7 @@ require 'sinatra'
 require 'slim'
 require 'slim/include'
 require './src/config.rb'
-require './src/rrd.rb'
+require './src/collectd.rb'
 require './src/rack_lint_workaround.rb'
 
 require 'rack-mini-profiler' if settings.development? 

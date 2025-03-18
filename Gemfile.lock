@@ -46,9 +46,9 @@ GEM
     mustermann (3.0.3)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.7.4)
-    parslet (2.0.0)
     puma (6.6.0)
       nio4r (~> 2.0)
+    racc (1.8.1)
     rack (3.1.12)
     rack-mini-profiler (3.3.1)
       rack (>= 1.2.0)
@@ -83,8 +83,7 @@ GEM
     temple (0.10.3)
     tilt (2.6.0)
     timeout (0.4.3)
-    toml (0.3.0)
-      parslet (>= 1.8.0, < 3.0.0)
+    tomlrb (2.0.3)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uri (1.0.3)
@@ -96,6 +95,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord (~> 8.0)
   puma (~> 6.6)
+  racc (~> 1.8)
   rack-mini-profiler (~> 3.3)
   rackup (~> 2.2)
   rerun!
@@ -103,7 +103,7 @@ DEPENDENCIES
   slim (~> 5.2)
   sqlite3 (~> 2.6)
   stackprof (~> 0.2.27)
-  toml (~> 0.3.0)
+  tomlrb (~> 2.0)
 
 BUNDLED WITH
    2.6.2

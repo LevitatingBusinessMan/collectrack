@@ -41,17 +41,18 @@ class Plugin
 
   def self.read_plugins host
     plugins = {}
-    Dir.each_child(host.path).each do |plugindir|
+    Dir['*', base: host.path].each do |plugindir|
       name, instance = Plugin.split_dirname plugindir
       plugins[name] ||= []
       plugins[name] << instance
     end
-    
+
     plugins.map do |p,i|
       Plugin.new host, p, i
     end
   end
 
+  # given a name like disk-dma-0 returns ["disk", "dma-0"]
   def self.split_dirname dirname
     /^(?<name>\w+)(-(?<variant>[\w-]+))?$/.match(dirname).captures
   end
@@ -106,6 +107,10 @@ class Instance
 
   def path
     File.join(@host.path, dir)
+  end
+
+  def files
+    Dir['*.rrd', base: path]
   end
 
 end
