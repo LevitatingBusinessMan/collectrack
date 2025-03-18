@@ -1,2 +1,4 @@
-title: CPU usage
-opts: ["-upper-limit=100"]
+-
+  title: CPU usage
+  opts: ["-upper-limit=100"]
+  vertical_label: Jiffies

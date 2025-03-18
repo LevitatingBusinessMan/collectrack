@@ -23,3 +23,9 @@ ul#instances {
 span#load {
   margin-right: 10px;
 }
+
+pre#code {
+  /* background-color: DarkSlateGray; */
+  color: crimson;
+  font-size: 12pt;
+}

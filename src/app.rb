@@ -3,6 +3,7 @@ $: << "./libs"
 require "sinatra"
 require "slim"
 require "slim/include"
+require "pp"
 require "./src/config"
 require "./src/collectd"
 require "./src/rack_lint_workaround"
@@ -54,7 +55,6 @@ get "/:host/:plugin/:instance/:file" do
   # pass if the file is missing
   slim :file
 end
-
 
 not_found do
   slim "h1 #{request.path} was not found"

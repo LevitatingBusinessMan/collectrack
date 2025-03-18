@@ -17,7 +17,8 @@ class Instance
     r, w = IO.pipe
     out = []
     # raise "Graphing #{@plugin} is not yet supported" if not @plugin.yaml
-    for graph in @plugin.yaml || self.default_plugin_conf
+    for graph in @plugin.yaml || default_plugin_conf
+      puts self.files
       args = [
         "/dev/fd/#{w.fileno}",
         "--start=end-1h",
@@ -27,9 +28,10 @@ class Instance
         "LINE:a#FF0000:value",
         "--width=400"
       ]
+      args << "--vertical-label=#{graph[:vertical_label]}" if graph[:vertical_label]
       $log.debug args
-      RRD.graph *args
-      out << Base64.encode64(r.read_nonblock(32768))  
+      RRD.graph(*args)
+      out << Base64.encode64(r.read_nonblock(32768))
     end
     r.close
     w.close
@@ -39,7 +41,7 @@ class Instance
   # like the yaml config but a default
   def default_plugin_conf
     # per default, we attempt to make a single graph plotting the DS name 'value'
-    [ 
+    [
       {
         title: self
       }

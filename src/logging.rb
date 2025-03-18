@@ -1,2 +1,2 @@
-require 'logger'
-$log = Logger.new STDERR
+require "logger"
+$log = Logger.new $stderr

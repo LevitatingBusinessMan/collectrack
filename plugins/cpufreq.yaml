@@ -1,3 +1,4 @@
 -
-  title: CPU-#{self.name} Frequency
+  title: CPU-#{self.name} frequency
   opts: ["-u", 100]
+  vertical_label: Hz

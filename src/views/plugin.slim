@@ -1,14 +1,14 @@
 h2 #{@host.a}/#{@plugin}
 ul#instances
-  - for instance in @plugin.instances
+  - for instance in @plugin.instances.sort_by { it.name.to_i || it.name }
     li#instance: a[href=instance.link]= instance
+
+- for instance in @plugin.instances
+  = instance.graph_imgs.join.html_safe
 
 - if @plugin.yaml
   details
     summary YAML
-    pre=@plugin.yaml
+    pre#code= "##{@plugin.yaml_path}\n#{File.read(@plugin.yaml_path)}"
 - else
   p this plugin has no configuration
-
-- for instance in @plugin.instances
-  = instance.graph_imgs.join.html_safe
