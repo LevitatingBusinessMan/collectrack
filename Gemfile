@@ -14,7 +14,6 @@ gem "sqlite3", "~> 2.6"
 
 gem "slim", "~> 5.2"
 
-
 gem "rerun", git: "https://github.com/alexch/rerun.git", :group => :development
 
 gem "rack-mini-profiler", "~> 3.3", :group => :development

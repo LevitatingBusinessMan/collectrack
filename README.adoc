@@ -9,5 +9,5 @@ CollectRack is a graphing frontend for https://oss.oetiker.ch/rrdtool/[.rrd] fil
 ==== Development
 
 ```
-bundle exec rerun -- rackup -p 3344
+bin/rerun -p "src/*.rb" -- bin/rackup -p 3344
 ```
