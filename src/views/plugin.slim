@@ -1,5 +1,5 @@
 h2 #{@host.a}/#{@plugin}
-ul
+ul#instances
   - for instance in @plugin.instances
     li#instance: a[href=instance.link]= instance
 
@@ -9,8 +9,6 @@ ul
     pre=@plugin.yaml
 - else
   p this plugin is not setup to be graphed
-
-p imagine many graphs generated for all instances of this plugin on this host
 
 - for instance in @plugin.instances
   = instance.graph_imgs.join.html_safe

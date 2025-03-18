@@ -9,3 +9,13 @@ a {
 body {
   background-color: WhiteSmoke;
 }
+
+li#instance {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+ul#instances {
+  padding-left: 0;
+  margin-bottom: 10px;
+}
