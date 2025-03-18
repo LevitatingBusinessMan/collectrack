@@ -27,3 +27,5 @@ gem "racc", "~> 1.8"
 gem "standardrb", "~> 1.0", group: :development
 
 gem "rake", "~> 13.2"
+
+gem "ruby-lsp", "~> 0.23.12", :group => :development

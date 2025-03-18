@@ -1,2 +1,3 @@
-title: CPU Frequency
-type: stacked
+-
+  title: CPU-#{self.name} Frequency
+  opts: ["-u", 100]

@@ -28,3 +28,9 @@ class Host; include AHref; end
 class Plugin; include AHref; end
 
 class Instance; include AHref; end
+
+class Instance
+  def graph_imgs
+    self.graph.map { "<img src=\"data:image;base64,#{it}\"/>".html_safe }
+  end
+end

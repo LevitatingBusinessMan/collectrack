@@ -8,7 +8,4 @@ details
     - for file in @instance.files
       li#file= file
 
-- if @plugin.yaml
-  = @instance.graph
-- else 
-  p this plugin is not yet setup to be graphed
+=@instance.graph_imgs.join.html_safe

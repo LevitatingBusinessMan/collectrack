@@ -1,0 +1,2 @@
+title: CPU usage
+opts: ["-upper-limit=100"]

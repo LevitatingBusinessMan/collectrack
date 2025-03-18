@@ -86,7 +86,7 @@ class Plugin
 
   def yaml
     if Dir["*", base: Config.plugin_config_dir].include? "#{self}.yaml"
-      YAML.load_file File.join(Config.plugin_config_dir, "#{self}.yaml")
+      YAML.load_file File.join(Config.plugin_config_dir, "#{self}.yaml"), symbolize_names: true
     end
   end
 end
@@ -101,7 +101,7 @@ class Instance
   end
 
   def dir
-    @plugin.name + (@name ? "-#{@name}" : "")
+    @plugin.name + ("-#{@name}" if @name).to_s
   end
   alias_method :to_s, :dir
 
