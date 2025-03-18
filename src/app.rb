@@ -3,13 +3,18 @@ $: << './libs'
 require 'sinatra'
 require 'slim'
 require 'slim/include'
-require './src/config.rb'
-require './src/collectd.rb'
-require './src/rack_lint_workaround.rb'
+require './src/config'
+require './src/collectd'
+require './src/rack_lint_workaround'
+require './src/rrd'
+require './src/view_helpers'
+
 
 require 'rack-mini-profiler' if settings.development? 
 require 'stackprof' if settings.development? 
 use Rack::MiniProfiler if settings.development? 
+
+Slim::Engine.options[:use_html_safe] = true
 
 Config.init
 

@@ -11,8 +11,11 @@ class Config
     @@toml[:base_dir]
   end
 
+  def self.plugin_config_dir
+    @@toml[:plugin_config_dir]
+  end
+
   def self.hosts
-    p Dir.each_child(base_dir).to_a
     Dir.each_child(base_dir).map &Host.method(:new)
   end
 

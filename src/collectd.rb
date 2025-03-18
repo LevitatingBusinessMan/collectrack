@@ -85,6 +85,12 @@ class Plugin
   end
   alias has_instance? has_key?
 
+  def yaml
+    if Dir['*', base: Config.plugin_config_dir].include? "#{self}.yaml"
+      YAML.load_file File.join(Config.plugin_config_dir, "#{self}.yaml")
+    end
+  end
+
 end
 
 class Instance

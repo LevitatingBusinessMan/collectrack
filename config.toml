@@ -1,1 +1,2 @@
 base_dir = "/var/lib/collectd"
+plugin_config_dir = "./plugins"

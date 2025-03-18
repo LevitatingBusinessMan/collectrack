@@ -1,4 +1,4 @@
-h2 #{@host}/#{@plugin}/#{@instance}
+h2 #{@host.a}/#{@plugin.a}/#{@instance}
 
 p imagine graphs for this instance '#{@instance}' of the '#{@plugin}' plugin type
 
@@ -7,3 +7,8 @@ details
   ul
     - for file in @instance.files
       li#file= file
+
+- if @plugin.yaml
+  = @instance.graph
+- else 
+  p this plugin is not yet setup to be graphed
