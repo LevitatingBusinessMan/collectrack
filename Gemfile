@@ -14,12 +14,16 @@ gem "sqlite3", "~> 2.6"
 
 gem "slim", "~> 5.2"
 
-gem "rerun", git: "https://github.com/alexch/rerun.git", :group => :development
+gem "rerun", git: "https://github.com/alexch/rerun.git", group: :development
 
-gem "rack-mini-profiler", "~> 3.3", :group => :development
+gem "rack-mini-profiler", "~> 3.3", group: :development
 
 gem "stackprof", "~> 0.2.27"
 
 gem "tomlrb", "~> 2.0"
 
 gem "racc", "~> 1.8"
+
+gem "standardrb", "~> 1.0", group: :development
+
+gem "rake", "~> 13.2"

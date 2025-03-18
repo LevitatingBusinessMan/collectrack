@@ -1,10 +1,10 @@
-require './src/collectd.rb'
-require 'tomlrb'
+require "./src/collectd"
+require "tomlrb"
 
 class Config
   def self.init
-    @@toml = Tomlrb.load_file('config.toml', symbolize_keys: true)
-    self.freeze
+    @@toml = Tomlrb.load_file("config.toml", symbolize_keys: true)
+    freeze
   end
 
   def self.base_dir
@@ -16,7 +16,6 @@ class Config
   end
 
   def self.hosts
-    Dir.each_child(base_dir).map &Host.method(:new)
+    Dir.each_child(base_dir).map(&Host.method(:new))
   end
-
 end

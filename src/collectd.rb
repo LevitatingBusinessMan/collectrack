@@ -26,14 +26,13 @@ class Host
   end
 
   def [] key
-    plugins.find do it.to_s == key end
+    plugins.find { it.to_s == key }
   end
 
   def has_key? key
-    plugins.any? do it.to_s == key end
+    plugins.any? { it.to_s == key }
   end
-  alias has_plugin? has_key?
-
+  alias_method :has_plugin?, :has_key?
 end
 
 class Plugin
@@ -41,26 +40,26 @@ class Plugin
 
   def self.read_plugins host
     plugins = {}
-    Dir['*', base: host.path].each do |plugindir|
+    Dir["*", base: host.path].each do |plugindir|
       name, instance = Plugin.split_dirname plugindir
       plugins[name] ||= []
       plugins[name] << instance
     end
 
-    plugins.map do |p,i|
+    plugins.map do |p, i|
       Plugin.new host, p, i
     end
   end
 
   # given a name like disk-dma-0 returns ["disk", "dma-0"]
   def self.split_dirname dirname
-    /^(?<name>\w+)(-(?<variant>[\w-]+))?$/.match(dirname).captures
+    /^(?<name>\w+)(?:-(?<variant>[\w-]+))?$/.match(dirname).captures
   end
 
   def initialize host, name, instances
     @name = name
     @host = host
-    @instances = instances.map do Instance.new self, it end
+    @instances = instances.map { Instance.new self, it }
     # in the future I want the instances to be a superclass of this class
     # and the ability to do something like
     # @host["cpu"]["0"]
@@ -77,20 +76,19 @@ class Plugin
   end
 
   def [] key
-    instances.find do it.to_s == key end
+    instances.find { it.to_s == key }
   end
 
   def has_key? key
-    instances.any? do it.to_s == key end
+    instances.any? { it.to_s == key }
   end
-  alias has_instance? has_key?
+  alias_method :has_instance?, :has_key?
 
   def yaml
-    if Dir['*', base: Config.plugin_config_dir].include? "#{self}.yaml"
+    if Dir["*", base: Config.plugin_config_dir].include? "#{self}.yaml"
       YAML.load_file File.join(Config.plugin_config_dir, "#{self}.yaml")
     end
   end
-
 end
 
 class Instance
@@ -103,9 +101,9 @@ class Instance
   end
 
   def dir
-    "#{@plugin.name}" + (@name ? "-#{@name}" : "")
+    @plugin.name + (@name ? "-#{@name}" : "")
   end
-  alias to_s dir
+  alias_method :to_s, :dir
 
   def link
     File.join(@plugin.link, dir)
@@ -116,7 +114,6 @@ class Instance
   end
 
   def files
-    Dir['*.rrd', base: path]
+    Dir["*.rrd", base: path]
   end
-
 end

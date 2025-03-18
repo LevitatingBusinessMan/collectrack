@@ -1,7 +1,7 @@
-require 'RRD'
-require 'yaml'
-require './src/collectd.rb'
-require './src/config.rb'
+require "RRD"
+require "yaml"
+require "./src/collectd"
+require "./src/config"
 
 class Instance
   def graph
