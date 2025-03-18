@@ -1,0 +1,4 @@
+h2 #{@host.name}
+ul
+  - for plugin in @host.plugins
+    li#plugin: a[href=plugin.link title=plugin.instances.join(", ")]= plugin

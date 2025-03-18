@@ -1,0 +1,8 @@
+doctype html
+html
+  head
+    title Collect Rack #{@host} #{@plugin} #{@instance}
+    style = File.read "./src/css/stylesheet.css"
+  body
+h1 Welcome to <a href="/">Collect Rack</a>
+== yield

@@ -1,0 +1,106 @@
+class Host
+  attr_reader :name
+
+  def initialize host
+    @name = host
+  end
+
+  def plugins
+    @plugins ||= Plugin.read_plugins self
+  end
+
+  def exist?
+    File.exist? File.join(Config.base_dir, @name)
+  end
+
+  def path
+    File.join(Config.base_dir, @name)
+  end
+
+  def link
+    "/#{@name}"
+  end
+
+  def to_s
+    @name
+  end
+
+  def [] key
+    plugins.find do it.to_s == key end
+  end
+
+  def has_key? key
+    plugins.any? do it.to_s == key end
+  end
+  alias has_plugin? has_key?
+
+end
+
+class Plugin
+  attr_reader :name, :instances, :host
+
+  def self.read_plugins host
+    plugins = {}
+    Dir.each_child(host.path).each do |plugindir|
+      name, instance = Plugin.split_dirname plugindir
+      plugins[name] ||= []
+      plugins[name] << instance
+    end
+    
+    plugins.map do |p,i|
+      Plugin.new host, p, i
+    end
+  end
+
+  def self.split_dirname dirname
+    /^(?<name>\w+)(-(?<variant>[\w-]+))?$/.match(dirname).captures
+  end
+
+  def initialize host, name, instances
+    @name = name
+    @host = host
+    @instances = instances.map do Instance.new self, it end
+    # in the future I want the instances to be a superclass of this class
+    # and the ability to do something like
+    # @host["cpu"]["0"]
+    # which would return an Instance superclass of Plugin with .to_s as cpu-0
+    # or @host["memory"]["memory"] for plugins with no instances
+  end
+
+  def to_s
+    @name
+  end
+
+  def link
+    File.join(@host.link, @name)
+  end
+
+  def [] key
+    instances.find do it.to_s == key end
+  end
+
+  def has_key? key
+    instances.any? do it.to_s == key end
+  end
+  alias has_instance? has_key?
+
+end
+
+class Instance
+  attr_reader :name, :plugin, :host
+
+  def initialize plugin, instance_name
+    @name = instance_name
+    @host = plugin.host
+    @plugin = plugin
+  end
+
+  def to_s
+    "#{@plugin.name}" + (@name ? "-#{@name}" : "")
+  end
+
+  def link
+    File.join(@plugin.link, to_s)
+  end
+
+end

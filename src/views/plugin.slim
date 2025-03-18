@@ -1,0 +1,4 @@
+h2 #{@host}/#{@plugin}
+ul
+  - for instance in @plugin.instances
+    li#instance: a[href=instance.link]= instance
