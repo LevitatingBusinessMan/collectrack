@@ -1,3 +1,5 @@
+$: << './libs'
+
 require 'sinatra'
 require 'slim'
 require 'slim/include'
