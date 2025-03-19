@@ -1,19 +1,17 @@
 ---
 title: Interface Packets (#{@name})
 vertical_label: Packets/s
+file: if_packets
 lines:
   - ds: tx
-    file: if_packets
   - ds: rx
-    file: if_packets
     inverted: true
 
 ---
 title: Interface Traffic (#{@name})
 vertical_label: Bytes/s
+file: if_octets
 lines:
   - ds: tx
-    file: if_octets
   - ds: rx
-    file: if_octets
     inverted: true

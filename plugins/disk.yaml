@@ -1,25 +1,23 @@
 ---
 title: "Time spent doing I/O (#{self})"
 vertical_label: Milliseconds
+file: disk_io_time
 lines:
   - ds: io_time
     legend: IO time
-    file: disk_io_time
 ---
 title: Disk Traffic (#{@name})
 vertical_label: Bytes/s
+file: disk_octets
 lines:
   - ds: read
-    file: disk_octets
   - ds: write
-    file: disk_octets
     inverted: true
 ---
 title: Disk Operations (#{@name})
 vertical_label: Bytes/s
+file: disk_ops
 lines:
   - ds: read
-    file: disk_ops
   - ds: write
-    file: disk_ops
     inverted: true

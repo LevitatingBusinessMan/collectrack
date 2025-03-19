@@ -60,7 +60,7 @@ class Instance
 
         lineno = 0
         for line in graph[:lines]
-          filename = line[:file]&.+(".rrd") || ("#{@plugin}.rrd" if files.include? "#{@plugin}.rrd") || (files[0] if files.length == 1)
+          filename = line[:file]&.+(".rrd") || graph[:file]&.+(".rrd") || ("#{@plugin}.rrd" if files.include? "#{@plugin}.rrd") || (files[0] if files.length == 1)
 
           if not filename
             raise "Cannot find adequate file to draw value from"
