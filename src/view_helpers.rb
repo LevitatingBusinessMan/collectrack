@@ -37,6 +37,12 @@ class Instance
   end
 end
 
+class RRDFile
+  def graph_img options={}
+    "<img src=\"data:image;base64,#{graph(options)}\"/>".html_safe
+  end
+end
+
 class Host
   def load_spans
     load = self.load

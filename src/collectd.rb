@@ -98,12 +98,14 @@ class Plugin
 end
 
 class Instance
-  attr_reader :name, :plugin, :host
+  attr_reader :name, :plugin, :host, :files
 
   def initialize plugin, instance_name
     @name = instance_name
     @host = plugin.host
     @plugin = plugin
+    @files = Dir["*.rrd", base: path].map { RRDFile.new it, self }
+    @instance = self
   end
 
   def dir
@@ -119,9 +121,15 @@ class Instance
     File.join(@host.path, dir)
   end
 
-  def files
-    Dir["*.rrd", base: path].map { RRDFile.new it, self }
+  def [] key
+    files.find { it.to_s == key || it.chomp == key }
   end
+
+  def has_key? key
+    files.any? { it.to_s == key || it.chomp == key }
+  end
+  alias_method :has_file?, :has_key?
+
 end
 
 class RRDFile

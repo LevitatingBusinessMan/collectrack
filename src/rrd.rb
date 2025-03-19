@@ -40,78 +40,88 @@ module RRD
   # end
 end
 
+module Graphable
+  def graph_yaml yaml, options={}
+    r, w = IO.pipe
+
+    args = [
+      "/dev/fd/#{w.fileno}",
+      "--start=end-1h",
+      "--end=now",
+      "--title=#{evalstr yaml[:title]} on #{@host}",
+      "--width=#{options[:width] || 500}",
+      "--height=#{options[:height] || 150}"
+    ]
+    args << "--vertical-label=#{yaml[:vertical_label]}" if yaml[:vertical_label]
+
+    colors = Colors.new
+
+    if not yaml[:lines] and not yaml[:file]
+      raise "yaml received contains no lines or files"
+    end
+
+    # the yaml needs lines or file(s) (and a title)
+    lines = yaml[:lines] || @instance[yaml[:file]].default_lines
+
+    $log.debug yaml
+    $log.debug lines if not yaml[:lines]
+
+    lineno = 0
+    for line in lines
+      # if the line has no file, attempt a globally configured file, otherwise use a file with the name of the plugin, otherwise use the only file, otherwise error
+      filename = line[:file]&.+(".rrd") || yaml[:file]&.+(".rrd") || ("#{@plugin}.rrd" if files.map(&:to_s).include? "#{@plugin}.rrd") || (files[0] if files.length == 1)
+
+      if not filename
+        raise "Cannot find adequate file to draw value from"
+      end
+
+      file = File.join(@instance.path, filename)
+
+      if not File.exist? file
+        $log.warn "#{file} not found"
+        next
+      end
+
+      ds = line[:ds] || "value"
+      legend = line[:legend] || line[:ds] || filename.delete_prefix("#{@plugin}-").delete_suffix(".rrd")
+      color = line[:color] || colors.next_color
+      cf = line[:cf] || "AVERAGE"
+      thickness = line[:thickness] || 1
+
+      vname_in = "#{ds}#{lineno}"
+      vname_out = if line[:inverted] then "#{vname_in}_inv" else vname_in end
+
+      args << "DEF:#{vname_in}=#{file}:#{ds}:#{cf}"
+      args << "CDEF:#{vname_out}=#{vname_in},-1,*" if line[:inverted]
+      args << "LINE#{thickness}:#{vname_out}#{color}:#{legend}"
+      lineno += 1
+    end
+    args += yaml[:opts] if yaml[:opts]
+
+    $log.debug args
+    begin
+      RRD.graph(*args)
+    rescue Exception => ex
+      $log.warn ex.message
+      raise ex
+    end
+    out = r.read_nonblock(262144)
+    r.close
+    w.close
+    out
+  end
+end
+
 class Instance
+  include Graphable
+
   # return one or more graphs as base64
   def graph options={}
-    r, w = IO.pipe
     out = []
 
     for graph in @plugin.yaml || default_yaml
-      begin
-        args = [
-          "/dev/fd/#{w.fileno}",
-          "--start=end-1h",
-          "--end=now",
-          "--title=#{evalstr graph[:title]} on #{@host}",
-          "--width=#{options[:width] || 500}",
-          "--height=#{options[:height] || 150}"
-        ]
-        args << "--vertical-label=#{graph[:vertical_label]}" if graph[:vertical_label]
-
-        colors = Colors.new
-
-        if not graph[:lines] and not graph[:file]
-          raise "yaml received contains no lines or files"
-        end
-
-        # the yaml needs lines or file(s) (and a title)
-        lines = graph[:lines] || get_dss(graph[:file] + ".rrd").map { {
-          ds: it,
-          file: graph[:file]
-        } }
-
-        lineno = 0
-        for line in lines
-          filename = line[:file]&.+(".rrd") || graph[:file]&.+(".rrd") || ("#{@plugin}.rrd" if files.map(&:to_s).include? "#{@plugin}.rrd") || (files[0] if files.length == 1)
-
-          if not filename
-            raise "Cannot find adequate file to draw value from"
-          end
-
-          file = File.join(path, filename)
-
-          if not File.exist? file
-            $log.warn "#{file} not found"
-            next
-          end
-
-          ds = line[:ds] || "value"
-          legend = line[:legend] || line[:ds] || filename.delete_prefix("#{@plugin}-").delete_suffix(".rrd")
-          color = line[:color] || colors.next_color
-          cf = line[:cf] || "AVERAGE"
-          thickness = line[:thickness] || 1
-
-          vname_in = "#{ds}#{lineno}"
-          vname_out = if line[:inverted] then "#{vname_in}_inv" else vname_in end
-
-          args << "DEF:#{vname_in}=#{file}:#{ds}:#{cf}"
-          args << "CDEF:#{vname_out}=#{vname_in},-1,*" if line[:inverted]
-          args << "LINE#{thickness}:#{vname_out}#{color}:#{legend}"
-          lineno += 1
-        end
-      args += graph[:opts] if graph[:opts]
-
-      $log.debug args
-      RRD.graph(*args)
-      out << Base64.encode64(r.read_nonblock(262144))
-      rescue Exception => ex
-        $log.warn ex.message
-        raise ex
-        next
-      end
+      out << Base64.encode64(graph_yaml(graph, options))
     end
-    r.close
-    w.close
     out
   end
 
@@ -134,6 +144,8 @@ class Host
 end
 
 class RRDFile
+  include Graphable
+
   def info
     RRD.info path
   end
@@ -145,11 +157,19 @@ class RRDFile
   def default_yaml
     {
       title: "#{chomp} (#{@instance})",
-      lines: get_dss.map { |ds| {
-        ds: ds,
-        file: chomp
-      } }
+      file: chomp
     }
+  end
+
+  def default_lines
+    get_dss.map { {
+      ds: it,
+      file: chomp
+    } }
+  end
+
+  def graph options={}
+    Base64.encode64 graph_yaml(default_yaml, options)
   end
 
 end

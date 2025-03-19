@@ -3,4 +3,6 @@ ul.inline
   - for file in @instance.files
       li.inline = file.a
 
-pre#code = RRD.info(File.join(@instance.path, @file)).pretty_inspect
+= @file.graph_img
+
+pre#code = @file.info.pretty_inspect

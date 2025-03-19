@@ -74,8 +74,8 @@ get "/:host/:plugin/:instance/:file" do
   @plugin = @host[params[:plugin]]
   pass if !@plugin.has_instance? params[:instance]
   @instance = @plugin[params[:instance]]
-  pass if !@instance.files.map(&:to_s).include? params[:file]
-  @file = params[:file]
+  pass if !@instance.has_file? params[:file]
+  @file = @instance[params[:file]]
   slim :file
 end
 
