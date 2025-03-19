@@ -36,6 +36,8 @@ module RRD
   # READ_PIPE, WRITE_PIPE = IO.pipe
   # READ_PIPE.binmode
   # WRITE_PIPE.binmode
+  # class RRD.yaml
+  # end
 end
 
 class Instance
@@ -44,7 +46,7 @@ class Instance
     r, w = IO.pipe
     out = []
 
-    for graph in @plugin.yaml || default_plugin_conf
+    for graph in @plugin.yaml || default_yaml
       begin
         args = [
           "/dev/fd/#{w.fileno}",
@@ -114,20 +116,9 @@ class Instance
   end
 
   # like the yaml config but a default
-  def default_plugin_conf
+  def default_yaml
     # per default, we attempt to make a single graph plotting the DS name 'value' from each file
-    self.files.map { |file| {
-      title: "#{file.chomp(".rrd")} (#{self})",
-      lines: get_dss(file).map { |ds| {
-        ds: ds,
-        file: file.chomp(".rrd")
-      } }
-    } }
-  end
-
-  def get_dss filename
-    info = RRD.info File.join(path, filename)
-    info.keys.map { /^ds\[(\w+)\]/.match(it)&.[] 1 }.select(&:itself).uniq
+    self.files.map(&:default_yaml)
   end
 
 end
@@ -136,9 +127,30 @@ class Host
   def load
     if self["load"]&.[]("load")
       instance = self["load"]["load"]
-      rrd = File.join(instance.path, instance.files.first)
-      info = RRD.info(rrd)
+      info = instance.files.first.info
       [info["ds[shortterm].last_ds"]&.to_f, info["ds[midterm].last_ds"]&.to_f, info["ds[longterm].last_ds"]&.to_f]
     end
   end
 end
+
+class RRDFile
+  def info
+    RRD.info path
+  end
+
+  def get_dss
+    info.keys.map { /^ds\[(\w+)\]/.match(it)&.[] 1 }.select(&:itself).uniq
+  end
+
+  def default_yaml
+    {
+      title: "#{chomp} (#{@instance})",
+      lines: get_dss.map { |ds| {
+        ds: ds,
+        file: chomp
+      } }
+    }
+  end
+
+end
+

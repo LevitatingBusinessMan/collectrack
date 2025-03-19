@@ -1,6 +1,6 @@
 h2 <a href="/">.</a>/#{@host.a}/#{@plugin.a}/#{@instance.a}/#{@file}
 ul.inline
   - for file in @instance.files
-      li.inline: a[href=File.join(@instance.link, file)]= file
+      li.inline = file.a
 
 pre#code = RRD.info(File.join(@instance.path, @file)).pretty_inspect

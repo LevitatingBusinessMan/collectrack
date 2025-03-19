@@ -21,3 +21,5 @@ gem "racc", "~> 1.8"
 gem "rake", "~> 13.2"
 
 gem "listen", "~> 3.9", :group => :development
+
+gem "standardrb", "~> 1.0", :group => :development

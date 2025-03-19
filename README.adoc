@@ -32,8 +32,9 @@ However I cannot configure all plugins for all environments and some plugins are
 So there is a default behavior for graphing unknown databases.
 
 This default behavior is to draw a separate graph for each .rrd file found in a plugin instance.
+A line is then drawn for each ds in the database.
 
-This doesn't work well for some plugins like `memory` or `cpu` which have different values saved as ds `value` across multiple databases.
+This doesn't work well for some plugins like `memory` or `cpu` which have multiple data sources saved as ds `value` across multiple databases.
 For these a single graph for data across all databases would be preferred, and this is the old default behavior.
 
 However most plugins store different units in different files.

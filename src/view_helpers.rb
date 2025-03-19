@@ -29,6 +29,8 @@ class Plugin; include AHref; end
 
 class Instance; include AHref; end
 
+class RRDFile; include AHref; end
+
 class Instance
   def graph_imgs options={}
     graph(options).map { "<img src=\"data:image;base64,#{it}\"/>".html_safe }

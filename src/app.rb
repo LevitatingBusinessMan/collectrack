@@ -59,13 +59,22 @@ end
 #   slim :instance
 # end
 
+# get "/:host/:plugin/:instance/:file/graph" do
+#   @host = Host.new(params[:host])
+#   pass if !@host.has_plugin? params[:plugin]
+#   @plugin = @host[params[:plugin]]
+#   pass if !@plugin.has_instance? params[:instance]
+#   @instance = @plugin[params[:instance]]
+#   slim :instance
+# end
+
 get "/:host/:plugin/:instance/:file" do
   @host = Host.new(params[:host])
   pass if !@host.has_plugin? params[:plugin]
   @plugin = @host[params[:plugin]]
   pass if !@plugin.has_instance? params[:instance]
   @instance = @plugin[params[:instance]]
-  pass if !@instance.files.include? params[:file]
+  pass if !@instance.files.map(&:to_s).include? params[:file]
   @file = params[:file]
   slim :file
 end

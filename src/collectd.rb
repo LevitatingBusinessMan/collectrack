@@ -120,10 +120,34 @@ class Instance
   end
 
   def files
-    Dir["*.rrd", base: path]
+    Dir["*.rrd", base: path].map { RRDFile.new it, self }
   end
 end
 
-# class RRDFile
-#   attr_reader :name, :plugin, :host
-# end
+class RRDFile
+  attr_reader :name, :plugin, :host, :instance
+
+  def initialize name, instance
+    @name = name
+    @instance = instance
+    @host = instance.host
+    @plugin = instance.plugin
+  end
+
+  def to_s
+    @name
+  end
+
+  def chomp
+    @name.chomp(".rrd")
+  end
+
+  def path
+    File.join(@instance.path, @name)
+  end
+
+  def link
+    File.join(@instance.link, @name)
+  end
+
+end

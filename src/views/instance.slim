@@ -11,4 +11,4 @@ details
   summary Files
   ul
     - for file in @instance.files
-      li: a[href=File.join(@instance.link, file)]= file
+      li= file.a
