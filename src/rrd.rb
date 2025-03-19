@@ -17,9 +17,9 @@ class Colors
   LightPink = "#FFB6C1"
 
   DEFAULTS = [
-    Colors::Crimson, Colors::Coral, Colors::LightSeaGreen,
+    Colors::Crimson,  Colors::LightSeaGreen,
     Colors::MediumOrchid, Colors::CornFlowerBlue, Colors::DarkSeaGreen,
-    Colors::LightPink
+    Colors::LightPink, Colors::Coral
   ].freeze
 
   def initialize
@@ -45,51 +45,55 @@ class Instance
     out = []
 
     for graph in @plugin.yaml || default_plugin_conf
-      args = [
-        "/dev/fd/#{w.fileno}",
-        "--start=end-1h",
-        "--end=now",
-        "--title=#{evalstr graph[:title]} on #{@host}",
-        "--width=#{options[:width] || 500}",
-        "--height=#{options[:height] || 150}"
-      ]
-      args << "--vertical-label=#{graph[:vertical_label]}" if graph[:vertical_label]
-
-      colors = Colors.new
-
-      vname = 0
-      for line in graph[:lines]
-        filename = line[:file]&.+(".rrd") || ("#{@plugin}.rrd" if files.include? "#{@plugin}.rrd") || (files[0] if files.length == 1)
-
-        if not filename
-          raise "Cannot find adequate file to draw value from"
-        end
-
-        file = File.join(path, filename)
-
-        if not File.exist? file
-          $log.warn "#{file} not found"
-          next
-        end
-
-        ds = line[:ds] || "value"
-        legend = line[:legend] || line[:ds] || filename.delete_prefix("#{@plugin}-").delete_suffix(".rrd")
-        color = line[:color] || colors.next_color
-        cf = line[:cf] || "AVERAGE"
-        thickness = line[:thickness] || 1
-
-        args += [
-          "DEF:#{vname}=#{file}:#{ds}:#{cf}",
-          "LINE#{thickness}:#{vname}#{color}:#{legend}",
+      begin
+        args = [
+          "/dev/fd/#{w.fileno}",
+          "--start=end-1h",
+          "--end=now",
+          "--title=#{evalstr graph[:title]} on #{@host}",
+          "--width=#{options[:width] || 500}",
+          "--height=#{options[:height] || 150}"
         ]
-        vname += 1
-      end
+        args << "--vertical-label=#{graph[:vertical_label]}" if graph[:vertical_label]
 
+        colors = Colors.new
+
+        vname = 0
+        for line in graph[:lines]
+          filename = line[:file]&.+(".rrd") || ("#{@plugin}.rrd" if files.include? "#{@plugin}.rrd") || (files[0] if files.length == 1)
+
+          if not filename
+            raise "Cannot find adequate file to draw value from"
+          end
+
+          file = File.join(path, filename)
+
+          if not File.exist? file
+            $log.warn "#{file} not found"
+            next
+          end
+
+          ds = line[:ds] || "value"
+          legend = line[:legend] || line[:ds] || filename.delete_prefix("#{@plugin}-").delete_suffix(".rrd")
+          color = line[:color] || colors.next_color
+          cf = line[:cf] || "AVERAGE"
+          thickness = line[:thickness] || 1
+
+          args += [
+            "DEF:#{vname}=#{file}:#{ds}:#{cf}",
+            "LINE#{thickness}:#{vname}#{color}:#{legend}",
+          ]
+          vname += 1
+        end
       args += graph[:opts] if graph[:opts]
 
       $log.debug args
       RRD.graph(*args)
       out << Base64.encode64(r.read_nonblock(262144))
+      rescue Exception => ex
+        $log.warn ex.message
+        next
+      end
     end
     r.close
     w.close
