@@ -13,6 +13,7 @@ require "./src/view_helpers"
 require "rack-mini-profiler" if settings.development?
 require "stackprof" if settings.development?
 use Rack::MiniProfiler if settings.development?
+Rack::MiniProfiler.config.enable_advanced_debugging_tools = true if settings.development?
 
 Slim::Engine.options[:use_html_safe] = true
 
