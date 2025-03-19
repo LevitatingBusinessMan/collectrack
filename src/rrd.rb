@@ -135,12 +135,15 @@ class Instance
     regex = Regexp.new(yaml[:file]&.match(/^\/(.+)\/$/)&.[] 1)
     nyaml = yaml.dup
     nyaml.delete :file
+    og_lines = nyaml[:lines].dup || [{}]
+    nyaml[:lines] = []
     for file in files
-      if caps = regex.match(file.chomp)
-        nyaml[:lines] = [] if not nyaml[:lines]
-        nyaml[:lines] << {
-          file: file.chomp,
-          legend: caps["legend"]
+      if caps = regex.match(file.chomp)&.named_captures
+        nyaml[:lines] += og_lines.map {
+          it.merge({
+            file: file.chomp,
+            legend: caps["legend"]
+          }.compact) 
         }
       end
     end
