@@ -15,11 +15,10 @@ After running `bundle install`, the app can be started using `bin/rackup`, `bin/
 
 ==== Development
 
-When starting puma in development it is configured open a unix socket for `pumactl`.
-
 There is a development script `src/rerun.rb` which listens to sourcecode changes and restarts the puma server.
-This can be executed with `ruby src/rerun.rb` or `bin/rerun`.
-This script will execute `puma -C puma_rerun.rb` by default when no running puma is detected.
+It uses the control-url for puma defined in `puma_rerun.rb` to control the server.
+This script can be executed with `ruby src/rerun.rb` or `bin/rerun`.
+It will execute `puma -C puma_rerun.rb` by default when no running puma is detected.
 Other commands to start the server can be specified on the command line, but using `rackup` causes the host and port to reset after a restart.
 
 ```
@@ -27,7 +26,7 @@ bin/rerun
 ```
 
 == Default behavior
-Collect Rack ships aims to ship with instruction to draw most popular collectd plugins.
+Collect Rack ships aims to ship with instruction to graph most popular collectd plugins.
 However I cannot configure all plugins for all environments and some plugins are inherently unpredictable.
 So there is a default behavior for graphing unknown databases.
 
@@ -38,4 +37,4 @@ This doesn't work well for some plugins like `memory` or `cpu` which have multip
 For these a single graph for data across all databases would be preferred, and this is the old default behavior.
 
 However most plugins store different units in different files.
-So for most other plugins the current behavior produces good graphs, even for unconfigurable plugins like `sensor`.
+So for most other plugins the current behavior produces good graphs, even for generally unconfigurable plugins like `sensor`.
