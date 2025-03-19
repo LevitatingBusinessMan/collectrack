@@ -86,7 +86,7 @@ class Plugin
 
   def yaml
     @yaml || if File.exist? yaml_path
-      @yaml = YAML.load_stream File.read(yaml_path), filename: yaml_path, symbolize_names: true
+      @yaml = YAML.load_stream(File.read(yaml_path), filename: yaml_path, symbolize_names: true).freeze
     end
   end
 

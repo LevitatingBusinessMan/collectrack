@@ -120,16 +120,31 @@ class Instance
     out = []
 
     for yaml in @plugin.yaml || default_yaml
-      if yaml[:file]&.match? /^\/.+\/$/
-        files.map { it.yaml_regex_filename yaml }.compact.each {
-          out << Base64.encode64(graph_yaml(it, options))
-        }
-      else
-        out << Base64.encode64(graph_yaml(yaml, options))
+      if yaml[:file]&.match?(/^\/.+\/$/)
+        yaml = update_regex_filename_yaml yaml
+        next if not yaml[:lines] or yaml[:lines].empty?
       end
+      out << Base64.encode64(graph_yaml(yaml, options))
     end
   
     out
+  end
+
+  # add lines to a yaml where the filename is a regex
+  def update_regex_filename_yaml yaml
+    regex = Regexp.new(yaml[:file]&.match(/^\/(.+)\/$/)&.[] 1)
+    nyaml = yaml.dup
+    nyaml.delete :file
+    for file in files
+      if caps = regex.match(file.chomp)
+        nyaml[:lines] = [] if not nyaml[:lines]
+        nyaml[:lines] << {
+          file: file.chomp,
+          legend: caps["legend"]
+        }
+      end
+    end
+    nyaml
   end
 
   # like the yaml config but a default
@@ -182,22 +197,6 @@ class RRDFile
 
   def graph options={}
     Base64.encode64 graph_yaml(default_yaml, options)
-  end
-
-  # update a yaml that has a regex filename
-  def yaml_regex_filename yaml
-    if caps = Regexp::new(yaml[:file].delete_prefix('/').delete_suffix('/')).match(chomp)&.named_captures
-      nyaml = yaml.dup
-      nyaml[:file] = chomp
-      if caps["legend"]
-        if not nyaml[:lines]
-          nyaml[:lines] = [{legend: caps["legend"]}]
-        elsif nyaml[:lines].length == 1
-          nyaml[:lines][0][legend: caps["legend"]]
-        end
-      end
-      nyaml
-    end
   end
 
 end
