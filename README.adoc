@@ -19,8 +19,8 @@ When starting puma in development it is configured open a unix socket for `pumac
 
 There is a development script `src/rerun.rb` which listens to sourcecode changes and restarts the puma server.
 This can be executed with `ruby src/rerun.rb` or `bin/rerun`.
-This script will execute `rackup -s puma` by default when no running puma is detected.
-Other commands to start the server can be specified on the command line.
+This script will execute `puma -C config/puma.rb` by default when no running puma is detected.
+Other commands to start the server can be specified on the command line, but using `rackup` causes the host and port to reset after a restart.
 
 ```
 bin/rerun

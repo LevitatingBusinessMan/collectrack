@@ -1,5 +1,5 @@
 require "listen"
-COMMAND = ARGV.empty? ? ["rackup -s puma"] : ARGV
+COMMAND = ARGV.empty? ? ["puma -C puma_rerun.rb"] : ARGV
 
 listener = Listen.to "./src/", only: /\.rb$/ do
   start
