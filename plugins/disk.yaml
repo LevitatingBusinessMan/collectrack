@@ -5,3 +5,21 @@ lines:
   - ds: io_time
     legend: IO time
     file: disk_io_time
+---
+title: Disk Traffic (#{@name})
+vertical_label: Bytes/s
+lines:
+  - ds: write
+    file: disk_octets
+  - ds: read
+    file: disk_octets
+    inverted: true
+---
+title: Disk Operations (#{@name})
+vertical_label: Bytes/s
+lines:
+  - ds: write
+    file: disk_ops
+  - ds: read
+    file: disk_ops
+    inverted: true
