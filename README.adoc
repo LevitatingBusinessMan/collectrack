@@ -7,11 +7,11 @@ Collect Rack is a graphing frontend for https://oss.oetiker.ch/rrdtool/[.rrd] fi
 Before Collect Rack I made https://github.com/LevitatingBusinessMan/rrd2html.rb[rrd2html.rb] which is a very minimal (you could say code golfed) CGI application.
 This project was born out of dissatisfaction with https://github.com/LevitatingBusinessMan/rrd2html.rb[rrd2html.rb] and inspired by https://github.com/pommi/CGP[pommi/CGP].
 
-The "Collect" part of the name refers to collectd. The "Rack" part for that fact that it is a https://github.com/rack/rack/blob/main/SPEC.rdoc[Rack] app.
+The "Collect" part of the name refers to https://www.collectd.org/[collectd]. The "Rack" part for it being a https://github.com/rack/rack/blob/main/SPEC.rdoc[Rack] app.
 
 == Running
 
-The app can be started using `rackup`, `puma` or by sinatra itself via `ruby ./src/app.rb`.
+After running `bundle install`, the app can be started using `bin/rackup`, `bin/puma` or by sinatra itself via `ruby src/app.rb`.
 
 ==== Development
 
