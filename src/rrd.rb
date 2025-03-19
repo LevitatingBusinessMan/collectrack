@@ -44,6 +44,8 @@ module Graphable
   def graph_yaml yaml, options={}
     r, w = IO.pipe
 
+    $log.debug yaml
+
     args = [
       "/dev/fd/#{w.fileno}",
       "--start=end-1h",
@@ -56,13 +58,12 @@ module Graphable
 
     colors = Colors.new
 
-    lines = yaml[:lines] || (@instance[yaml[:file]].default_lines if yaml[:file]) || @instance.default_file&.default_lines
-    
+    lines = yaml[:lines] || (@instance[yaml[:file]]&.default_lines if yaml[:file]) || @instance.default_file&.default_lines
+
     if !lines
       raise "Cannot find adequate file to draw value from"
     end
 
-    $log.debug yaml
     $log.debug lines if not yaml[:lines]
 
     lineno = 0
@@ -118,9 +119,16 @@ class Instance
   def graph options={}
     out = []
 
-    for graph in @plugin.yaml || default_yaml
-      out << Base64.encode64(graph_yaml(graph, options))
+    for yaml in @plugin.yaml || default_yaml
+      if yaml[:file]&.match? /^\/.+\/$/
+        files.map { it.yaml_regex_filename yaml }.compact.each {
+          out << Base64.encode64(graph_yaml(it, options))
+        }
+      else
+        out << Base64.encode64(graph_yaml(yaml, options))
+      end
     end
+  
     out
   end
 
@@ -174,6 +182,22 @@ class RRDFile
 
   def graph options={}
     Base64.encode64 graph_yaml(default_yaml, options)
+  end
+
+  # update a yaml that has a regex filename
+  def yaml_regex_filename yaml
+    if caps = Regexp::new(yaml[:file].delete_prefix('/').delete_suffix('/')).match(chomp)&.named_captures
+      nyaml = yaml.dup
+      nyaml[:file] = chomp
+      if caps["legend"]
+        if not nyaml[:lines]
+          nyaml[:lines] = [{legend: caps["legend"]}]
+        elsif nyaml[:lines].length == 1
+          nyaml[:lines][0][legend: caps["legend"]]
+        end
+      end
+      nyaml
+    end
   end
 
 end

@@ -1,0 +1,12 @@
+---
+title: Voltage (#{self})
+file: /^voltage-(?<legend>.+)$/
+vertical_label: Volt
+---
+title: Temperature (#{self})
+file: /^temperature-(?<legend>.+)$/
+vertical_label: Celcius
+---
+title: Fanspeed (#{self})
+file: /^fanspeed-(?<legend>.+)$/
+vertical_label: RPM
