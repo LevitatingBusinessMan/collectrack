@@ -168,6 +168,7 @@ class Host
     if self["load"]&.[]("load")
       instance = self["load"]["load"]
       info = instance.files.first.info
+      return if info["last_update"]& - Time.now.to_i > 5 * 60
       [info["ds[shortterm].last_ds"]&.to_f, info["ds[midterm].last_ds"]&.to_f, info["ds[longterm].last_ds"]&.to_f]
     end
   end
