@@ -87,7 +87,6 @@ class Plugin
   def yaml
     @yaml || if File.exist? yaml_path
       @yaml = YAML.load_stream File.read(yaml_path), filename: yaml_path, symbolize_names: true
-      # in case I regret splitting the documents: @yaml = YAML.load_file yaml_path, symbolize_names: true
     end
   end
 
@@ -98,14 +97,17 @@ class Plugin
 end
 
 class Instance
-  attr_reader :name, :plugin, :host, :files
+  attr_reader :name, :plugin, :host
 
   def initialize plugin, instance_name
     @name = instance_name
     @host = plugin.host
     @plugin = plugin
-    @files = Dir["*.rrd", base: path].map { RRDFile.new it, self }
     @instance = self
+  end
+
+  def files
+    @files || (@files = Dir["*.rrd", base: path].map { RRDFile.new it, self })
   end
 
   def dir
