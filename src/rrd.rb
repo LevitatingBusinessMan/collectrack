@@ -56,12 +56,11 @@ module Graphable
 
     colors = Colors.new
 
-    if not yaml[:lines] and not yaml[:file]
-      raise "yaml received contains no lines or files"
+    lines = yaml[:lines] || (@instance[yaml[:file]].default_lines if yaml[:file]) || @instance.default_file&.default_lines
+    
+    if !lines
+      raise "Cannot find adequate file to draw value from"
     end
-
-    # the yaml needs lines or file(s) (and a title)
-    lines = yaml[:lines] || @instance[yaml[:file]].default_lines
 
     $log.debug yaml
     $log.debug lines if not yaml[:lines]
@@ -69,7 +68,7 @@ module Graphable
     lineno = 0
     for line in lines
       # if the line has no file, attempt a globally configured file, otherwise use a file with the name of the plugin, otherwise use the only file, otherwise error
-      filename = line[:file]&.+(".rrd") || yaml[:file]&.+(".rrd") || ("#{@plugin}.rrd" if files.map(&:to_s).include? "#{@plugin}.rrd") || (files[0] if files.length == 1)
+      filename = line[:file]&.+(".rrd") || yaml[:file]&.+(".rrd") || @instance.default_file.to_s
 
       if not filename
         raise "Cannot find adequate file to draw value from"
@@ -129,6 +128,11 @@ class Instance
   def default_yaml
     # per default, we attempt to make a single graph plotting the DS name 'value' from each file
     self.files.map(&:default_yaml)
+  end
+
+  # attempt to find the file matching the plugin name or the only file
+  def default_file
+    files.find { it.name == "#{@plugin}.rrd"} || (files[0] if files.length == 1)
   end
 
 end
