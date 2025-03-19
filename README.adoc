@@ -11,6 +11,8 @@ The "Collect" part of the name refers to collectd. The "Rack" part for that fact
 
 == Running
 
+The app can be started using `rackup`, `puma` or by sinatra itself via `./src/app.rb`.
+
 ==== Development
 
 ```
