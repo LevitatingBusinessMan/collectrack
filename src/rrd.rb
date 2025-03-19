@@ -92,6 +92,7 @@ class Instance
       out << Base64.encode64(r.read_nonblock(262144))
       rescue Exception => ex
         $log.warn ex.message
+        raise ex
         next
       end
     end
@@ -103,15 +104,20 @@ class Instance
   # like the yaml config but a default
   def default_plugin_conf
     # per default, we attempt to make a single graph plotting the DS name 'value' from each file
-    [
-      {
-        title: self,
-        lines: self.files.map { {
-          file: it.chomp(".rrd")
-        } }
-      }
-    ]
+    self.files.map { |file| {
+      title: "#{file.chomp(".rrd")} (#{self})",
+      lines: get_dss(file).map { |ds| {
+        ds: ds,
+        file: file.chomp(".rrd")
+      } }
+    } }
   end
+
+  def get_dss filename
+    info = RRD.info File.join(path, filename)
+    info.keys.map { /^ds\[(\w+)\]/.match(it)&.[] 1 }.select(&:itself).uniq
+  end
+
 end
 
 class Host

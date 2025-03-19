@@ -14,3 +14,16 @@ This project was born out of dissatisfaction with https://github.com/LevitatingB
 ```
 bin/rerun -p "src/*.rb" -- bin/rackup -p 3344
 ```
+
+== Default behavior
+Collect Rack ships aims to ship with instruction to draw most popular collectd plugins.
+However I cannot configure all plugins for all environments and some plugins are inherently unpredictable.
+So there is a default behavior for graphing unknown databases.
+
+This default behavior is to draw a separate graph for each .rrd file found in a plugin instance.
+
+This doesn't work well for some plugins like `memory` or `cpu` which have different values saved as ds `value` across multiple databases.
+For these a single graph for data across all databases would be preferred, and this is the old default behavior.
+
+However most plugins store different units in different files.
+So for most other plugins the current behavior produces good graphs, even for unconfigurable plugins like `sensor`.
