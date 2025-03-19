@@ -7,6 +7,8 @@ Collect Rack is a graphing frontend for https://oss.oetiker.ch/rrdtool/[.rrd] fi
 Before Collect Rack I made https://github.com/LevitatingBusinessMan/rrd2html.rb[rrd2html.rb] which is a very minimal (you could say code golfed) CGI application.
 This project was born out of dissatisfaction with https://github.com/LevitatingBusinessMan/rrd2html.rb[rrd2html.rb] and inspired by https://github.com/pommi/CGP[pommi/CGP].
 
+The "Collect" part of the name refers to collectd. The "Rack" part for that fact that it is a https://github.com/rack/rack/blob/main/SPEC.rdoc[Rack] app.
+
 == Running
 
 ==== Development
