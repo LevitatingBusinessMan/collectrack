@@ -58,8 +58,18 @@ class Instance
 
         colors = Colors.new
 
+        if not graph[:lines] and not graph[:file]
+          raise "yaml received contains no lines or files"
+        end
+
+        # the yaml needs lines or file(s) (and a title)
+        lines = graph[:lines] || get_dss(graph[:file] + ".rrd").map { {
+          ds: it,
+          file: graph[:file]
+        } }
+
         lineno = 0
-        for line in graph[:lines]
+        for line in lines
           filename = line[:file]&.+(".rrd") || graph[:file]&.+(".rrd") || ("#{@plugin}.rrd" if files.include? "#{@plugin}.rrd") || (files[0] if files.length == 1)
 
           if not filename

@@ -4,7 +4,12 @@ vertical_label: Milliseconds
 file: disk_io_time
 lines:
   - ds: io_time
-    legend: IO time
+---
+title: "Time spent doing I/O weighted (#{self})"
+vertical_label: Milliseconds
+file: disk_io_time
+lines:
+  - ds: weighted_io_time
 ---
 title: Disk Traffic (#{@name})
 vertical_label: Bytes/s
