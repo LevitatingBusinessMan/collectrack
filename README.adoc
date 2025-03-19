@@ -11,12 +11,18 @@ The "Collect" part of the name refers to collectd. The "Rack" part for that fact
 
 == Running
 
-The app can be started using `rackup`, `puma` or by sinatra itself via `./src/app.rb`.
+The app can be started using `rackup`, `puma` or by sinatra itself via `ruby ./src/app.rb`.
 
 ==== Development
 
+When starting puma in development it is configured open a unix socket for `pumactl`.
+
+There is a development script `src/rerun.rb` which listens to sourcecode changes and restarts the puma server.
+This can be executed with `ruby src/rerun.rb` or `bin/rerun`.
+This script will execute `rackup -s puma` by default when no running puma is detected.
+
 ```
-bin/rerun -p "src/*.rb" -- bin/rackup -p 3344
+bin/rerun
 ```
 
 == Default behavior

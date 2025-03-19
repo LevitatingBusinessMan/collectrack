@@ -11,6 +11,7 @@ require "./src/rrd"
 require "./src/view_helpers"
 
 configure :development do
+  ENV['APP_ENV'] = "development"
   require "rack-mini-profiler"
   require "stackprof"
   use Rack::MiniProfiler
