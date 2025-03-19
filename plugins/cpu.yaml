@@ -1,6 +1,6 @@
 ---
 title: CPU-#{@name} usage
-opts: ["-upper-limit=100"]
+opts: ["--upper-limit=100"]
 vertical_label: Jiffies
 lines:
   #- legend: idle

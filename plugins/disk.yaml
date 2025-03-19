@@ -1,0 +1,7 @@
+---
+title: "Time spent doing I/O (#{self})"
+vertical_label: Milliseconds
+lines:
+  - ds: io_time
+    legend: IO time
+    file: disk_io_time

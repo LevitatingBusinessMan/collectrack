@@ -18,8 +18,8 @@ class String
 end
 
 module AHref
-  def a
-    "<a href=#{link}>#{self}</a>".html_safe
+  def a inner=nil
+    "<a href=#{link}>#{inner || self}</a>".html_safe
   end
 end
 
@@ -30,8 +30,8 @@ class Plugin; include AHref; end
 class Instance; include AHref; end
 
 class Instance
-  def graph_imgs
-    graph.map { "<img src=\"data:image;base64,#{it}\"/>".html_safe }
+  def graph_imgs options={}
+    graph(options).map { "<img src=\"data:image;base64,#{it}\"/>".html_safe }
   end
 end
 

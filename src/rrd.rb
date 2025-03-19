@@ -4,9 +4,32 @@ require "base64"
 require "./src/collectd"
 require "./src/config"
 require "./src/logging"
+require "./src/util"
 
-module Colors
-  CRIMSON = "#DC143C"
+class Colors
+  Crimson = "#DC143C"
+  Coral = "#FF7F50"
+  LightSeaGreen = "#20B2AA"
+  MediumOrchid = "#BA55D3"
+  CornFlowerBlue = "#6495ED"
+  DarkSeaGreen = "#8FBC8F"
+  OliveDrab = "#6B8E23"
+  LightPink = "#FFB6C1"
+
+  DEFAULTS = [
+    Colors::Crimson, Colors::Coral, Colors::LightSeaGreen,
+    Colors::MediumOrchid, Colors::CornFlowerBlue, Colors::DarkSeaGreen,
+    Colors::LightPink
+  ].freeze
+
+  def initialize
+    @queue = DEFAULTS.dup
+  end
+
+  def next_color
+    @queue = DEFAULTS.dup if @queue.empty?
+    @queue.shift
+  end
 end
 
 module RRD
@@ -16,8 +39,8 @@ module RRD
 end
 
 class Instance
-  # return one or more graphs ase base64
-  def graph
+  # return one or more graphs as base64
+  def graph options={}
     r, w = IO.pipe
     out = []
 
@@ -26,10 +49,13 @@ class Instance
         "/dev/fd/#{w.fileno}",
         "--start=end-1h",
         "--end=now",
-        "--title=#{eval "\"#{graph[:title]}\""} on #{@host}",
-        "--width=400"
+        "--title=#{evalstr graph[:title]} on #{@host}",
+        "--width=#{options[:width] || 500}",
+        "--height=#{options[:height] || 150}"
       ]
       args << "--vertical-label=#{graph[:vertical_label]}" if graph[:vertical_label]
+
+      colors = Colors.new
 
       vname = 0
       for line in graph[:lines]
@@ -47,21 +73,23 @@ class Instance
         end
 
         ds = line[:ds] || "value"
-        legend = line[:legend] || line[:ds] || filename.chomp(".rrd")
-        color = nil
+        legend = line[:legend] || line[:ds] || filename.delete_prefix("#{@plugin}-").delete_suffix(".rrd")
+        color = line[:color] || colors.next_color
         cf = line[:cf] || "AVERAGE"
         thickness = line[:thickness] || 1
 
         args += [
           "DEF:#{vname}=#{file}:#{ds}:#{cf}",
-          "LINE#{thickness}:#{vname}#{Colors::CRIMSON}:#{legend}",
+          "LINE#{thickness}:#{vname}#{color}:#{legend}",
         ]
         vname += 1
       end
 
+      args += graph[:opts] if graph[:opts]
+
       $log.debug args
       RRD.graph(*args)
-      out << Base64.encode64(r.read_nonblock(32768))
+      out << Base64.encode64(r.read_nonblock(262144))
     end
     r.close
     w.close
@@ -75,8 +103,7 @@ class Instance
       {
         title: self,
         lines: self.files.map { {
-          file: it.chomp(".rrd"),
-          name: it
+          file: it.chomp(".rrd")
         } }
       }
     ]

@@ -1,9 +1,11 @@
 h2 <a href="/">.</a>/#{@host.a}/#{@plugin.a}/#{@instance}
 
+=@instance.graph_imgs(width: 1000, height: 300).join.html_safe
+
+hr
+
 details
   summary Files
   ul
     - for file in @instance.files
       li#file= file
-
-=@instance.graph_imgs.join.html_safe

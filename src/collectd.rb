@@ -123,3 +123,5 @@ class Instance
     Dir["*.rrd", base: path]
   end
 end
+
+#Class RRDFile; end

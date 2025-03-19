@@ -3,8 +3,10 @@ ul#instances
   - for instance in @plugin.instances.sort_by { it.name.to_i || it.name }
     li#instance: a[href=instance.link]= instance
 
-- for instance in @plugin.instances
-  = instance.graph_imgs.join.html_safe
+- for instance in @plugin.instances.sort_by { it.name.to_i || it.name }
+  = instance.graph_imgs.map{instance.a it}.join.html_safe
+
+hr
 
 - if @plugin.yaml
   details

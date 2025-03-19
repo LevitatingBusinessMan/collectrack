@@ -2,9 +2,9 @@
 title: Load
 vertical_label: Load
 lines:
-  - legend: 1m
+  - legend: 1 minute
     ds: shortterm
-  - legend: 5m
+  - legend: 5 minutes
     ds: midterm
-  - legend: 15m
+  - legend: 15 minutes
     ds: longterm
