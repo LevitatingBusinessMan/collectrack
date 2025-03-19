@@ -9,17 +9,36 @@ This project was born out of dissatisfaction with https://github.com/LevitatingB
 
 The "Collect" part of the name refers to https://www.collectd.org/[collectd]. The "Rack" part for it being a https://github.com/rack/rack/blob/main/SPEC.rdoc[Rack] app.
 
+[cols="1,1"]
+|===
+| Web Framework
+| https://sinatrarb.com/[Sinatra]
+
+| Gateway Interface
+| https://github.com/rack/rack/blob/main/SPEC.rdoc[Rack]
+
+| Server
+| https://puma.io/[Puma] or other https://github.com/rack/rack/tree/main?tab=readme-ov-file#supported-web-servers[Rack::Handler]
+
+| Graphing
+| https://oss.oetiker.ch/rrdtool/[rrdtool]
+
+| Data Collection
+| https://collectd.org[collectd]
+
+|===
 == Running
 
-After running `bundle install`, the app can be started using `bin/rackup`, `bin/puma` or by sinatra itself via `ruby src/app.rb`.
+After running `bundle install`, the app can be started using `bin/rackup`, `bin/puma` or `ruby src/app.rb`.
 
 ==== Development
 
 There is a development script `src/rerun.rb` which listens to sourcecode changes and restarts the puma server.
 It uses the control-url for puma defined in `puma_rerun.rb` to control the server.
+
 This script can be executed with `ruby src/rerun.rb` or `bin/rerun`.
-It will execute `puma -C puma_rerun.rb` by default when no running puma is detected.
-Other commands to start the server can be specified on the command line, but using `rackup` causes the host and port to reset after a restart.
+It will execute `puma -C puma_rerun.rb` by default, other commands to start the server can be specified on the command line.
+However using `rackup` causes the  host and port to reset after a restart.
 
 ```
 bin/rerun
@@ -34,7 +53,7 @@ This default behavior is to draw a separate graph for each .rrd file found in a 
 A line is then drawn for each ds in the database.
 
 This doesn't work well for some plugins like `memory` or `cpu` which have multiple data sources saved as ds `value` across multiple databases.
-For these a single graph for data across all databases would be preferred, and this is the old default behavior.
+For these a single graph with data across all databases would be preferred.
 
 However most plugins store different units in different files.
 So for most other plugins the current behavior produces good graphs, even for generally unconfigurable plugins like `sensor`.
