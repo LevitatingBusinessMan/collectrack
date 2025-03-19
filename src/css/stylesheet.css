@@ -10,12 +10,12 @@ body {
   background-color: WhiteSmoke;
 }
 
-li#instance {
+li.inline {
   display: inline-block;
   margin-right: 10px;
 }
 
-ul#instances {
+ul.inline {
   padding-left: 0;
   margin-bottom: 10px;
 }

@@ -124,4 +124,6 @@ class Instance
   end
 end
 
-#Class RRDFile; end
+# class RRDFile
+#   attr_reader :name, :plugin, :host
+# end
