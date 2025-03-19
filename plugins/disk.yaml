@@ -9,17 +9,17 @@ lines:
 title: Disk Traffic (#{@name})
 vertical_label: Bytes/s
 lines:
-  - ds: write
-    file: disk_octets
   - ds: read
+    file: disk_octets
+  - ds: write
     file: disk_octets
     inverted: true
 ---
 title: Disk Operations (#{@name})
 vertical_label: Bytes/s
 lines:
-  - ds: write
-    file: disk_ops
   - ds: read
+    file: disk_ops
+  - ds: write
     file: disk_ops
     inverted: true
