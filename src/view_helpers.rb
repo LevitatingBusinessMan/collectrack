@@ -35,6 +35,9 @@ class Instance
   def graph_imgs_base64 options={}
     graphs(options).map { "<img src=\"data:image;base64,#{Base64.encode64 it}\"/>".html_safe }
   end
+  def graph_imgs options={}
+    (0..graph_count-1).map { "<img src=\"#{img_link it, options}\" onerror=\"this.style.display='none'\"/>" }
+  end
 end
 
 class RRDFile

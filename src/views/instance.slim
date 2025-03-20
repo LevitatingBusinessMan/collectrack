@@ -3,7 +3,7 @@ ul.inline
   - for instance in @plugin.instances.sort_by { it.name.to_i || it.name }
     li.inline: a[href=instance.link]= instance
 
-=@instance.graph_imgs_base64(width: 1000, height: 300).join.html_safe
+=@instance.graph_imgs(width: 1000, height: 300).join.html_safe
 
 hr
 

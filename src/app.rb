@@ -56,10 +56,13 @@ get "/:host/:plugin/:instance/graph" do
   @plugin = @host[params[:plugin]]
   pass if !@plugin.has_instance? params[:instance]
   @instance = @plugin[params[:instance]]
-  pass if !params[n]
+  n = Integer(params[:n]) rescue nil
+  pass if !n
 
   content_type :png
-  Base64.decode64 @instance.graph[n]
+  headers "content-disposition" => "filename=\"#{@instance.graph_title(n)}\""
+  # expires 60
+  @instance.graph(n, width: params[:width], height: params[:height]) || pass
 end
 
 # get "/:host/:plugin/:instance/:file/graph" do
@@ -83,5 +86,5 @@ get "/:host/:plugin/:instance/:file" do
 end
 
 not_found do
-  slim "h1= \"#{request.path} was not found\""
+  slim "h1= \"#{request.fullpath} was not found\""
 end

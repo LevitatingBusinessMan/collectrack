@@ -122,7 +122,11 @@ class Instance
   include Graphable
 
   def graph n, options={}
-    graph_yaml(@plugin.yamls&.[] n || self.files[n].default_yaml)
+    graph_yaml(effective_yaml(n) || return nil)
+  end
+
+  def graph_title n
+    "#{evalstr effective_yaml(n)[:title]} on #{@host}"
   end
 
   def graph_count
@@ -139,6 +143,10 @@ class Instance
   # WARNING a default yamls requires reading RRD.info for each file
   def effective_yamls
     @plugin.yamls || default_yamls
+  end
+
+  def effective_yaml n
+    @plugin.yamls&.[](n) || self.files[n]&.default_yaml
   end
 
   # add lines to a yaml where the filename is a regex
