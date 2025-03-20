@@ -24,7 +24,7 @@ span#load {
   margin-right: 10px;
 }
 
-li#host a {
+li#host a, li#plugin a {
   width: 200px;
   display: inline-block;
 }
