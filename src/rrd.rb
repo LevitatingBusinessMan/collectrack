@@ -122,11 +122,11 @@ class Instance
   include Graphable
 
   def graph n, options={}
-    graph_yaml(effective_yaml(n) || return nil)
+    graph_yaml((effective_yaml(n) || return nil), options)
   end
 
   def graph_title n
-    "#{evalstr effective_yaml(n)[:title]} on #{@host}"
+    "#{evalstr effective_yaml(n)&.[] :title} on #{@host}"
   end
 
   def graph_count

@@ -127,11 +127,6 @@ class Instance
   end
   alias_method :has_file?, :has_key?
 
-  def img_link n, options={}
-    # TODO add width height query params
-    File.join(@plugin.link, dir, "graph") + "?n=#{n}"
-  end
-
 end
 
 class RRDFile

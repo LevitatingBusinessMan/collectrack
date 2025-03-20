@@ -38,6 +38,10 @@ class Instance
   def graph_imgs options={}
     (0..graph_count-1).map { "<img src=\"#{img_link it, options}\" onerror=\"this.style.display='none'\"/>" }
   end
+  def img_link n, options={}
+    options[:n] = n
+    File.join(@plugin.link, self.to_s, "graph") + "?" + URI.encode_www_form(options)
+  end
 end
 
 class RRDFile
