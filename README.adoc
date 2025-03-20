@@ -44,8 +44,8 @@ However using `rackup` causes the  host and port to reset after a restart.
 bin/rerun
 ```
 
-== Default behavior
-Collect Rack ships aims to ship with instruction to graph most popular collectd plugins.
+== Default plugin behavior
+Collect Rack ships aims to ship with instructions to graph most popular collectd plugins (see `./plugins`).
 However I cannot configure all plugins for all environments and some plugins are inherently unpredictable.
 So there is a default behavior for graphing unknown databases.
 
