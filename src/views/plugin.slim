@@ -4,13 +4,15 @@ ul.inline
     li.inline: a[href=instance.link]= instance
 
 - for instance in @plugin.instances.sort_by { it.name.to_i || it.name }
-  = instance.graph_imgs.map{instance.a it}.join.html_safe
+  = instance.graph_imgs_base64.map{instance.a it}.join.html_safe
 
 hr
 
-- if @plugin.yaml
+- if @plugin.yamls
   details
     summary YAML
     pre#code= "##{@plugin.yaml_path}\n#{File.read(@plugin.yaml_path)}"
 - else
   p this plugin has no configuration
+
+/== slim :'partials/settings', layout: nil

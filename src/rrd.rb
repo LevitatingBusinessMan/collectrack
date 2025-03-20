@@ -41,8 +41,14 @@ module RRD
 end
 
 module Graphable
+  # may return nil
   def graph_yaml yaml, options={}
     r, w = IO.pipe
+    
+    if yaml[:file]&.match?(/^\/.+\/$/)
+      yaml = @instance.update_regex_filename_yaml yaml
+      return if not yaml[:lines] or yaml[:lines].empty?
+    end
 
     $log.debug yaml
 
@@ -115,19 +121,24 @@ end
 class Instance
   include Graphable
 
-  # return one or more graphs as base64
-  def graph options={}
-    out = []
+  def graph n, options={}
+    graph_yaml(@plugin.yamls&.[] n || self.files[n].default_yaml)
+  end
 
-    for yaml in @plugin.yaml || default_yaml
-      if yaml[:file]&.match?(/^\/.+\/$/)
-        yaml = update_regex_filename_yaml yaml
-        next if not yaml[:lines] or yaml[:lines].empty?
-      end
-      out << Base64.encode64(graph_yaml(yaml, options))
-    end
-  
-    out
+  def graph_count
+    @plugin.yamls&.length || self.files.length
+  end
+
+  # return one or more graphs as base64
+  def graphs options={}
+    effective_yamls.map {
+      graph_yaml it, options
+    }.compact 
+  end
+
+  # WARNING a default yamls requires reading RRD.info for each file
+  def effective_yamls
+    @plugin.yamls || default_yamls
   end
 
   # add lines to a yaml where the filename is a regex
@@ -151,7 +162,7 @@ class Instance
   end
 
   # like the yaml config but a default
-  def default_yaml
+  def default_yamls
     # per default, we attempt to make a single graph plotting the DS name 'value' from each file
     self.files.map(&:default_yaml)
   end

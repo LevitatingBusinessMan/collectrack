@@ -60,11 +60,6 @@ class Plugin
     @name = name
     @host = host
     @instances = instances.map { Instance.new self, it }
-    # in the future I want the instances to be a superclass of this class
-    # and the ability to do something like
-    # @host["cpu"]["0"]
-    # which would return an Instance superclass of Plugin with .to_s as cpu-0
-    # or @host["memory"]["memory"] for plugins with no instances
   end
 
   def to_s
@@ -84,9 +79,9 @@ class Plugin
   end
   alias_method :has_instance?, :has_key?
 
-  def yaml
-    @yaml || if File.exist? yaml_path
-      @yaml = YAML.load_stream(File.read(yaml_path), filename: yaml_path, symbolize_names: true).freeze
+  def yamls
+    @yamls || if File.exist? yaml_path
+      @yamls = YAML.load_stream(File.read(yaml_path), filename: yaml_path, symbolize_names: true).map(&:freeze)
     end
   end
 

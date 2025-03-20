@@ -50,14 +50,17 @@ get "/:host/:plugin/:instance" do
   slim :instance
 end
 
-# get "/:host/:plugin/:instance/graph" do
-#   @host = Host.new(params[:host])
-#   pass if !@host.has_plugin? params[:plugin]
-#   @plugin = @host[params[:plugin]]
-#   pass if !@plugin.has_instance? params[:instance]
-#   @instance = @plugin[params[:instance]]
-#   slim :instance
-# end
+get "/:host/:plugin/:instance/graph" do
+  @host = Host.new(params[:host])
+  pass if !@host.has_plugin? params[:plugin]
+  @plugin = @host[params[:plugin]]
+  pass if !@plugin.has_instance? params[:instance]
+  @instance = @plugin[params[:instance]]
+  pass if !params[n]
+
+  content_type :png
+  Base64.decode64 @instance.graph[n]
+end
 
 # get "/:host/:plugin/:instance/:file/graph" do
 #   @host = Host.new(params[:host])
