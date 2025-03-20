@@ -3,8 +3,10 @@ ul.inline
   - for instance in @plugin.instances.sort_by { it.name.to_i || it.name }
     li.inline: a[href=instance.link]= instance
 
+== slim :'partials/spans', layout: nil
+
 - for instance in @plugin.instances.sort_by { it.name.to_i || it.name }
-  = instance.graph_imgs.map{instance.a it}.join.html_safe
+  = instance.graph_imgs(@query).map{instance.a it}.join.html_safe
 
 hr
 

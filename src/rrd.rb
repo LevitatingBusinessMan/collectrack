@@ -51,10 +51,14 @@ module Graphable
     end
 
     $log.debug yaml
+    $log.debug options
+
+    span = options[:span] || "6h"
+    span = "1#{span}" if not span[0].numeric
 
     args = [
       "/dev/fd/#{w.fileno}",
-      "--start=end-1h",
+      "--start=end-#{span}",
       "--end=now",
       "--title=#{evalstr yaml[:title]} on #{@host}",
       "--width=#{options[:width] || 500}",
@@ -103,6 +107,8 @@ module Graphable
       lineno += 1
     end
     args += yaml[:opts] if yaml[:opts]
+
+    return if lineno == 0
 
     $log.debug args
     begin

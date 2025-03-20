@@ -24,6 +24,10 @@ Config.init
 
 set :slim, layout: :application
 
+before do
+  @query = request.env["rack.request.query_hash"].symbolize_keys
+end
+
 get "/" do
   slim :index
 end
@@ -62,7 +66,7 @@ get "/:host/:plugin/:instance/graph" do
   content_type :png
   headers "content-disposition" => "filename=\"#{@instance.graph_title(n)}\""
   # expires 60
-  @instance.graph(n, width: params[:width], height: params[:height]) || pass
+  @instance.graph(n, @query) || pass
 end
 
 # get "/:host/:plugin/:instance/:file/graph" do

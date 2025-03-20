@@ -3,6 +3,8 @@ ul.inline
   - for file in @instance.files
       li.inline = file.a
 
-= @file.graph_img
+== slim :'partials/spans', layout: nil
+
+= @file.graph_img(@query)
 
 pre#code = @file.info.pretty_inspect

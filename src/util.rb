@@ -3,10 +3,14 @@ def evalstr str
   eval "\"#{str}\""
 end
 
-class String
-
-  def interpolate
-    binding.eval "\"#{self}\""
+class Hash
+  def symbolize_keys
+    transform_keys { |key| key.to_sym rescue key }
   end
+end
 
+class String
+  def numeric
+    (Integer(self) rescue false) and true
+  end
 end
