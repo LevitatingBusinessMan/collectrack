@@ -1,12 +1,12 @@
-h2 <a href="/">.</a>/#{@host.a}/#{@plugin}
+h2 #{link("/", ".")}/#{link(@host)}/#{@plugin}
 ul.inline
   - for instance in @plugin.instances.sort_by { it.name.to_i || it.name }
-    li.inline: a[href=merge_query(instance.link)]= instance
+    li.inline= link(instance)
 
 == slim :'partials/spans', layout: nil
 
 - for instance in @plugin.instances.sort_by { it.name.to_i || it.name }
-  = instance.graph_imgs(@query).map{instance.a it}.join.html_safe
+  = instance.graph_imgs(@query).map{link(instance, it)}.join.html_safe
 
 hr
 

@@ -75,6 +75,10 @@ def merge_query a, b=request.fullpath
   a = URI(a) if a.class != URI
   b = URI(b) if b.class != URI
   a_query, b_query = [a,b].map { URI.decode_www_form(it.query || '').to_h }
-  a.query = URI.encode_www_form(a_query.merge(b_query))
+  a.query = URI.encode_www_form(a_query.merge(b_query)) if b_query.size > 0
   a
+end
+
+def link obj, inner=nil, attrs={}
+  "<a href=#{merge_query(obj.respond_to?(:link) ? obj.link : obj)}>#{inner || obj}</a>".html_safe
 end

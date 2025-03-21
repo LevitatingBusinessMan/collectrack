@@ -1,7 +1,7 @@
-h2 <a href="/">.</a>/#{@host.a}/#{@plugin.a}/#{@instance}
+h2 #{link("/", ".")}/#{link(@host)}/#{link(@plugin)}/#{@instance}
 ul.inline
   - for instance in @plugin.instances.sort_by { it.name.to_i || it.name }
-    li.inline: a[href=merge_query(instance.link)]= instance
+    li.inline= link(instance)
 
 == slim :'partials/spans', layout: nil
 
@@ -13,6 +13,6 @@ details
   summary Files
   ul
     - for file in @instance.files
-      li= file.a
+      li= link(file)
 
 /== slim :'partials/settings', layout: nil

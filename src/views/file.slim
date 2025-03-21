@@ -1,7 +1,7 @@
-h2 <a href="/">.</a>/#{@host.a}/#{@plugin.a}/#{@instance.a}/#{@file}
+h2 #{link("/", ".")}/#{link(@host)}/#{link(@plugin)}/#{link(@instance)}/#{@file}
 ul.inline
   - for file in @instance.files
-      li.inline = file.a
+      li.inline = link file
 
 == slim :'partials/spans', layout: nil
 

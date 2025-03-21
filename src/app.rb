@@ -26,6 +26,7 @@ set :slim, layout: :application
 
 before do
   @query = request.env["rack.request.query_hash"].symbolize_keys
+  @query_string = request.env["rack.request.query_string"]
 end
 
 get "/" do
