@@ -5,6 +5,7 @@ require "./src/collectd.rb"
 
 class CollectdSock
   def initialize
+    return if !Config.unixsock
     begin
       @sock = UNIXSocket.new Config.unixsock
       $log.info "Socket connection at #{Config.unixsock} established"
@@ -13,6 +14,7 @@ class CollectdSock
     end
   end
   def flush obj=nil
+    return if !@sock
     args = ["FLUSH"]
     case obj
     when Plugin
@@ -25,10 +27,5 @@ class CollectdSock
     $log.debug("Sending socket: '#{args.join(" ")}'")
     @sock.puts(args.join(" "))
     $log.debug("Socket response: '#{@sock.gets.chomp}'")
-  end
-end
-
-class Instance
-  def flush
   end
 end
