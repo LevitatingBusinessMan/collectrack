@@ -75,6 +75,6 @@ def merge_query a, b=request.fullpath
   a = URI(a) if a.class != URI
   b = URI(b) if b.class != URI
   a_query, b_query = [a,b].map { URI.decode_www_form(it.query || '').to_h }
-  a.query = a_query.merge(b_query)
+  a.query = URI.encode_www_form(a_query.merge(b_query))
   a
 end

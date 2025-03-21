@@ -1,7 +1,7 @@
 h2 <a href="/">.</a>/#{@host.a}/#{@plugin}
 ul.inline
   - for instance in @plugin.instances.sort_by { it.name.to_i || it.name }
-    li.inline: a[href=instance.link]= instance
+    li.inline: a[href=merge_query(instance.link)]= instance
 
 == slim :'partials/spans', layout: nil
 
