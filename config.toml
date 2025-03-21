@@ -1,4 +1,5 @@
 base_dir = "/var/lib/collectd"
+unixsock = "/run/collectd.sock"
 plugin_config_dir = "./plugins"
 
 [colors]

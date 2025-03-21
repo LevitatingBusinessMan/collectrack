@@ -9,6 +9,7 @@ require "./src/collectd"
 require "./src/rack_lint_workaround"
 require "./src/rrd"
 require "./src/view_helpers"
+require "./src/unixsock"
 
 configure :development do
   ENV['APP_ENV'] = "development"
@@ -21,6 +22,9 @@ end
 Slim::Engine.options[:use_html_safe] = true
 
 Config.init
+
+
+set unixsock: CollectdSock.new
 
 set :slim, layout: :application
 
@@ -43,6 +47,8 @@ get "/:host/:plugin" do
   @host = Host.new(params[:host])
   pass if !@host.has_plugin? params[:plugin]
   @plugin = @host[params[:plugin]]
+  settings.unixsock.flush @plugin
+
   slim :plugin
 end
 
@@ -52,7 +58,22 @@ get "/:host/:plugin/:instance" do
   @plugin = @host[params[:plugin]]
   pass if !@plugin.has_instance? params[:instance]
   @instance = @plugin[params[:instance]]
+  settings.unixsock.flush @instance
+
   slim :instance
+end
+
+get "/:host/:plugin/:instance/:file" do
+  @host = Host.new(params[:host])
+  pass if !@host.has_plugin? params[:plugin]
+  @plugin = @host[params[:plugin]]
+  pass if !@plugin.has_instance? params[:instance]
+  @instance = @plugin[params[:instance]]
+  pass if !@instance.has_file? params[:file]
+  @file = @instance[params[:file]]
+  settings.unixsock.flush @file
+
+  slim :file
 end
 
 get "/:host/:plugin/:instance/graph" do
@@ -78,17 +99,6 @@ end
 #   @instance = @plugin[params[:instance]]
 #   slim :instance
 # end
-
-get "/:host/:plugin/:instance/:file" do
-  @host = Host.new(params[:host])
-  pass if !@host.has_plugin? params[:plugin]
-  @plugin = @host[params[:plugin]]
-  pass if !@plugin.has_instance? params[:instance]
-  @instance = @plugin[params[:instance]]
-  pass if !@instance.has_file? params[:file]
-  @file = @instance[params[:file]]
-  slim :file
-end
 
 not_found do
   slim "h1= \"#{request.fullpath} was not found\""

@@ -89,6 +89,10 @@ class Plugin
     File.join(Config.plugin_config_dir, "#{self}.yaml")
   end
 
+  def plugin
+    self
+  end
+
 end
 
 class Instance
@@ -126,6 +130,10 @@ class Instance
     files.any? { it.to_s == key || it.chomp == key }
   end
   alias_method :has_file?, :has_key?
+
+  def instance
+    self
+  end
 
 end
 
