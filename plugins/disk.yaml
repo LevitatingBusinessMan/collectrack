@@ -20,7 +20,7 @@ lines:
     inverted: true
 ---
 title: Disk Operations (#{@name})
-vertical_label: Bytes/s
+vertical_label: Operations/s
 file: disk_ops
 lines:
   - ds: read
