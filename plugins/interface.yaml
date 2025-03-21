@@ -15,3 +15,21 @@ lines:
   - ds: tx
   - ds: rx
     inverted: true
+
+---
+title: Interface Dropped Packets (#{@name})
+vertical_label: Packets/s
+file: if_dropped
+lines:
+  - ds: tx
+  - ds: rx
+    inverted: true
+
+---
+title: Interface Errors (#{@name})
+vertical_label: Errors/s
+file: if_errors
+lines:
+  - ds: tx
+  - ds: rx
+    inverted: true
