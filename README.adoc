@@ -14,6 +14,9 @@ The "Collect" part of the name refers to https://www.collectd.org/[collectd]. Th
 | Web Framework
 | https://sinatrarb.com/[Sinatra]
 
+| Templating Engine
+| https://slim-template.github.io/[Slim]
+
 | Gateway Interface
 | https://github.com/rack/rack/blob/main/SPEC.rdoc[Rack]
 
@@ -25,8 +28,19 @@ The "Collect" part of the name refers to https://www.collectd.org/[collectd]. Th
 
 | Data Collection
 | https://collectd.org[collectd]
-
 |===
+
+== Features
+Collect Rack aims to be significantly faster than existing web frontends for collectd.
+Requests to render graphs are sent out in parallel to the application.
+The application then interacts with the official Ruby bindings of `librrd` instead of spawning a process, and the output is streamed through a pipe directly to the underlying webserver.
+When rendering many graphs Collect Track has about twice the speed of CGP.
+
+It can also utilize the https://www.collectd.org/documentation/manpages/collectd-unixsock.html[unixsock] plugin to flush the caches of the plugins its graphing.
+This means that your graphs will always be up-to-date even with a large `CacheTimeout` setting.
+
+Planned is being able to parse your existing `/etc/collectd.conf` file for automatic configuration.
+
 == Running
 
 After running `bundle install`, the app can be started using `bin/rackup`, `bin/puma` or `ruby src/app.rb`.
