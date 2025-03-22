@@ -99,13 +99,16 @@ module Graphable
       color = line[:color] || colors.next_color
       cf = line[:cf] || "AVERAGE"
       thickness = line[:thickness] || 1
+      statement = yaml[:area] ? "AREA" : "LINE#{line[:thickness]}"
+      stack = ":STACK" if yaml[:stacked]
+      skipscale = ":skipscale" if line[:skipscale]
 
       vname_in = "#{ds}#{lineno}"
       vname_out = if line[:inverted] then "#{vname_in}_inv" else vname_in end
 
       args << "DEF:#{vname_in}=#{file}:#{ds}:#{cf}"
       args << "CDEF:#{vname_out}=#{vname_in},-1,*" if line[:inverted]
-      args << "LINE#{thickness}:#{vname_out}#{color}:#{legend}"
+      args << "#{statement}:#{vname_out}#{color}:#{legend}#{stack}#{skipscale}"
       lineno += 1
     end
     args += yaml[:opts] if yaml[:opts]

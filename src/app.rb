@@ -31,7 +31,7 @@ set :slim, layout: :application
 before do
   @query = request.env["rack.request.query_hash"].symbolize_keys
   @query_string = request.env["rack.request.query_string"]
-  request.env["uri"] = URI(request.fullpath)
+  @uri = URI(request.env["REQUEST_URI"]).freeze
 end
 
 get "/" do
