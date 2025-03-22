@@ -75,8 +75,9 @@ class RRDFile
 end
 
 #replace a value in a query
-def replace_query key, value, uri=request.env["uri"]
+def replace_query key, value, uri=@uri
   uri = URI(uri) if uri.class != URI
+  uri = uri.dup if uri.frozen?
   query = URI.decode_www_form(uri.query || '').to_h
   query[key] = value
   uri.query = URI.encode_www_form query
@@ -84,7 +85,7 @@ def replace_query key, value, uri=request.env["uri"]
 end
 
 # # merge the queries of URIs
-def merge_query a, b=request.env["uri"]
+def merge_query a, b=@uri
   a = URI(a) unless a.is_a? URI
   b = URI(b) unless b.is_a? URI
   a_query, b_query = [a,b].map { URI.decode_www_form(it.query || '').to_h }
