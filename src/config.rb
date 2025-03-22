@@ -1,7 +1,7 @@
 require "./src/collectd"
 require "tomlrb"
 
-class Config
+module Config
   def self.init
     @@toml = Tomlrb.load_file("config.toml", symbolize_keys: true)
     freeze
@@ -13,6 +13,10 @@ class Config
 
   def self.plugin_config_dir
     @@toml[:plugin_config_dir]
+  end
+
+  def self.unixsock
+    @@toml[:unixsock]
   end
 
   def self.hosts

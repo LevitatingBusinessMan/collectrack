@@ -23,7 +23,6 @@ Slim::Engine.options[:use_html_safe] = true
 
 Config.init
 
-
 set unixsock: CollectdSock.new
 
 set :slim, layout: :application

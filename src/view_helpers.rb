@@ -31,6 +31,24 @@ class Instance; include AHref; end
 
 class RRDFile; include AHref; end
 
+class Host
+  def load_spans
+    load = self.load
+    if load
+      load.map { "<span id=\"load\">#{sprintf "%.2f", it}</span>" }.join.html_safe
+    end
+  end
+  def children
+    plugins
+  end
+end
+
+class Plugin
+  def children
+    instances
+  end
+end
+
 class Instance
   def graph_imgs_base64 options={}
     graphs(options).map { "<img src=\"data:image;base64,#{Base64.encode64 it}\"/>".html_safe }
@@ -44,6 +62,10 @@ class Instance
     uri.query = URI.encode_www_form(options)
     uri
   end
+  def children
+    # change to @files to save a miniscule amount of time
+    files
+  end
 end
 
 class RRDFile
@@ -52,16 +74,7 @@ class RRDFile
   end
 end
 
-class Host
-  def load_spans
-    load = self.load
-    if load
-      load.map { "<span id=\"load\">#{sprintf "%.2f", it}</span>" }.join.html_safe
-    end
-  end
-end
-
-# replace a value in a query
+#replace a value in a query
 def replace_query key, value, uri=request.fullpath
   uri = URI(uri) if uri.class != URI
   query = URI.decode_www_form(uri.query || '').to_h
@@ -80,5 +93,5 @@ def merge_query a, b=request.fullpath
 end
 
 def link obj, inner=nil, attrs={}
-  "<a href=#{merge_query(obj.respond_to?(:link) ? obj.link : obj)}>#{inner || obj}</a>".html_safe
+  "<a href=#{merge_query(obj.respond_to?(:link) ? obj.link : obj)} #{"title=\"#{obj.children&.join(", ")}\"" if obj.respond_to?(:children)}>#{inner || obj}</a>".html_safe
 end
