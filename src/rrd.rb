@@ -2,7 +2,7 @@ require "RRD"
 require "yaml"
 require "base64"
 require "./src/collectd"
-require "./src/config"
+require "./src/config/config"
 require "./src/logging"
 require "./src/util"
 

@@ -7,10 +7,10 @@ RSpec::Core::RakeTask.new(:spec)
 
 desc "Generate collectd.conf lexer"
 task :lexer do
-  `bin/rex src/config/config.rex`
+  `bin/rex src/config/scanner.rex`
 end
 
 desc "Generate collectd.conf parser"
 task :parser do
-  `bin/racc src/config/config.racc`
+  `bin/racc src/config/parser.racc`
 end

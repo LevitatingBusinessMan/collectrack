@@ -4,12 +4,15 @@ require "sinatra"
 require "slim"
 require "slim/include"
 require "pp"
-require "./src/config"
+#require "./src/config"
 require "./src/collectd"
 require "./src/rack_lint_workaround"
 require "./src/rrd"
 require "./src/view_helpers"
 require "./src/unixsock"
+require "./src/config/config"
+
+Config.load ENV["COLLECTD_CONFIG"] || "/etc/collectd.conf" 
 
 configure :development do
   ENV['APP_ENV'] = "development"
@@ -21,8 +24,6 @@ configure :development do
 end
 
 Slim::Engine.options[:use_html_safe] = true
-
-Config.init
 
 set unixsock: CollectdSock.new
 
@@ -88,7 +89,7 @@ get "/:host/:plugin/:instance/graph" do
 
   content_type :png
   headers "content-disposition" => "filename=\"#{@instance.graph_title(n)}\""
-  # expires 60
+  expires Config.interval # this doesn't seem to work
   body = @instance.graph(n, @query) || pass
   body
 end

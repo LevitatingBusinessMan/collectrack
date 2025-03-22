@@ -39,7 +39,9 @@ When rendering many graphs Collect Track has about twice the speed of CGP.
 It can also utilize the https://www.collectd.org/documentation/manpages/collectd-unixsock.html[unixsock] plugin to flush the caches of the plugins its graphing.
 This means that your graphs will always be up-to-date even with a large `CacheTimeout` setting.
 
-Planned is being able to parse your existing `/etc/collectd.conf` file for automatic configuration.
+
+CollectTrack can parse your existing `collectd.conf` file to draw configuration values from.
+This is used to get values like your `BaseDir` and `unixsock` socket file.
 
 == Running
 

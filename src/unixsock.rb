@@ -1,5 +1,5 @@
 require "socket"
-require "./src/config.rb"
+require "./src/config/config.rb"
 require "./src/logging.rb"
 require "./src/collectd.rb"
 

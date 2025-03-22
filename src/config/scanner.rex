@@ -1,6 +1,6 @@
 # Rexical version of 
 # https://github.com/collectd/collectd/blob/14c59711e8470798428845ea2ecbdbe28fceb164/src/liboconfig/scanner.l
-class CollectdConfig
+class CollectdConfigParser
 macro
   WHITE_SPACE [\ \t\b]
   NON_WHITE_SPACE [^\ \t\b]

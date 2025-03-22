@@ -2,13 +2,14 @@
 # https://www.rubydoc.info/gems/racc
 # https://github.com/ruby/racc/tree/master/doc/en
 
-class CollectdConfig
+class CollectdConfigParser
 options no_result_var
 rule
   target: entire_file
   
   string:
     QUOTED_STRING
+    { unquote(val[0]) }
     | UNQUOTED_STRING
 
   argument:
@@ -53,7 +54,7 @@ rule
   
   statement_list:
     statement_list statement
-    { val[0] + [val[1]] if val[1] }
+    { val[0]&.+ [val[1]] }
     | statement
     { [val[0]] }
   
@@ -67,3 +68,8 @@ end
 
 ---- header
 require "./src/config/config.rex"
+
+---- inner
+def unquote str
+  str.delete_prefix('"').delete_suffix('"')
+end

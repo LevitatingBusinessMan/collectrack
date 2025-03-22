@@ -1,8 +1,8 @@
 require "./src/config/config"
 
-RSpec.describe CollectdConfig do
+RSpec.describe CollectdConfigParser do
   before do
-    @parser = CollectdConfig.new
+    @parser = CollectdConfigParser.new
   end
 
   it "scans hostname" do
@@ -40,7 +40,7 @@ Hostname "r-desktop"
 EOF
     expect(stmts.first.class).to be(Option)
     expect(stmts.first.identifier).to eq("Hostname")
-    expect(stmts.first.arguments).to eq(["\"r-desktop\""])
+    expect(stmts.first.arguments).to eq(["r-desktop"])
    end
 
    it "ignores comments" do
@@ -73,7 +73,7 @@ EOF
    block = stmts.first
    expect(block.class).to eq(Block)
    expect(block.identifier).to eq("Plugin")
-   expect(block.arguments).to eq(["\"battery\""])
+   expect(block.arguments).to eq(["battery"])
    expect(block.statements.first.class).to eq(Option)
    expect(block.statements.first.identifier).to eq("ValuesPercentage")
    expect(block.statements.first.arguments).to eq([false])
@@ -81,4 +81,38 @@ EOF
    expect(block.statements.last.arguments).to eq([false])
    end
 
+   it "parses an option spit over two lines" do
+    stmts = @parser.scan_str <<-EOF
+Hostname \
+"r-desktop"
+EOF
+    expect(stmts.first.class).to be(Option)
+    expect(stmts.first.identifier).to eq("Hostname")
+    expect(stmts.first.arguments).to eq(["r-desktop"])
+   end
+
+   it "parses a block after EOLs" do
+    stmts = @parser.scan_str <<-EOF
+#
+# Config file for collectd(1).
+# Please read collectd.conf(5) for a list of options.
+# http://collectd.org/
+#
+
+##############################################################################
+# Global                                                                     #
+#----------------------------------------------------------------------------#
+# Global settings for the daemon.                                            #
+##############################################################################
+
+<CollectTrack>
+    Option argument
+</CollectTrack>
+EOF
+
+  expect(stmts.length).to eq(1)
+  block = stmts.first
+  expect(block.class).to eq(Block)
+  end
+  
 end
