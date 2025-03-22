@@ -234,13 +234,13 @@ module_eval(<<'.,.,', 'parser.racc', 52)
 
 module_eval(<<'.,.,', 'parser.racc', 56)
   def _reduce_20(val, _values)
-     val[0]&.+ [val[1]]
+     (val[0]&.+ [val[1]]).compact
   end
 .,.,
 
 module_eval(<<'.,.,', 'parser.racc', 58)
   def _reduce_21(val, _values)
-     [val[0]]
+     ([val[0]]).compact
   end
 .,.,
 

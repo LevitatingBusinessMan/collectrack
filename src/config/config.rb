@@ -62,7 +62,7 @@ class Config
   end
 
   def self.unixsock
-    self[:plugin, :unixsock]&.[](:socket_file)&.arguments.first
+    self[:plugin, :unixsock]&.[](:socket_file)&.arguments&.first
   end
 
   def self.base_dir
@@ -75,6 +75,10 @@ class Config
 
   def self.interval
     self[:interval]&.arguments&.first&.to_i || 10
+  end
+
+  def self.flush_socket
+    self[:collect_track]&.[](:flush_socket)&.arguments&.first
   end
 
 end

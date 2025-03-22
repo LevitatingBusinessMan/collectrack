@@ -5,6 +5,7 @@ require "./src/collectd.rb"
 
 class CollectdSock
   def initialize
+    pp  Config.unixsock
     return if !Config.unixsock
     begin
       @sock = UNIXSocket.new Config.unixsock
@@ -14,7 +15,8 @@ class CollectdSock
     end
   end
   def flush obj=nil
-    return if !@sock
+    return unless @sock
+    return unless Config.flush_socket
     args = ["FLUSH"]
     case obj
     when Plugin

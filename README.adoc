@@ -47,6 +47,34 @@ This is used to get values like your `BaseDir` and `unixsock` socket file.
 
 After running `bundle install`, the app can be started using `bin/rackup`, `bin/puma` or `ruby src/app.rb`.
 
+== Configuration
+Collect Rack uses the same syntax as `collectd.conf` and by default it searches for your existing `/etc/collectd.conf`.
+
+If you want to use a config file that is not `/etc/collectd.conf` you can specify it using the `COLLECTD_CONFIG` environment variable.
+
+For options specific to `CollectTrack` you can use a block called `CollectTrack`.
+
+An example config could look like this:
+
+```
+BaseDir "/var/lib/collectd"
+
+<CollectTrack>
+  PluginConfDir "/opt/collectrack/plugins"
+  FlushSocket   true
+</CollectTrack>
+
+<Plugin unixsock>
+  SocketFile "/run/collectd.sock"
+</Plugin>
+
+```
+
+Options for the `CollectTrack` block are:
+
+* `PluginConfDir`: Where to draw `.yaml` plugin configurations from. Default `./plugins`.
+* `FlushSocket`: Flush the collectd cache when drawing graphs. The `unixsock` plugin must be configured for this to work. Default `true`.
+
 ==== Development
 
 There is a development script `src/rerun.rb` which listens to sourcecode changes and restarts the puma server.
