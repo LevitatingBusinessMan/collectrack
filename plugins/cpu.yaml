@@ -1,21 +1,24 @@
 ---
 title: CPU-#{@name} usage
-opts: ["--upper-limit=100"]
+opts: ["--upper-limit=100", "--rigid"]
 vertical_label: Jiffies
+stacked: true
+area: true
 lines:
-  #- legend: idle
-  #  file: cpu-idle
-  - legend: nice
-    file: cpu-nice
-  - legend: steal
-    file: cpu-steal
   - legend: user
     file: cpu-user
-  - legend: interrupt
-    file: cpu-interrupt
-  - legend: softirq
-    file: cpu-softirq
   - legend: system
     file: cpu-system
   - legend: wait
     file: cpu-wait
+  - legend: steal
+    file: cpu-steal
+  - legend: interrupt
+    file: cpu-interrupt
+  - legend: softirq
+    file: cpu-softirq
+  - legend: nice
+    file: cpu-nice
+  - legend: idle
+    file: cpu-idle
+    color: "#EEEEEE"

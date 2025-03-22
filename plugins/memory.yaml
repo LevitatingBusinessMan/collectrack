@@ -1,0 +1,26 @@
+---
+title: Memory usage
+vertical_label: Gb
+stacked: true
+area: true
+lines:
+  - legend: slab recl.
+    file: memory-slab_recl
+  - legend: slab unrecl.
+    file: memory-slab_unrecl
+  - legend: used
+    file: memory-used
+  - legend: wired
+    file: memory-wired
+  - legend: cache
+    file: memory-cache
+  - legend: cached
+    file: memory-cached
+  - legend: buffered
+    file: memory-bufferd
+  - legend: inactive
+    file: memory-inactive
+    color: "#EEEEEE"
+  - legend: available
+    file: memory-available
+    color: "#EEEEEE"
