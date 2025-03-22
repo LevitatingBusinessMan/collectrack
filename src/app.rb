@@ -17,6 +17,7 @@ configure :development do
   require "stackprof"
   use Rack::MiniProfiler
   Rack::MiniProfiler.config.enable_advanced_debugging_tools = true
+  Rack::MiniProfiler.config.flamegraph_ignore_gc = true
 end
 
 Slim::Engine.options[:use_html_safe] = true
@@ -30,6 +31,7 @@ set :slim, layout: :application
 before do
   @query = request.env["rack.request.query_hash"].symbolize_keys
   @query_string = request.env["rack.request.query_string"]
+  request.env["uri"] = URI(request.fullpath)
 end
 
 get "/" do
@@ -87,7 +89,15 @@ get "/:host/:plugin/:instance/graph" do
   content_type :png
   headers "content-disposition" => "filename=\"#{@instance.graph_title(n)}\""
   # expires 60
-  @instance.graph(n, @query) || pass
+  body = @instance.graph(n, @query) || pass
+  body
+end
+
+get "/test" do
+  r,w = IO.pipe
+  Thread.new { w.write("hello\n"); w.close }.run
+  content_type :png
+  r
 end
 
 # get "/:host/:plugin/:instance/:file/graph" do

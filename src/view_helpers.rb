@@ -51,7 +51,7 @@ end
 
 class Instance
   def graph_imgs_base64 options={}
-    graphs(options).map { "<img src=\"data:image;base64,#{Base64.encode64 it}\"/>".html_safe }
+    graphs(options).map { "<img src=\"data:image;base64,#{Base64.encode64 it.read}\"/>".html_safe }
   end
   def graph_imgs options={}
     (0..graph_count-1).map { "<img src=\"#{img_link(it, options)}\" onerror=\"this.style.display='none'\"/>" }
@@ -75,7 +75,7 @@ class RRDFile
 end
 
 #replace a value in a query
-def replace_query key, value, uri=request.fullpath
+def replace_query key, value, uri=request.env["uri"]
   uri = URI(uri) if uri.class != URI
   query = URI.decode_www_form(uri.query || '').to_h
   query[key] = value
@@ -84,9 +84,9 @@ def replace_query key, value, uri=request.fullpath
 end
 
 # # merge the queries of URIs
-def merge_query a, b=request.fullpath
-  a = URI(a) if a.class != URI
-  b = URI(b) if b.class != URI
+def merge_query a, b=request.env["uri"]
+  a = URI(a) unless a.is_a? URI
+  b = URI(b) unless b.is_a? URI
   a_query, b_query = [a,b].map { URI.decode_www_form(it.query || '').to_h }
   a.query = URI.encode_www_form(a_query.merge(b_query)) if b_query.size > 0
   a

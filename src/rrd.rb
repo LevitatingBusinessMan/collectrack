@@ -32,18 +32,20 @@ class Colors
   end
 end
 
-module RRD
-  # READ_PIPE, WRITE_PIPE = IO.pipe
-  # READ_PIPE.binmode
-  # WRITE_PIPE.binmode
-  # class RRD.yaml
-  # end
+class RRDIO < IO
+  # I ran into some bug with puma, on pipes to_path is nil
+  # and this causes a bug on this line:
+  # https://github.com/puma/puma/blob/master/lib/puma/request.rb#L194
+  # cannot replicate outside of rrd
+  def to_path
+    ""
+  end
 end
 
 module Graphable
   # may return nil
   def graph_yaml yaml, options={}
-    r, w = IO.pipe
+    r, w = RRDIO.pipe autoclose: true, binmode: true
     
     if yaml[:file]&.match?(/^\/.+\/$/)
       yaml = @instance.update_regex_filename_yaml yaml
@@ -112,15 +114,21 @@ module Graphable
 
     $log.debug args
     begin
-      RRD.graph(*args)
+      Thread.new {
+        start = Time.now
+        RRD.graph(*args)
+        w.close
+        $log.debug "RRD ran for #{(Time.now - start) * 1000}ms"
+      }.run
     rescue Exception => ex
       $log.warn ex.message
       raise ex
     end
-    out = r.read_nonblock(262144)
-    r.close
-    w.close
-    out
+    r
+    # out = r.read_nonblock(262144)
+    # r.close
+    # w.close
+    # out
   end
 end
 
@@ -142,7 +150,7 @@ class Instance
   # return one or more graphs as base64
   def graphs options={}
     effective_yamls.map {
-      graph_yaml it, options
+      graph_yaml(it, options)
     }.compact 
   end
 
@@ -225,7 +233,7 @@ class RRDFile
   end
 
   def graph options={}
-    Base64.encode64 graph_yaml(default_yaml, options)
+    Base64.encode64 graph_yaml(default_yaml, options).read
   end
 
 end

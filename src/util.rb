@@ -14,3 +14,10 @@ class String
     (Integer(self) rescue false) and true
   end
 end
+
+class Thread::Queue
+  def join
+    out = []
+    out << pop while not closed?
+  end
+end
