@@ -4,9 +4,7 @@ require "sinatra"
 require "slim"
 require "slim/include"
 require "pp"
-#require "./src/config"
 require "./src/collectd"
-require "./src/rack_lint_workaround"
 require "./src/rrd"
 require "./src/view_helpers"
 require "./src/unixsock"
@@ -21,6 +19,7 @@ configure :development do
   use Rack::MiniProfiler
   Rack::MiniProfiler.config.enable_advanced_debugging_tools = true
   Rack::MiniProfiler.config.flamegraph_ignore_gc = true
+  use Rack::Lint
 end
 
 Slim::Engine.options[:use_html_safe] = true
