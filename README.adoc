@@ -63,10 +63,10 @@ An example config could look like this:
 ```
 BaseDir "/var/lib/collectd"
 
-<CollectTrack>
+<CollectRack>
   PluginConfDir "/opt/collectrack/plugins"
   FlushSocket   true
-</CollectTrack>
+</CollectRack>
 
 <Plugin unixsock>
   SocketFile "/run/collectd.sock"

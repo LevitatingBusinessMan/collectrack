@@ -70,7 +70,7 @@ class Config
   end
 
   def self.plugin_config_dir
-    self[:collect_track]&.[](:plugin_config_dir)&.arguments&.first || "./plugins"
+    self[:collect_rack]&.[](:plugin_config_dir)&.arguments&.first || "./plugins"
   end
 
   def self.interval
@@ -78,7 +78,7 @@ class Config
   end
 
   def self.flush_socket
-    flush_socket = self[:collect_track]&.[](:flush_socket)&.arguments&.first
+    flush_socket = self[:collect_rack]&.[](:flush_socket)&.arguments&.first
     flush_socket.nil? ? true : flush_socket
   end
 
