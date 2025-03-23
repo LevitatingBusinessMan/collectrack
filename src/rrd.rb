@@ -90,7 +90,7 @@ module Graphable
       file = File.join(@instance.path, filename)
 
       if not File.exist? file
-        $log.warn "#{file} not found"
+        $log.debug "#{file} not found"
         next
       end
 
