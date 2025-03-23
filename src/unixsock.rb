@@ -16,11 +16,13 @@ class CollectdSock
   def flush obj=nil
     return unless @sock
     return unless Config.flush_socket
-    args = ["FLUSH"]
+    args = ["FLUSH", "plugin=rrdtool"]
     case obj
     when Plugin
+      args << "plugin=#{obj.plugin}"
     when Instance
       args << "plugin=#{obj.plugin}"
+      args += obj.files.map { "identifier=\"#{it.host}/#{it.instance}/#{it.chomp}\"" }
     when RRDFile
       args << "plugin=#{obj.plugin}"
       args << "identifier=\"#{obj.host}/#{obj.instance}/#{obj.chomp}\""
