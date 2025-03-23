@@ -5,7 +5,6 @@ require "./src/collectd.rb"
 
 class CollectdSock
   def initialize
-    pp  Config.unixsock
     return if !Config.unixsock
     begin
       @sock = UNIXSocket.new Config.unixsock
