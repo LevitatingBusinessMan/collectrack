@@ -27,3 +27,5 @@ gem "standardrb", "~> 1.0", :group => :development
 gem "rspec", "~> 3.13", :group => :development
 
 gem "rexical", "~> 1.0", :group => :development
+
+gem "bundler", "~> 2.6"

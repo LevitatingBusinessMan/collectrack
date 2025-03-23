@@ -1,2 +1,3 @@
 ---
 BUNDLE_SHEBANG: "ruby"
+BUNDLE_CACHE_ALL: "true"

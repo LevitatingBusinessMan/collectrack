@@ -113,6 +113,7 @@ PLATFORMS
   x86_64-linux-gnu
 
 DEPENDENCIES
+  bundler (~> 2.6)
   listen (~> 3.9)
   puma (~> 6.6)
   racc (~> 1.8)

@@ -14,3 +14,10 @@ desc "Generate collectd.conf parser"
 task :parser do
   `bin/racc src/config/parser.racc`
 end
+
+desc "Generate vendor tarball"
+task :vendor do
+  `bundle cache`
+  `tar cf vendor.tar.xz vendor`
+  FileUtils.rm_r "vendor"
+end
