@@ -32,20 +32,11 @@ class Colors
   end
 end
 
-class RRDIO < IO
-  # I ran into some bug with puma, on pipes to_path is nil
-  # and this causes a bug on this line:
-  # https://github.com/puma/puma/blob/master/lib/puma/request.rb#L194
-  # cannot replicate outside of rrd
-  def to_path
-    ""
-  end
-end
-
 module Graphable
   # may return nil
   def graph_yaml yaml, options={}
-    r, w = RRDIO.pipe autoclose: true, binmode: true
+    r, w = IO.pipe autoclose: true, binmode: true
+    r.singleton_class.undef_method(:to_path) # to_path may not be nil under Rack spec
     
     if yaml[:file]&.match?(/^\/.+\/$/)
       yaml = @instance.update_regex_filename_yaml yaml
