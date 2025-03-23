@@ -78,7 +78,8 @@ class Config
   end
 
   def self.flush_socket
-    self[:collect_track]&.[](:flush_socket)&.arguments&.first
+    flush_socket = self[:collect_track]&.[](:flush_socket)&.arguments&.first
+    flush_socket.nil? ? true : flush_socket
   end
 
 end
