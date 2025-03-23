@@ -1,5 +1,5 @@
 require "listen"
-COMMAND = ARGV.empty? ? ["puma -C puma_rerun.rb"] : ARGV
+COMMAND = ARGV.empty? ? ["puma -e development"] : ARGV
 
 listener = Listen.to "./src/", only: /\.rb$/ do
   start
