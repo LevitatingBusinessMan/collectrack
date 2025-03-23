@@ -91,6 +91,8 @@ However using `rackup` causes the  host and port to reset after a restart.
 bin/rerun
 ```
 
+To generate and test the configuration parser run `rake`.
+
 == Default plugin behavior
 Collect Rack ships aims to ship with instructions to graph most popular collectd plugins (see `./plugins`).
 However I cannot configure all plugins for all environments and some plugins are inherently unpredictable.
@@ -104,3 +106,6 @@ For these a single graph with data across all databases would be preferred.
 
 However most plugins store different units in different files.
 So for most other plugins the current behavior produces good graphs, even for generally unconfigurable plugins like `sensor`.
+
+== Configuration Parser
+This project ships a ruby implementation of the `collectd.conf` parser made with https://github.com/sparklemotion/rexical[rexical] and https://github.com/ruby/racc[racc]. Its code lives in `src/config`. You could use this in your own projects if you need to parse collectd configurations. See the readme at `src/config/README.adoc`.

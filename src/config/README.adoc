@@ -1,3 +1,25 @@
+:hardbreaks-option:
+
 This is where the config parser lives.
 
-It uses rexical and racc and tries to mimic the original collectd parser.
+It uses rexical and racc and tries to mimic the original collectd parser (which uses lex and yacc).
+
+The original parsers are in the `real/` directory for reference.
+
+=== Generating
+Use the rake tasks to generate the scanner and parser.
+```
+rake lexer parser
+```
+
+The following files will be generated:
+`parser.racc` -> `parser.tab.rb` 
+`parser.rex` -> `parser.rex.rb`
+
+=== Testing
+There are a few tests for the parser.
+```
+rake spec
+```
+
+or simply run `rake` to both generate and test the parser.
