@@ -116,17 +116,16 @@ module Graphable
     return if lineno == 0
 
     $log.debug args
-    begin
-      Thread.new {
-        start = Time.now
+    Thread.new {
+      start = Time.now
+      begin
         RRD.graph(*args)
-        w.close
-        $log.debug "RRD ran for #{(Time.now - start) * 1000}ms"
-      }.run
-    rescue Exception => ex
-      $log.warn ex.message
-      raise ex
-    end
+      rescue Exception => ex
+        $log.warn ex.message
+      end
+      w.close
+      $log.debug "RRD ran for #{(Time.now - start) * 1000}ms"
+    }.run
     r
     # out = r.read_nonblock(262144)
     # r.close
