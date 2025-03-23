@@ -1,4 +1,4 @@
-$: << "./libs"
+$:.unshift "./libs"
 
 require "sinatra"
 require "slim"
