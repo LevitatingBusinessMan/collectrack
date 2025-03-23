@@ -12,7 +12,7 @@ require "./src/view_helpers"
 require "./src/unixsock"
 require "./src/config/config"
 
-Config.load ENV["COLLECTD_CONFIG"] || "/etc/collectd.conf" 
+Config.load
 
 configure :development do
   ENV['APP_ENV'] = "development"

@@ -38,7 +38,7 @@ class Block
 end
 
 class Config
-  def self.load file
+  def self.load file=(ENV["COLLECTD_CONFIG"] || "/etc/collectd.conf")
     @@parser = CollectdConfigParser.new
     @@statements = @@parser.scan_file file
   end
