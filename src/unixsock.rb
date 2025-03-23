@@ -8,6 +8,7 @@ class CollectdSock
     return if !Config.unixsock
     begin
       @sock = UNIXSocket.new Config.unixsock
+      @sock.timeout = 1
       $log.info "Socket connection at #{Config.unixsock} established"
     rescue Exception => ex
       $log.warn ex.message
