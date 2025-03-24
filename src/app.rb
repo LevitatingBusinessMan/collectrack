@@ -4,6 +4,7 @@ require "sinatra"
 require "slim"
 require "slim/include"
 require "pp"
+require "rack/common_logger"
 require "./src/collectd"
 require "./src/rrd"
 require "./src/view_helpers"
@@ -20,7 +21,7 @@ configure :development do
   Rack::MiniProfiler.config.enable_advanced_debugging_tools = true
   Rack::MiniProfiler.config.flamegraph_ignore_gc = true
   use Rack::Lint
-  use Rack::CommonLogger
+  use Rack::CommonLogger, Logging.logger
 end
 
 disable :logging
@@ -94,13 +95,6 @@ get "/:host/:plugin/:instance/graph" do
   expires Config.interval # this doesn't seem to work
   body = @instance.graph(n, @query) || pass
   body
-end
-
-get "/test" do
-  r,w = IO.pipe
-  Thread.new { w.write("hello\n"); w.close }.run
-  content_type :png
-  r
 end
 
 # get "/:host/:plugin/:instance/:file/graph" do
