@@ -49,6 +49,8 @@ This is used to get values like your `BaseDir` and `unixsock` socket file.
 
 After running `bundle install`, the app can be started using `bin/rackup`, `bin/puma` or `ruby src/app.rb`. I personally recommand starting Collect Track via `puma`.
 
+When using `puma` you can configure middleware using `config.ru` and modify the puma configuration in `config/puma`.
+
 There is also a https://build.opensuse.org/package/show/home:Levitating/collectrack[package] available for OpenSUSE.
 
 == Configuration
