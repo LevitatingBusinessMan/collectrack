@@ -118,3 +118,9 @@ end
 not_found do
   slim "h1= \"#{request.fullpath} was not found\""
 end
+
+get "/favicon.ico" do
+  content_type :png
+  File.open "favicon.ico"
+end
+
