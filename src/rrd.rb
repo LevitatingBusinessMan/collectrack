@@ -33,18 +33,20 @@ class Colors
 end
 
 module Graphable
+  include Logging
+
   # may return nil
   def graph_yaml yaml, options={}
     r, w = IO.pipe autoclose: true, binmode: true
     r.singleton_class.undef_method(:to_path) # to_path may not be nil under Rack spec
-    
+
     if yaml[:file]&.match?(/^\/.+\/$/)
       yaml = @instance.update_regex_filename_yaml yaml
       return if not yaml[:lines] or yaml[:lines].empty?
     end
 
-    $log.debug yaml
-    $log.debug options
+    logger.debug yaml
+    logger.debug options
 
     span = options[:span] || "6h"
     span = "1#{span}" if not span[0].numeric
@@ -67,7 +69,7 @@ module Graphable
       raise "Cannot find adequate file to draw value from"
     end
 
-    $log.debug lines if not yaml[:lines]
+    logger.debug lines if not yaml[:lines]
 
     lineno = 0
     for line in lines
@@ -106,7 +108,7 @@ module Graphable
 
     return if lineno == 0
 
-    $log.debug args
+    logger.debug args
     Thread.new {
       start = Time.now
       begin
@@ -115,7 +117,7 @@ module Graphable
         $log.warn ex.message
       end
       w.close
-      $log.debug "RRD ran for #{(Time.now - start) * 1000}ms"
+      logger.debug "RRD ran for #{(Time.now - start) * 1000}ms"
     }.run
     r
     # out = r.read_nonblock(262144)

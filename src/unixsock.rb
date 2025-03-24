@@ -4,14 +4,16 @@ require "./src/logging.rb"
 require "./src/collectd.rb"
 
 class CollectdSock
+  include Logging
+
   def initialize
     return if !Config.unixsock
     begin
       @sock = UNIXSocket.new Config.unixsock
       @sock.timeout = 1
-      $log.info "Socket connection at #{Config.unixsock} established"
+      logger.info "Socket connection at #{Config.unixsock} established"
     rescue Exception => ex
-      $log.warn ex.message
+      logger.warn ex.message
     end
   end
   def flush obj=nil
@@ -28,8 +30,8 @@ class CollectdSock
       args << "plugin=#{obj.plugin}"
       args << "identifier=\"#{obj.host}/#{obj.instance}/#{obj.chomp}\""
     end
-    $log.debug("Sending socket: '#{args.join(" ")}'")
+    logger.debug("Sending socket: '#{args.join(" ")}'")
     @sock.puts(args.join(" "))
-    $log.debug("Socket response: '#{@sock.gets.chomp}'")
+    logger.debug("Socket response: '#{@sock.gets.chomp}'")
   end
 end

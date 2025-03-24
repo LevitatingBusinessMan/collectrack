@@ -20,7 +20,10 @@ configure :development do
   Rack::MiniProfiler.config.enable_advanced_debugging_tools = true
   Rack::MiniProfiler.config.flamegraph_ignore_gc = true
   use Rack::Lint
+  use Rack::CommonLogger
 end
+
+disable :logging
 
 Slim::Engine.options[:use_html_safe] = true
 
