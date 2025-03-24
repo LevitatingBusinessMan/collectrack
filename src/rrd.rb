@@ -83,7 +83,7 @@ module Graphable
       file = File.join(@instance.path, filename)
 
       if not File.exist? file
-        $log.debug "#{file} not found"
+        logger.debug "#{file} not found"
         next
       end
 
@@ -114,7 +114,7 @@ module Graphable
       begin
         RRD.graph(*args)
       rescue Exception => ex
-        $log.warn ex.message
+	logger.warn ex.message
       end
       w.close
       logger.debug "RRD ran for #{(Time.now - start) * 1000}ms"
