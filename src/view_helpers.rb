@@ -69,7 +69,7 @@ class Instance
 end
 
 class RRDFile
-  def graph_img options={}
+  def graph_imgs_base64 options={}
     "<img src=\"data:image;base64,#{graph(options)}\"/>".html_safe
   end
 end

@@ -205,6 +205,14 @@ end
 class RRDFile
   include Graphable
 
+  def graph options={}
+    graph_yaml(default_yaml, options)
+  end
+
+  def graph_title
+    "#{evalstr default_yaml[:title]} on #{@host}"
+  end
+
   def info
     RRD.info path
   end

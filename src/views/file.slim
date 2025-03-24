@@ -5,6 +5,6 @@ ul.inline
 
 == slim :'partials/spans', layout: nil
 
-= @file.graph_img(@query)
+= @file.graph_imgs_base64(@query)
 
 pre#code = @file.info.pretty_inspect

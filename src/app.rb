@@ -100,13 +100,19 @@ get "/:host/:plugin/:instance/:file.rrd" do
   slim :file
 end
 
-# get "/:host/:plugin/:instance/:file/graph" do
+# get "/:host/:plugin/:instance/:file.rrd/graph" do
 #   @host = Host.new(params[:host])
 #   pass if !@host.has_plugin? params[:plugin]
 #   @plugin = @host[params[:plugin]]
 #   pass if !@plugin.has_instance? params[:instance]
 #   @instance = @plugin[params[:instance]]
-#   slim :instance
+#   pass if !@instance.has_file? params[:file]
+#   @file = @instance[params[:file]]
+
+#   content_type :png
+#   headers "content-disposition" => "filename=\"#{@file.graph_title}\""
+#   body = @file.graph(@query) || pass
+#   body
 # end
 
 not_found do
