@@ -21,3 +21,11 @@ task :vendor do
   `tar cf vendor.tar.xz vendor`
   FileUtils.rm_r "vendor"
 end
+
+desc "Commit src/version.rb and set git tag"
+task :release, [:version] do |t, args|
+  File.write(p("src/version.rb"), p("VERSION = \"#{args[:version]}\"\n"))
+  `git add src/version.rb`
+  `git commit -m "src/version.rb #{args[:version]}" --no-edit`
+  `git tag #{args[:version]}`
+end

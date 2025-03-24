@@ -10,6 +10,7 @@ require "./src/rrd"
 require "./src/view_helpers"
 require "./src/unixsock"
 require "./src/config/config"
+require "./src/version"
 
 Config.load
 
@@ -36,6 +37,7 @@ before do
   @query = request.env["rack.request.query_hash"].symbolize_keys
   @query_string = request.env["rack.request.query_string"]
   @uri = URI(request.env["REQUEST_URI"]).freeze
+  headers "x-collectrack-version" => VERSION
 end
 
 get "/" do
