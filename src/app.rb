@@ -21,6 +21,7 @@ configure :development do
   use Rack::MiniProfiler
   Rack::MiniProfiler.config.enable_advanced_debugging_tools = true
   Rack::MiniProfiler.config.flamegraph_ignore_gc = true
+  Rack::MiniProfiler.config.flamegraph_sample_rate = 0.1
   use Rack::Lint
   use Rack::CommonLogger, Logging.logger
 end
@@ -69,18 +70,6 @@ get "/:host/:plugin/:instance" do
   slim :instance
 end
 
-get "/:host/:plugin/:instance/:file" do
-  @host = Host.new(params[:host])
-  pass if !@host.has_plugin? params[:plugin]
-  @plugin = @host[params[:plugin]]
-  pass if !@plugin.has_instance? params[:instance]
-  @instance = @plugin[params[:instance]]
-  pass if !@instance.has_file? params[:file]
-  @file = @instance[params[:file]]
-
-  slim :file
-end
-
 get "/:host/:plugin/:instance/graph" do
   @host = Host.new(params[:host])
   pass if !@host.has_plugin? params[:plugin]
@@ -97,6 +86,18 @@ get "/:host/:plugin/:instance/graph" do
   expires Config.interval # this doesn't seem to work
   body = @instance.graph(n, @query) || pass
   body
+end
+
+get "/:host/:plugin/:instance/:file" do
+  @host = Host.new(params[:host])
+  pass if !@host.has_plugin? params[:plugin]
+  @plugin = @host[params[:plugin]]
+  pass if !@plugin.has_instance? params[:instance]
+  @instance = @plugin[params[:instance]]
+  pass if !@instance.has_file? params[:file]
+  @file = @instance[params[:file]]
+
+  slim :file
 end
 
 # get "/:host/:plugin/:instance/:file/graph" do

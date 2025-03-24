@@ -1,3 +1,5 @@
+require "./src/logging"
+
 class Host
   attr_reader :name
 
@@ -37,8 +39,10 @@ end
 
 class Plugin
   attr_reader :name, :instances, :host
+  include Logging
 
   def self.read_plugins host
+    @@logger.debug "Building plugin tree for #{host}"
     plugins = {}
     Dir["*", base: host.path].each do |plugindir|
       name, instance = Plugin.split_dirname plugindir
