@@ -88,7 +88,7 @@ get "/:host/:plugin/:instance/graph" do
   body
 end
 
-get "/:host/:plugin/:instance/:file" do
+get "/:host/:plugin/:instance/:file.rrd" do
   @host = Host.new(params[:host])
   pass if !@host.has_plugin? params[:plugin]
   @plugin = @host[params[:plugin]]
