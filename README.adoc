@@ -33,32 +33,48 @@ The "Collect" part of the name refers to https://www.collectd.org/[collectd]. Th
 |===
 
 == Features
+===== Speed
 Collect Rack aims to be significantly faster than existing web frontends for collectd.
-Requests to render graphs are sent out in parallel to the application.
-The application then interacts with the official Ruby bindings of `librrd` instead of spawning a process, and the output is streamed through a pipe directly to the underlying webserver.
-When rendering many graphs Collect Track has about twice the speed of CGP.
+By the magic of using puma as the default webserver collect rack can be aggressively parallelized.
+The application also interacts with the official Ruby bindings of `librrd` instead of spawning a process, and the output is streamed through a pipe directly to the webserver.
+When rendering many graphs Collect Rack has about twice the speed of CGP.
 
+===== FLUSH
 It can also utilize the https://www.collectd.org/documentation/manpages/collectd-unixsock.html[unixsock] plugin to flush the caches of the plugins its graphing.
 This means that your graphs will always be up-to-date even with a large `CacheTimeout` setting.
 
-
-CollectTrack can parse your existing `collectd.conf` file to draw configuration values from.
-This is used to get values like your `BaseDir` and `unixsock` socket file.
+===== collectd.conf parsing
+CollectRack can parse your existing `collectd.conf` file to draw configuration values from.
+You can even configure CollectRack
 
 == Running
 
-After running `bundle install`, the app can be started using `bin/rackup`, `bin/puma` or `ruby src/app.rb`. I personally recommand starting Collect Track via `puma`.
+After running `bundle install`, the app can be started using `bin/rackup`, `bin/puma` or `ruby src/app.rb`. I personally recommand starting Collect Rack via `puma`.
 
 When using `puma` you can configure middleware using `config.ru` and modify the puma configuration in `config/puma`.
 
 There is also a https://build.opensuse.org/package/show/home:Levitating/collectrack[package] available for OpenSUSE.
+
+=== Using a  systemd.service
+Please see the https://build.opensuse.org/projects/home:Levitating/packages/collectrack/files/collectrack.service?expand=1[collectrack.service] shipped with the OpenSUSE package for reference.
+
+If you're using a packaged version of collect rack and you'd like to change the default behaviour use a systemd override.
+
+```systemd
+#/etc/systemd/system/collectrack.service.d/override.conf
+[Service]
+ExecStart=
+ExecStart=/usr/share/collectrack/bin/puma -e production -b unix:/run/collectrack.sock
+```
+
+To run Collect Rack with additional middleware you can choose to configure your own `config.ru` rackup file and execute that instead.
 
 == Configuration
 Collect Rack uses the same syntax as `collectd.conf` and by default it searches for your existing `/etc/collectd.conf`.
 
 If you want to use a config file that is not `/etc/collectd.conf` you can specify it using the `COLLECTD_CONFIG` environment variable.
 
-For options specific to `CollectTrack` you can use a block called `CollectTrack`.
+For options specific to `CollectRack` you can use a block called `CollectRack`.
 
 An example config could look like this:
 
@@ -78,11 +94,14 @@ BaseDir "/var/lib/collectd"
 
 ```
 
-Options for the `CollectTrack` block are:
+Options for the `CollectRack` block are:
 
 * `PluginConfDir`: Where to draw `.yaml` plugin configurations from. Default `./plugins`.
 * `FlushSocket`: Flush the collectd cache when drawing graphs. The `unixsock` plugin must be configured for this to work. Default `true`.
 * `CollectdMiddleware`: Enable middleware for own sending metrics to collectd
+
+`FlushSocket` is suboptimal for response times. If for whatever reason your goal is to render as much graphs per second as possible leave it off.
+
 ==== Development
 
 There is a development script `src/rerun.rb` which listens to sourcecode changes and restarts the puma server.
@@ -96,6 +115,7 @@ bin/rerun
 ```
 
 To generate and test the configuration parser run `rake`.
+
 
 == Default plugin behavior
 Collect Rack ships aims to ship with instructions to graph most popular collectd plugins (see `./plugins`).
