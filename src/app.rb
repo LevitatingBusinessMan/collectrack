@@ -11,6 +11,7 @@ require "./src/view_helpers"
 require "./src/unixsock"
 require "./src/config/config"
 require "./src/version"
+require "./src/logging"
 
 Config.load
 
@@ -28,6 +29,7 @@ end
 
 if Config.collectd_middleware
   require "./src/collectd_middleware"
+  Logging.logger.info "Using Rack::Collectd middleware"
   use(Rack::Collectd, Config.collectd_middleware_name || "collectrack")
 end
 
