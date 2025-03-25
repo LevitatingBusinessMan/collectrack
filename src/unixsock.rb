@@ -11,6 +11,7 @@ class CollectdSock
     begin
       @sock = UNIXSocket.new Config.unixsock
       @sock.timeout = 1
+      @mutex = Thread::Mutex.new
       logger.info "Socket connection at #{Config.unixsock} established"
     rescue Exception => ex
       logger.warn ex.message
@@ -31,7 +32,9 @@ class CollectdSock
       args << "identifier=\"#{obj.host}/#{obj.instance}/#{obj.chomp}\""
     end
     logger.debug("Sending socket: '#{args.join(" ")}'")
-    @sock.puts(args.join(" "))
-    logger.debug("Socket response: '#{@sock.gets.chomp}'")
+    @mutex.synchronize {
+      @sock.puts(args.join(" "))
+      logger.debug("Socket response: '#{@sock.gets.chomp}'")
+    }
   end
 end
