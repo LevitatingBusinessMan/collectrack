@@ -9,7 +9,10 @@ class Rack::Collectd
     @stats.with_full_proc_stats
   end
   def call(env)
-    @stats.requests(nil).count! 1
-    @app.call(env)
+    @stats.http_requests(nil).count! 1
+    start = Time.now
+    status, headers, body = @app.call(env)
+    @stats.response_time(nil).gauge = Time.now - start
+    [status, headers, body]
   end
 end
