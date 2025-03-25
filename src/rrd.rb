@@ -109,21 +109,19 @@ module Graphable
     return if lineno == 0
 
     logger.debug args
-    Thread.new {
+    thread = Thread.new do
       start = Time.now
       begin
         RRD.graph(*args)
       rescue Exception => ex
-	logger.warn ex.message
+	      logger.warn ex.message
+      ensure
+        w.close
+        logger.debug "RRD ran for #{(Time.now - start) * 1000}ms"
       end
-      w.close
-      logger.debug "RRD ran for #{(Time.now - start) * 1000}ms"
-    }.run
+    end
+    thread.run
     r
-    # out = r.read_nonblock(262144)
-    # r.close
-    # w.close
-    # out
   end
 end
 
