@@ -26,6 +26,11 @@ configure :development do
   use Rack::CommonLogger, Logging.logger
 end
 
+if Config.collectd_middleware
+  require "./src/collectd_middleware"
+  use(Rack::Collectd, Config.collectd_middleware_name || "collectrack")
+end
+
 disable :logging
 
 Slim::Engine.options[:use_html_safe] = true

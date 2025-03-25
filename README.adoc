@@ -68,6 +68,8 @@ BaseDir "/var/lib/collectd"
 <CollectRack>
   PluginConfDir "/opt/collectrack/plugins"
   FlushSocket   true
+  CollectdMiddleware true
+
 </CollectRack>
 
 <Plugin unixsock>
@@ -80,7 +82,7 @@ Options for the `CollectTrack` block are:
 
 * `PluginConfDir`: Where to draw `.yaml` plugin configurations from. Default `./plugins`.
 * `FlushSocket`: Flush the collectd cache when drawing graphs. The `unixsock` plugin must be configured for this to work. Default `true`.
-
+* `CollectdMiddleware`: Enable middleware for own sending metrics to collectd
 ==== Development
 
 There is a development script `src/rerun.rb` which listens to sourcecode changes and restarts the puma server.

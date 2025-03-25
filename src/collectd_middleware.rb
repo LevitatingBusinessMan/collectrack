@@ -9,6 +9,7 @@ class Rack::Collectd
     @stats.with_full_proc_stats
   end
   def call(env)
+    @stats.requests(nil).count! 1
     @app.call(env)
   end
 end
