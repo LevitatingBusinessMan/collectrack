@@ -82,4 +82,13 @@ class Config
     flush_socket.nil? ? true : flush_socket
   end
 
+  def self.collectd_middleware
+    collectd_middleware = self[:collect_rack]&.[](:collectd_middleware)&.arguments&.first
+    collectd_middleware.nil? ? true : collectd_middleware
+  end
+
+  def self.collectd_middleware_name
+    self[:collect_rack]&.[](:collectd_middleware_name)&.arguments&.first
+  end
+
 end
