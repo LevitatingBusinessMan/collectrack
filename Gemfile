@@ -31,3 +31,5 @@ gem "rexical", "~> 1.0", :group => :development
 gem "bundler", "~> 2.6"
 
 gem "collectd", "~> 0.0.15"
+
+gem "concurrent-ruby", "~> 1.3"
