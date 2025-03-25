@@ -114,6 +114,7 @@ class Instance
   def dir
     @plugin.name + ("-#{@name}" if @name).to_s
   end
+  alias_method :fullname, :dir
   
   def to_s
     @name || @plugin.name
