@@ -49,7 +49,7 @@ module Graphable
     logger.debug options
 
     span = options[:span] || "6h"
-    span = "1#{span}" if not span[0].numeric
+    span = "1#{span}" if not span[0].numeric?
 
     args = [
       "/dev/fd/#{w.fileno}",

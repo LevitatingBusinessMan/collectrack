@@ -10,8 +10,12 @@ class Hash
 end
 
 class String
-  def numeric
+  def numeric?
     (Integer(self) rescue false) and true
+  end
+
+  def camelize
+    split('_').collect(&:capitalize).join
   end
 end
 

@@ -1,6 +1,7 @@
 require_relative "scanner.rex"
 require_relative "parser.tab"
 require "./src/collectd"
+require "./src/logging"
 
 class Option
   attr_reader :identifier, :arguments
@@ -38,15 +39,27 @@ class Block
 end
 
 class Config
+  include Logging
+
+  VALID_OPTIONS = [:flush_socket, :collectd_middleware, :collectd_middleware_name, :plugin_config_dir]
+
   def self.load file=(ENV["COLLECTD_CONFIG"] || "/etc/collectd.conf")
     @@parser = CollectdConfigParser.new
     @@statements = @@parser.scan_file file
+    verify_options
   end
 
+  def self.verify_options
+    camels = VALID_OPTIONS.map(&:to_s).map(&:camelize)
+    return unless  self[:collect_rack] && self[:collect_rack].statements
+    for stmt in self[:collect_rack]&.statements
+      @@logger.warn "Unknown CollectRack option '#{stmt.identifier}'" unless camels.include? stmt.identifier
+    end
+  end
 
   #find a statement using the identifier and optional first argument
   def self.[] key, argument=nil
-    key = key.to_s.split('_').collect(&:capitalize).join
+    key = key.to_s.camelize
     argument = argument.to_s if argument
     @@statements.find {
       if argument
@@ -84,7 +97,7 @@ class Config
 
   def self.collectd_middleware
     collectd_middleware = self[:collect_rack]&.[](:collectd_middleware)&.arguments&.first
-    collectd_middleware.nil? ? true : collectd_middleware
+    collectd_middleware.nil? ? false : collectd_middleware
   end
 
   def self.collectd_middleware_name
