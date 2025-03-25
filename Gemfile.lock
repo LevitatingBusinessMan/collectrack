@@ -3,6 +3,7 @@ GEM
   specs:
     ast (2.4.3)
     base64 (0.2.0)
+    collectd (0.0.15)
     diff-lcs (1.6.0)
     ffi (1.17.1)
     ffi (1.17.1-x86_64-linux-gnu)
@@ -114,6 +115,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 2.6)
+  collectd (~> 0.0.15)
   listen (~> 3.9)
   puma (~> 6.6)
   racc (~> 1.8)
