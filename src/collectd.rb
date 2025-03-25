@@ -66,9 +66,7 @@ class Plugin
     @instances = instances.map { Instance.new self, it }
   end
 
-  def to_s
-    @name
-  end
+  alias_method :to_s, :name
 
   def link
     File.join(@host.link, @name)
@@ -116,10 +114,13 @@ class Instance
   def dir
     @plugin.name + ("-#{@name}" if @name).to_s
   end
-  alias_method :to_s, :dir
+  
+  def to_s
+    @name || @plugin.name
+  end
 
   def link
-    File.join(@plugin.link, dir)
+    File.join(@plugin.link, to_s)
   end
 
   def path
