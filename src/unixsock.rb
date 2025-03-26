@@ -32,9 +32,13 @@ class CollectdSock
       args << "identifier=\"#{obj.host}/#{obj.instance}/#{obj.chomp}\""
     end
     logger.debug("Sending socket: '#{args.join(" ")}'")
-    @mutex.synchronize {
-      @sock.puts(args.join(" "))
-      logger.debug("Socket response: '#{@sock.gets.chomp}'")
-    }
+    begin
+      @mutex.synchronize {
+        @sock.puts(args.join(" "))
+        logger.debug("Socket response: '#{@sock.gets.chomp}'")
+      }
+    rescue Exception => ex
+      logger.error ex.detailed_message
+    end
   end
 end

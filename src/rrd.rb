@@ -114,7 +114,7 @@ module Graphable
       begin
         RRD.graph(*args)
       rescue Exception => ex
-	      logger.warn ex.message
+	      logger.error ex.detailed_message
       ensure
         w.close
         logger.debug "RRD ran for #{(Time.now - start) * 1000}ms"
