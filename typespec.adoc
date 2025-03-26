@@ -1,0 +1,78 @@
+:hardbreaks-option:
+For each data type that a plugin can create a config file may exist.
+This instructs how to draw one or more graphs per type.
+There may also be an overlayed configuration specific for the plugin.
+
+```yaml
+plugins/interface.yaml
+---
+type: if_octets
+title: Traffic
+
+types/if_octets.yaml
+unit: Packets
+inverse: [rx]
+
+types/cpu.yaml
+grouped: true
+stacked: true
+legend: Jiffies
+colors:
+ idle: '#EEEEEE'
+order:
+  - user
+  - system
+  - wait
+  - steal
+  - interrupt
+  - softirq
+  - nice
+  - idle
+```
+
+= On Collectd naming
+Each host in collectd has plugins.
+Those plugins may optionally be split over multiple plugin instance. `plugin[-instance]`
+A plugin or plugin instance has saved types.
+Those types may also be split under different instances. `type[-instance]`
+Those type or type instances contain either one dataset (ds) named `value` or multiple datasets.
+
+= YAML Document SPEC
+Each yaml document describes how to draw one or more graphs for a type.
+
+==== title: str
+Title for the graph.
+Will be evaluated within the scope of the types class instance.
+
+Default is `"#{@plugin} (#{@instance})"`
+
+==== type: str
+To what type does this document belong.
+This is only used in the plugin level override.
+
+==== unit: str
+What unit this data is in.
+Common ones would be "Byte" or "Packet".
+
+This is used for the legend.
+On `DERIVE` and `COUNTER` types `/s` is added.
+
+Default is `nil` (no legend)
+
+==== group: bool
+If the instances for this type should be graphed together.
+Type instances do not inherently need to be related.
+
+Although the default is `true` this may be subject to change.
+
+==== stack: bool
+If the datasets should be drawn using `:STACK` (see `rrdgraph_graph(1)`).
+Requires that `grouped` be true.
+
+==== colors: {ds: str}
+Value should be a hash where the key is the `ds-name` and value an rrdgraph compatible color code.
+
+==== order: [ds]
+An order for type instances to be plotted in.
+Requires that `group` be true.
+ds-names not included in the list will be appended randomly.
