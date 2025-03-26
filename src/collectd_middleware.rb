@@ -10,9 +10,15 @@ class Rack::Collectd
   end
   def call(env)
     start = Time.now
-    status, headers, body = @app.call(env)
-    @stats.response_time(nil).gauge = Time.now - start
-    @stats.http_requests("#{status.to_s[0]}xx").count! 1
-    [status, headers, body]
+    begin
+      status, headers, body = @app.call(env)
+    rescue Exception => ex
+      @stats.http_requests("5xx").count! 1
+      raise ex
+    else
+      @stats.response_time(nil).gauge = Time.now - start
+      @stats.http_requests("#{status.to_s[0]}xx").count! 1
+      [status, headers, body]
+    end
   end
 end
