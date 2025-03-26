@@ -202,6 +202,7 @@ end
 
 class RRDFile
   include Graphable
+  include Logging
 
   def graph options={}
     graph_yaml(default_yaml, options)
@@ -212,7 +213,11 @@ class RRDFile
   end
 
   def info
-    RRD.info path
+    begin
+      RRD.info path
+    rescue Exception => ex
+      logger.error ex.detailed_message
+    end
   end
 
   def get_dss
