@@ -1,6 +1,6 @@
 ---
 title: Memory usage
-vertical_label: Gb
+vertical_label: Bytes
 stacked: true
 area: true
 lines:
