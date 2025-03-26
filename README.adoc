@@ -33,17 +33,17 @@ The "Collect" part of the name refers to https://www.collectd.org/[collectd]. Th
 |===
 
 == Features
-===== Speed
+==== Speed
 Collect Rack aims to be significantly faster than existing web frontends for collectd.
 By the magic of using puma as the default webserver collect rack can be aggressively parallelized.
 The application also interacts with the official Ruby bindings of `librrd` instead of spawning a process, and the output is streamed through a pipe directly to the webserver.
 When rendering many graphs Collect Rack has about twice the speed of CGP.
 
-===== FLUSH
+==== FLUSH
 It can also utilize the https://www.collectd.org/documentation/manpages/collectd-unixsock.html[unixsock] plugin to flush the caches of the plugins its graphing.
 This means that your graphs will always be up-to-date even with a large `CacheTimeout` setting.
 
-===== collectd.conf parsing
+=====collectd.conf parsing
 CollectRack can parse your existing `collectd.conf` file to draw configuration values from.
 You can even configure CollectRack
 
@@ -102,7 +102,7 @@ Options for the `CollectRack` block are:
 
 `FlushSocket` is suboptimal for response times. If for whatever reason your goal is to render as much graphs per second as possible leave it off.
 
-==== Development
+== Development
 
 There is a development script `src/rerun.rb` which listens to sourcecode changes and restarts the puma server.
 
