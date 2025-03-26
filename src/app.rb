@@ -56,6 +56,8 @@ end
 get "/:host" do
   @host = Host.new(params[:host])
   pass if !@host.exist?
+  settings.unixsock.flush @instance
+
   slim :host
 end
 
@@ -63,6 +65,7 @@ get "/:host/:plugin" do
   @host = Host.new(params[:host])
   pass if !@host.has_plugin? params[:plugin]
   @plugin = @host[params[:plugin]]
+  settings.unixsock.flush @instance
 
   slim :plugin
 end
@@ -73,6 +76,7 @@ get "/:host/:plugin/:instance" do
   @plugin = @host[params[:plugin]]
   pass if !@plugin.has_instance? params[:instance]
   @instance = @plugin[params[:instance]]
+  settings.unixsock.flush @instance
 
   slim :instance
 end
@@ -85,8 +89,6 @@ get "/:host/:plugin/:instance/graph" do
   @instance = @plugin[params[:instance]]
   n = Integer(params[:n]) rescue nil
   pass if !n
-
-  settings.unixsock.flush @instance
 
   content_type :png
   headers "content-disposition" => "filename=\"#{@instance.graph_title(n)}\""
