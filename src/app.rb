@@ -45,6 +45,7 @@ before do
   @query = request.env["rack.request.query_hash"].symbolize_keys
   @query_string = request.env["rack.request.query_string"]
   @uri = URI(request.env["REQUEST_URI"]).freeze
+  env['rack.logger'] = Logging.logger
   headers "x-collectrack-version" => VERSION
 end
 
