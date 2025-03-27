@@ -43,10 +43,13 @@ class Rack::Collectd
     @stats.memory(@worker).polled_gauge do
       process_status('VmRSS')&.to_i&.* 1024
     end
-    @stats.cpu("user-#{@worker}").polled_gauge do
+    @stats.threads(@worker).polled_gauge do
+      process_status('Threads')&.to_i
+    end
+    @stats.cpu("user-#{@worker}").polled_counter do
       (Process::times.utime * 100).to_i
     end
-    @stats.cpu("system-#{@worker}").polled_gauge do
+    @stats.cpu("system-#{@worker}").polled_counter do
       (Process::times.stime * 100).to_i
     end
   end
