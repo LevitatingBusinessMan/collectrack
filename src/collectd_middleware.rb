@@ -1,6 +1,9 @@
 require "collectd"
 require "rack"
 
+# For response_time it might be nice to lower the minimum heartbeat
+# rrdtool tune response_time.rrd --heartbeat value:5000
+
 class Rack::Collectd
   def initialize(app, instance=:default, interval=10, addr="ff18::efc0:4a42", port=25826)
     @app = app
@@ -8,7 +11,7 @@ class Rack::Collectd
     @stats = Collectd.rack(instance)
     @cmdline = IO.read("/proc/self/cmdline").split("\x00").first
     # https://github.com/puma/puma/blob/ca201ef69757f8830b636251b0af7a51270eb68a/lib/puma/cluster/worker.rb#L31-L33
-    @worker = @cmdline.match(/puma: cluster worker (\d+): \d+.*$/)&.[](1)&.to_i
+    @worker = @cmdline.match(/puma: cluster worker (\d+): \d+.*$/)&.[](1)&.to_i || 0
     init_polls
   end
 
@@ -37,16 +40,13 @@ class Rack::Collectd
 
   def init_polls
     worker = @worker ? "-#{@worker}" : ""
-    @stats.memory("VmRSS#{worker}").polled_gauge do
+    @stats.memory(@worker).polled_gauge do
       process_status('VmRSS')&.to_i&.* 1024
     end
-    @stats.memory("VmSize#{worker}").polled_gauge do
-      process_status('VmSize')&.to_i&.* 1024
-    end
-    @stats.cpu("user#{worker}").polled_gauge do
+    @stats.cpu("user-#{@worker}").polled_gauge do
       (Process::times.utime * 100).to_i
     end
-    @stats.cpu("system#{worker}").polled_gauge do
+    @stats.cpu("system-#{@worker}").polled_gauge do
       (Process::times.stime * 100).to_i
     end
   end
