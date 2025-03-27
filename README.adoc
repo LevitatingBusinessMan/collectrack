@@ -69,6 +69,8 @@ ExecStart=/usr/share/collectrack/bin/puma -e production -b unix:/run/collectrack
 
 To run Collect Rack with additional middleware you can choose to configure your own `config.ru` rackup file and execute that instead.
 
+There's also the https://github.com/puma/puma/blob/master/docs/systemd.md[Puma documentation regarding systemd].
+
 == Configuration
 Collect Rack uses the same syntax as `collectd.conf` and by default it searches for your existing `/etc/collectd.conf`.
 
