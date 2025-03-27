@@ -37,8 +37,8 @@ module Graphable
 
   # may return nil
   def graph_yaml yaml, options={}
-    r, w = IO.pipe autoclose: true, binmode: true
-    r.singleton_class.undef_method(:to_path) # to_path may not be nil under Rack spec
+    #r, w = IO.pipe autoclose: true, binmode: true
+    #r.singleton_class.undef_method(:to_path) # to_path may not be nil under Rack spec
 
     if yaml[:file]&.match?(/^\/.+\/$/)
       yaml = @instance.update_regex_filename_yaml yaml
@@ -52,7 +52,7 @@ module Graphable
     span = "1#{span}" if not span[0].numeric?
 
     args = [
-      "/dev/fd/#{w.fileno}",
+     # "/dev/fd/#{w.fileno}",
       "--start=end-#{span}",
       "--end=now",
       "--title=#{evalstr yaml[:title]} on #{@host}",
@@ -109,19 +109,24 @@ module Graphable
     return if lineno == 0
 
     logger.debug args
-    thread = Thread.new do
+    rac = Ractor.new(args) do |args|
+      require "RRD"
+      r, w = IO.pipe
+      r.singleton_class.undef_method(:to_path)
+      Ractor.yield r
+      args.unshift "/dev/fd/#{w.fileno}"
       start = Time.now
       begin
         RRD.graph(*args)
       rescue Exception => ex
-	      logger.error ex.detailed_message
+        raise ex
+	      #logger.error ex.detailed_message
       ensure
         w.close
-        logger.debug "RRD ran for #{(Time.now - start) * 1000}ms"
+        #logger.debug "RRD ran for #{(Time.now - start) * 1000}ms"
       end
     end
-    thread.run
-    r
+    rac.take
   end
 end
 
