@@ -45,7 +45,7 @@ This means that your graphs will always be up-to-date even with a large `CacheTi
 
 ==== collectd.conf parsing
 CollectRack can parse your existing `collectd.conf` file to draw configuration values from.
-You can even configure CollectRack
+You can even configure CollectRack specific settings via your existing `collectd.conf`.
 
 == Running
 
