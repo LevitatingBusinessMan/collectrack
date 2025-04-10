@@ -118,6 +118,7 @@ bin/rerun
 
 To generate and test the configuration parser run `rake`.
 
+To release, run `rake <version>` to update and commit the version.
 
 == Default plugin behavior
 Collect Rack ships aims to ship with instructions to graph most popular collectd plugins (see `./plugins`).
