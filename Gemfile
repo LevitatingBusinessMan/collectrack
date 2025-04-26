@@ -33,3 +33,5 @@ gem "bundler", "~> 2.6"
 gem "collectd", "~> 0.0.15"
 
 gem "concurrent-ruby", "~> 1.3"
+
+gem "simplecov", "~> 0.22.0", group: :development

@@ -1,4 +1,5 @@
 require "./src/config/config"
+require 'tempfile'
 
 RSpec.describe CollectdConfigParser do
   before do
@@ -19,7 +20,7 @@ RSpec.describe CollectdConfigParser do
   end
 
   it "ignores commented blocks when scanning" do
-    tokens = @parser.tokens <<-EOF
+    tokens = @parser.tokens <<~EOF
     #<Plugin "battery">
     #  ValuesPercentage false
     #  ReportDegraded false
@@ -35,40 +36,40 @@ RSpec.describe CollectdConfigParser do
   end
 
   it "parses hostname" do
-    stmts = @parser.scan_str <<-EOF
-Hostname "r-desktop"
-EOF
+    stmts = @parser.scan_str <<~EOF
+    Hostname "r-desktop"
+    EOF
     expect(stmts.first.class).to be(Option)
     expect(stmts.first.identifier).to eq("Hostname")
     expect(stmts.first.arguments).to eq(["r-desktop"])
    end
 
    it "ignores comments" do
-    stmts = @parser.scan_str <<-EOF
-#Hostname "r-desktop"
-EOF
+    stmts = @parser.scan_str <<~EOF
+    #Hostname "r-desktop"
+    EOF
     expect(stmts).to be_empty
    end
 
    it "ignores commented block" do
-    stmts = @parser.scan_str <<-EOF
-#<Plugin "battery">
-#  ValuesPercentage false
-#  ReportDegraded false
-#  QueryStateFS false
-#</Plugin>
-EOF
+    stmts = @parser.scan_str <<~EOF
+    #<Plugin "battery">
+    #  ValuesPercentage false
+    #  ReportDegraded false
+    #  QueryStateFS false
+    #</Plugin>
+   EOF
    expect(stmts).to be_empty
    end
 
    it "parses a block" do
-    stmts = @parser.scan_str <<-EOF
-<Plugin "battery">
-  ValuesPercentage false
-  ReportDegraded false
-  QueryStateFS false
-</Plugin>
-EOF
+    stmts = @parser.scan_str <<~EOF
+    <Plugin "battery">
+      ValuesPercentage false
+      ReportDegraded false
+      QueryStateFS false
+    </Plugin>
+   EOF
    expect(stmts.length).to eq(1)
    block = stmts.first
    expect(block.class).to eq(Block)
@@ -82,17 +83,17 @@ EOF
    end
 
    it "parses an option spit over two lines" do
-    stmts = @parser.scan_str <<-EOF
-Hostname \
-"r-desktop"
-EOF
+    stmts = @parser.scan_str <<~EOF
+    Hostname \
+    "r-desktop"
+    EOF
     expect(stmts.first.class).to be(Option)
     expect(stmts.first.identifier).to eq("Hostname")
     expect(stmts.first.arguments).to eq(["r-desktop"])
    end
 
    it "parses a block after EOLs" do
-    stmts = @parser.scan_str <<-EOF
+    stmts = @parser.scan_str <<~EOF
 #
 # Config file for collectd(1).
 # Please read collectd.conf(5) for a list of options.
@@ -108,11 +109,23 @@ EOF
 <CollectTrack>
     Option argument
 </CollectTrack>
-EOF
+    EOF
 
   expect(stmts.length).to eq(1)
   block = stmts.first
   expect(block.class).to eq(Block)
   end
-  
+
+  it "parses from files" do
+    f = Tempfile.create
+    f << <<~EOF
+    Hostname "r-desktop"
+    EOF
+    f.rewind
+    stmts = @parser.scan_file f.path
+    expect(stmts.first.class).to be(Option)
+    expect(stmts.first.identifier).to eq("Hostname")
+    expect(stmts.first.arguments).to eq(["r-desktop"])
+  end
+
 end
