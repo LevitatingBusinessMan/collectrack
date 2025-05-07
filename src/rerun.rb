@@ -1,7 +1,7 @@
 require "listen"
 COMMAND = ARGV.empty? ? ["puma -e development"] : ARGV
 
-listener = Listen.to "./src/", only: /\.rb$/ do
+listener = Listen.to "./src/" do
   start
 end
 listener.start
