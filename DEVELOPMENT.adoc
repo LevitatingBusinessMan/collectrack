@@ -1,0 +1,19 @@
+= For Developers
+
+== Development
+There is a development script `src/rerun.rb` which listens to sourcecode changes and restarts the puma server.
+
+This script can be executed with `ruby src/rerun.rb` or `bin/rerun`.
+It will execute `puma -e development` by default, other commands to start the server can be specified on the command line.
+Do note that using `rackup` with this tool causes the host and port to reset.
+
+```
+bin/rerun
+```
+
+To generate and test the configuration parser run `rake`.
+
+== Releasing
+To release, run `rake release <version>` to update and commit the version.
+
+When the Gemfile is altered, run `rake vendor` which will create a `vendor.tar.xz` file for use in packaging.
