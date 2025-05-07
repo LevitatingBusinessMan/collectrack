@@ -18,7 +18,7 @@ end
 desc "Generate vendor tarball"
 task :vendor do
   `bundle cache --all-platforms`
-  `tar cf vendor.tar.xz vendor`
+  `tar cJf vendor.tar.xz vendor`
   FileUtils.rm_r "vendor"
 end
 
