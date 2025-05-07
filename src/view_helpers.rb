@@ -83,7 +83,7 @@ end
 # links made like this keep their query parameters
 # attrs does nothing currently
 def link obj, inner=nil, attrs={}
-  "<a href=#{merge_query(obj.respond_to?(:link) ? obj.link : obj)} #{"title=\"#{obj.children&.join(", ")}\"" if obj.respond_to?(:children)}>#{inner || obj}</a>".html_safe
+  "<a href=\"#{merge_query(obj.respond_to?(:link) ? obj.link : obj)}\" #{"title=\"#{obj.children&.join(", ")}\"" if obj.respond_to?(:children)}>#{inner || obj}</a>".html_safe
 end
 
 # module AHref
