@@ -35,6 +35,9 @@ end
 module Graphable
   include Logging
 
+  DEFAULT_GRAPH_WIDTH = 600
+  DEFAULT_GRAPH_HEIGHT = 200
+
   # may return nil
   def graph_yaml yaml, options={}
     r, w = IO.pipe autoclose: true, binmode: true
@@ -56,8 +59,9 @@ module Graphable
       "--start=end-#{span}",
       "--end=now",
       "--title=#{evalstr yaml[:title]} on #{@host}",
-      "--width=#{options[:width] || 500}",
-      "--height=#{options[:height] || 150}"
+      "--width=#{options[:width] || DEFAULT_GRAPH_WIDTH}",
+      "--height=#{options[:height] || DEFAULT_GRAPH_HEIGHT}",
+      "--full-size-mode"
     ]
     args << "--vertical-label=#{yaml[:vertical_label]}" if yaml[:vertical_label]
 
