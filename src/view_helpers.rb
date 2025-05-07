@@ -17,20 +17,6 @@ class String
   end
 end
 
-module AHref
-  def a inner=nil
-    "<a href=#{link}>#{inner || self}</a>".html_safe
-  end
-end
-
-class Host; include AHref; end
-
-class Plugin; include AHref; end
-
-class PluginInstance; include AHref; end
-
-class RRDFile; include AHref; end
-
 class Host
   def load_spans
     load = self.load
@@ -84,7 +70,7 @@ def replace_query key, value, uri=@uri
   uri
 end
 
-# # merge the queries of URIs
+# merge the queries of URIs
 def merge_query a, b=@uri
   a = URI(a) unless a.is_a? URI
   b = URI(b) unless b.is_a? URI
@@ -93,6 +79,23 @@ def merge_query a, b=@uri
   a
 end
 
+# create a generic link or a link to an object that has a link method
+# links made like this keep their query parameters
+# attrs does nothing currently
 def link obj, inner=nil, attrs={}
   "<a href=#{merge_query(obj.respond_to?(:link) ? obj.link : obj)} #{"title=\"#{obj.children&.join(", ")}\"" if obj.respond_to?(:children)}>#{inner || obj}</a>".html_safe
 end
+
+# module AHref
+#   def a inner=nil
+#     "<a href=#{link}>#{inner || self}</a>".html_safe
+#   end
+# end
+
+# class Host; include AHref; end
+
+# class Plugin; include AHref; end
+
+# class PluginInstance; include AHref; end
+
+# class RRDFile; include AHref; end
