@@ -12,5 +12,3 @@ plugin = host.plugins.choose
 
 puts "Instances:"
 instance = plugin.instances.choose
-
-

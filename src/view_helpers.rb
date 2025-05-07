@@ -27,7 +27,7 @@ class Host; include AHref; end
 
 class Plugin; include AHref; end
 
-class Instance; include AHref; end
+class PluginInstance; include AHref; end
 
 class RRDFile; include AHref; end
 
@@ -49,7 +49,7 @@ class Plugin
   end
 end
 
-class Instance
+class PluginInstance
   def graph_imgs_base64 options={}
     graphs(options).map { "<img src=\"data:image;base64,#{Base64.encode64 it.read}\"/>".html_safe }
   end

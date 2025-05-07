@@ -63,7 +63,7 @@ class Plugin
   def initialize host, name, instances
     @name = name
     @host = host
-    @instances = instances.map { Instance.new self, it }
+    @instances = instances.map { PluginInstance.new self, it }
   end
 
   alias_method :to_s, :name
@@ -97,7 +97,7 @@ class Plugin
 
 end
 
-class Instance
+class PluginInstance
   attr_reader :name, :plugin, :host
 
   def initialize plugin, instance_name

@@ -125,7 +125,7 @@ module Graphable
   end
 end
 
-class Instance
+class PluginInstance
   include Graphable
 
   def graph n, options={}

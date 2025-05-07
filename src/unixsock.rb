@@ -24,7 +24,7 @@ class CollectdSock
     case obj
     when Plugin
       args << "plugin=#{obj.plugin}"
-    when Instance
+    when PluginInstance
       args << "plugin=#{obj.plugin}"
       args += obj.files.map { "identifier=\"#{it.host}/#{it.instance.dir}/#{it.chomp}\"" }
     when RRDFile
