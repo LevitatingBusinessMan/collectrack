@@ -12,7 +12,7 @@ class Host
   end
 
   def exist?
-    File.exist? File.join(Config.base_dir, @name)
+    File.exist? path
   end
 
   def path

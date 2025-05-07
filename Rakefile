@@ -3,7 +3,9 @@ require 'rspec/core/rake_task'
 
 task default: %w[lexer parser spec]
 
-RSpec::Core::RakeTask.new(:spec)
+RSpec::Core::RakeTask.new(:spec) do |task|
+  task.rspec_opts = "--format documentation"
+end
 
 desc "Generate collectd.conf lexer"
 task :lexer do

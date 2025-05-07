@@ -1,6 +1,7 @@
 = For Developers
 
 == Development
+=== Running
 There is a development script `src/rerun.rb` which listens to sourcecode changes and restarts the puma server.
 
 This script can be executed with `ruby src/rerun.rb` or `bin/rerun`.
@@ -11,7 +12,17 @@ Do note that using `rackup` with this tool causes the host and port to reset.
 bin/rerun
 ```
 
-To generate and test the configuration parser run `rake`.
+=== The configuration parser
+The configuration parser and lexer in `src/config` need to be build.
+The ungenerated files are called `parser.racc` and `scanner.rex`.
+
+Build these explicitly with `rake lexer parser`.
+
+Also see the documentation in `src/config/README.adoc`.
+
+=== Testing
+
+Run `rake` to run all tests and generate a coverage report.
 
 == Releasing
 To release, run `rake release <version>` to update and commit the version.

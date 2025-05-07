@@ -2,6 +2,7 @@ require_relative "scanner.rex"
 require_relative "parser.tab"
 require "./src/collectd"
 require "./src/logging"
+require "./src/util"
 
 class Option
   attr_reader :identifier, :arguments
