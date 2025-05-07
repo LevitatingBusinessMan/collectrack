@@ -1,5 +1,6 @@
 require "./src/config/config"
 require_relative "helpers"
+require "./src/util"
 
 Config.load
 
