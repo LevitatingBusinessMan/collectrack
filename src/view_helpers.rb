@@ -35,14 +35,12 @@ class Plugin
   end
 end
 
-# if for any reason graphs should be able to fail, use onerror=\"this.style.display='none'\" on graphs to hide them
-
 class PluginInstance
   def graph_imgs_base64 options={}
-    graphs(options).map { "<img src=\"data:image;base64,#{Base64.encode64 it.read}\" width=#{options[:width] || Graphable::DEFAULT_GRAPH_WIDTH} height=#{options[:height] || Graphable::DEFAULT_GRAPH_HEIGHT}/>".html_safe }
+    graphs(options).map { "<img src=\"data:image;base64,#{Base64.encode64 it.read}\" onerror=\"this.style.display='none'\" width=#{options[:width] || Graphable::DEFAULT_GRAPH_WIDTH} height=#{options[:height] || Graphable::DEFAULT_GRAPH_HEIGHT}/>".html_safe }
   end
   def graph_imgs options={}
-    (0..graph_count-1).map { "<img src=\"#{img_link(it, options)}\" width=#{options[:width] || Graphable::DEFAULT_GRAPH_WIDTH} height=#{options[:height] || Graphable::DEFAULT_GRAPH_HEIGHT}/>" }
+    (0..graph_count-1).map { "<img src=\"#{img_link(it, options)}\" onerror=\"this.style.display='none'\" width=#{options[:width] || Graphable::DEFAULT_GRAPH_WIDTH} height=#{options[:height] || Graphable::DEFAULT_GRAPH_HEIGHT}/>" }
   end
   def img_link n, options={}
     options[:n] = n
@@ -58,7 +56,7 @@ end
 
 class RRDFile
   def graph_imgs_base64 options={}
-    "<img src=\"data:image;base64,#{graph(options)}\" width=#{options[:width] || Graphable::DEFAULT_GRAPH_WIDTH} height=#{options[:height] || Graphable::DEFAULT_GRAPH_HEIGHT}/>".html_safe
+    "<img src=\"data:image;base64,#{graph(options)}\" onerror=\"this.style.display='none'\" width=#{options[:width] || Graphable::DEFAULT_GRAPH_WIDTH} height=#{options[:height] || Graphable::DEFAULT_GRAPH_HEIGHT}/>".html_safe
   end
 end
 
