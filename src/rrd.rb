@@ -116,7 +116,7 @@ module Graphable
     thread = Thread.new do
       start = Time.now
       begin
-        RRD.graph(*args)
+        logger.debug RRD.graphv(*args)
       rescue Exception => ex
 	      logger.error ex.detailed_message
       ensure
