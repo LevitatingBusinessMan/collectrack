@@ -37,7 +37,7 @@ module Graphable
   include Logging
 
   DEFAULT_GRAPH_WIDTH = 600
-  DEFAULT_GRAPH_HEIGHT = 200
+  DEFAULT_GRAPH_HEIGHT = 250
 
   # may return nil
   def graph_yaml yaml, options={}
@@ -78,6 +78,10 @@ module Graphable
 
     logger.debug lines if not yaml[:lines]
 
+    max_legend_length = lines.map { |line|
+      (line[:legend] || line[:ds] || filename.delete_prefix("#{@plugin}-").delete_suffix(".rrd")).length
+    }.max
+
     lineno = 0
     for line in lines
       # if the line has no file, attempt a globally configured file, otherwise use a file with the name of the plugin, otherwise use the only file, otherwise error
@@ -96,19 +100,30 @@ module Graphable
 
       ds = line[:ds] || "value"
       legend = line[:legend] || line[:ds] || filename.delete_prefix("#{@plugin}-").delete_suffix(".rrd")
+      legend = sprintf("%-#{max_legend_length}s", legend)
       color = line[:color] || colors.next_color
       cf = line[:cf] || "AVERAGE"
       thickness = line[:thickness] || 1
       statement = yaml[:area] ? "AREA" : "LINE#{line[:thickness]}"
       stack = ":STACK" if yaml[:stacked]
       skipscale = ":skipscale" if line[:skipscale]
+      format = line[:format] || "%6.2lf"
 
       vname_in = "#{ds}#{lineno}"
       vname_out = if line[:inverted] then "#{vname_in}_inv" else vname_in end
 
       args << "DEF:#{vname_in}=#{file}:#{ds}:#{cf}"
+      args << "VDEF:min_#{vname_in}=#{vname_in},MINIMUM"
+      args << "VDEF:avg_#{vname_in}=#{vname_in},AVERAGE"
+      args << "VDEF:max_#{vname_in}=#{vname_in},MAXIMUM"
+      args << "VDEF:lst_#{vname_in}=#{vname_in},LAST"
       args << "CDEF:#{vname_out}=#{vname_in},-1,*" if line[:inverted]
+      args << "COMMENT:\\j"
       args << "#{statement}:#{vname_out}#{color}:#{legend}#{stack}#{skipscale}"
+      args << "GPRINT:lst_#{vname_out}:#{format}%s last\\t"
+      args << "GPRINT:min_#{vname_out}:#{format}%s min\\t"
+      args << "GPRINT:avg_#{vname_out}:#{format}%s avg\\t"
+      args << "GPRINT:max_#{vname_out}:#{format}%s max"
       lineno += 1
     end
     args += yaml[:opts] if yaml[:opts]
