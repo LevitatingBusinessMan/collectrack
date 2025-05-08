@@ -33,6 +33,7 @@ class CollectdSock
     end
     logger.debug("Sending socket: '#{args.join(" ")}'")
     begin
+      # TODO because threading is typically done by puma and not within my app this mutex is worthless
       @mutex.synchronize {
         @sock.puts(args.join(" "))
         logger.debug("Socket response: '#{@sock.gets.chomp}'")
