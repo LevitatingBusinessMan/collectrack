@@ -113,17 +113,17 @@ module Graphable
       vname_out = if line[:inverted] then "#{vname_in}_inv" else vname_in end
 
       args << "DEF:#{vname_in}=#{file}:#{ds}:#{cf}"
+      args << "CDEF:#{vname_out}=#{vname_in},-1,*" if line[:inverted]
       args << "VDEF:min_#{vname_in}=#{vname_in},MINIMUM"
       args << "VDEF:avg_#{vname_in}=#{vname_in},AVERAGE"
       args << "VDEF:max_#{vname_in}=#{vname_in},MAXIMUM"
       args << "VDEF:lst_#{vname_in}=#{vname_in},LAST"
-      args << "CDEF:#{vname_out}=#{vname_in},-1,*" if line[:inverted]
       args << "COMMENT:\\j"
       args << "#{statement}:#{vname_out}#{color}:#{legend}#{stack}#{skipscale}"
-      args << "GPRINT:lst_#{vname_out}:#{format}%s last\\t"
-      args << "GPRINT:min_#{vname_out}:#{format}%s min\\t"
-      args << "GPRINT:avg_#{vname_out}:#{format}%s avg\\t"
-      args << "GPRINT:max_#{vname_out}:#{format}%s max"
+      args << "GPRINT:lst_#{vname_in}:#{format}%s last\\t"
+      args << "GPRINT:min_#{vname_in}:#{format}%s min\\t"
+      args << "GPRINT:avg_#{vname_in}:#{format}%s avg\\t"
+      args << "GPRINT:max_#{vname_in}:#{format}%s max"
       lineno += 1
     end
     args += yaml[:opts] if yaml[:opts]
