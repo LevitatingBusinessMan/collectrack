@@ -1,6 +1,7 @@
 require "RRD"
 require "yaml"
 require "base64"
+require 'fcntl'
 require "./src/collectd"
 require "./src/config/config"
 require "./src/logging"
@@ -42,6 +43,8 @@ module Graphable
   def graph_yaml yaml, options={}
     r, w = IO.pipe autoclose: true, binmode: true
     r.singleton_class.undef_method(:to_path) # to_path may not be nil under Rack spec
+    max_pipe_size = File.read("/proc/sys/fs/pipe-max-size").to_i
+    r.fcntl(Fcntl::F_SETPIPE_SZ, max_pipe_size)
 
     if yaml[:file]&.match?(/^\/.+\/$/)
       yaml = @instance.update_regex_filename_yaml yaml
