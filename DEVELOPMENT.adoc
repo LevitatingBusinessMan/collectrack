@@ -25,6 +25,6 @@ Also see the documentation in `src/config/README.adoc`.
 Run `rake` to run all tests and generate a coverage report.
 
 == Releasing
-To release, run `rake release <version>` to update and commit the version.
+To release, run `rake release[<version>]` to update and commit the version.
 
 When the Gemfile is altered, run `rake vendor` which will create a `vendor.tar.xz` file for use in packaging.
