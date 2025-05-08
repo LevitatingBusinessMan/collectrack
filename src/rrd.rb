@@ -113,19 +113,18 @@ module Graphable
     return if lineno == 0
 
     logger.debug args
-    thread = Thread.new do
-      start = Time.now
-      begin
-        logger.debug RRD.graphv(*args)
-      rescue Exception => ex
-	      logger.error ex.detailed_message
-      ensure
-        w.close
-        logger.debug "RRD ran for #{(Time.now - start) * 1000}ms"
-      end
+    start = Time.now
+    begin
+      logger.debug RRD.graphv(*args)
+    rescue Exception => ex
+      w.close
+      r.close
+      raise ex
+    else
+      w.close
+      logger.debug "RRD ran for #{(Time.now - start) * 1000}ms"
+      return r
     end
-    thread.run
-    r
   end
 end
 
