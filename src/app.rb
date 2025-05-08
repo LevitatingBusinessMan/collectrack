@@ -30,7 +30,7 @@ end
 if Config.collectd_middleware
   require "./src/collectd_middleware"
   Logging.logger.info "Using Rack::Collectd middleware"
-  use(Rack::Collectd, Config.collectd_middleware_name || "collectrack")
+  use(Rack::Collectd, Config.collectd_middleware_name)
 end
 
 disable :logging

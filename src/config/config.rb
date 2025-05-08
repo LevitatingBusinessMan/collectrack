@@ -19,14 +19,14 @@ end
 
 class Block
   attr_reader :identifier, :statements, :arguments
-  def initialize identifier, arguments, statements
+  def initialize identifier, arguments, statements=[]
     @identifier = identifier
     @arguments = arguments
     @statements = statements
   end
 
   def [] key, argument=nil
-    key = key.to_s.split('_').collect(&:capitalize).join
+    key = key.to_s.camelize
     argument = argument.to_s if argument
     @statements.find {
       if argument
@@ -102,7 +102,7 @@ class Config
   end
 
   def self.collectd_middleware_name
-    self[:collect_rack]&.[](:collectd_middleware_name)&.arguments&.first
+    self[:collect_rack]&.[](:collectd_middleware_name)&.arguments&.first || "collectrack"
   end
 
 end
