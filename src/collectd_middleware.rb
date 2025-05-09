@@ -26,7 +26,7 @@ class Rack::Collectd
     else
       env['rack.logger'].debug "Response time #{(Time.now - start) * 1000}ms"
       @stats.response_time(nil).gauge = Time.now - start
-      @stats.http_requests("#{status.to_s[0]}xx").count! 1
+      @stats.http_requests("#{status.to_s[0]}xx-#{@worker}").count! 1
       [status, headers, body]
     end
   end
