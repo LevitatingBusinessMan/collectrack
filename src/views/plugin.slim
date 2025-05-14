@@ -10,11 +10,11 @@ ul.inline
 
 hr
 
+== slim :'partials/settings', layout: nil
+
 - if @plugin.yamls
   details
     summary YAML
     pre#code= "##{@plugin.yaml_path}\n#{File.read(@plugin.yaml_path)}"
 - else
   p this plugin has no configuration
-
-/== slim :'partials/settings', layout: nil

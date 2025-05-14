@@ -1,12 +1,38 @@
-details 
+details
   summary Settings
-  label Refresh interval
-  input
-  br
-  label Width
-  input
-  br
-  label Height
-  input
-  br
+  form#settings action=@uri
+    p
+      label Refresh interval:
+      input name="refresh" placeholder="none" value=(@query[:refresh] || nil)
+    p
+      label Width:
+      input name="width" placeholder=Graphable::DEFAULT_GRAPH_WIDTH value=(@query[:width] || nil)
+    p
+      label Height:
+      input name="height" placeholder=Graphable::DEFAULT_GRAPH_HEIGHT value=(@query[:height] || nil)
+    p
+      button SAVE
+      button type="button" onclick="location.href='#{@uri.path}'" RESET
 
+  p These settings are saved in the current url. Make them permanent by creating a bookmark.
+
+css:
+  form#settings {
+    display: table;
+  }
+
+  form#settings p {
+    display: table-row;
+  }
+
+  form#settings input, form#settings label {
+    display: table-cell;
+  }
+
+  form#settings label {
+    padding-right: 10px;
+  }
+
+  form#settings button {
+    margin-right: 5px;
+  }

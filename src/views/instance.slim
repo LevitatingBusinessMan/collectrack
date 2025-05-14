@@ -9,10 +9,10 @@ ul.inline
 
 hr
 
+== slim :'partials/settings', layout: nil
+
 details
   summary Files
   ul
     - for file in @instance.files
       li= link(file)
-
-/== slim :'partials/settings', layout: nil
