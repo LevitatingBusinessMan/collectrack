@@ -71,6 +71,24 @@ To run Collect Rack with additional middleware you can choose to configure your 
 
 There's also the https://github.com/puma/puma/blob/master/docs/systemd.md[Puma documentation regarding systemd].
 
+== Requirements
+=== About https://oss.oetiker.ch/rrdtool/doc/librrd.en.html[librrd] and the RRD.so
+Collect Rack relies on functions in the https://oss.oetiker.ch/rrdtool/prog/rrdruby.en.html[ruby bindings for rrdtool].
+These bindings are distributed alongside `rrdtool` in most linux distributions.
+In some distributions it is shipped seperately as `ruby-rrdtool`.
+
+However for some years the ruby bindings in rrdtool weren't being linked correctly.
+This was fixed upstream (https://github.com/oetiker/rrdtool-1.x/commit/cbb9a8198920beb9b8ed3e36e6a569668b17cf3e[cbb9a81]) but hasn't been part of a release yet.
+
+To fix this Collect Rack currently ships with a working RRD.so file in `libs/RRD.so`.
+This library was dynamically linked on an x86_64 OpenSUSE Tumbleweed installation and will likely not work on every environment.
+You may need to build git@github.com:oetiker/rrdtool-1.x.git[rrdtool] and then place the RRD.so ruby binding in `libs/`.
+
+OpenSUSE has backported the patch (https://build.opensuse.org/requests/1277244[request 1277244]).
+
+=== Ruby 3.4
+Collect Rack uses some Ruby 3.4 features.
+
 == Configuration
 Collect Rack uses the same syntax as `collectd.conf` and by default it searches for your existing `/etc/collectd.conf`.
 
