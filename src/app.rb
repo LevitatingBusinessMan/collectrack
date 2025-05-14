@@ -13,6 +13,9 @@ require "./src/config/config"
 require "./src/version"
 require "./src/logging"
 
+# because tilt shadows the VERSION global
+COLLECTRACK_VERSION = VERSION
+
 Config.load
 
 configure :development do
