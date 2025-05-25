@@ -110,20 +110,24 @@ module Graphable
       format = line[:format] || "%6.2lf"
 
       vname_in = "#{ds}#{lineno}"
-      vname_out = if line[:inverted] then "#{vname_in}_inv" else vname_in end
+      vname_out = if line[:inverted] then "inv_#{vname_in}_avg" else "#{vname_in}_avg" end
 
-      args << "DEF:#{vname_in}=#{file}:#{ds}:#{cf}"
-      args << "CDEF:#{vname_out}=#{vname_in},-1,*" if line[:inverted]
-      args << "VDEF:min_#{vname_in}=#{vname_in},MINIMUM"
-      args << "VDEF:avg_#{vname_in}=#{vname_in},AVERAGE"
-      args << "VDEF:max_#{vname_in}=#{vname_in},MAXIMUM"
-      args << "VDEF:lst_#{vname_in}=#{vname_in},LAST"
-      args << "COMMENT:\\j"
+      args << "DEF:#{vname_in}_min=#{file}:#{ds}:MIN"
+      args << "DEF:#{vname_in}_avg=#{file}:#{ds}:AVERAGE"
+      args << "DEF:#{vname_in}_max=#{file}:#{ds}:MAX"
+      args << "CDEF:inv_#{vname_in}_avg=#{vname_in}_avg,-1,*" if line[:inverted]
+      args << "VDEF:vdef_#{vname_in}_min=#{vname_in}_min,MINIMUM"
+      args << "VDEF:vdef_#{vname_in}_avg=#{vname_in}_avg,AVERAGE"
+      args << "VDEF:vdef_#{vname_in}_max=#{vname_in}_max,MAXIMUM"
+      args << "VDEF:vdef_#{vname_in}_lst=#{vname_in}_avg,LAST"
+      args << "COMMENT:\\j" if not options[:nocomment]
       args << "#{statement}:#{vname_out}#{color}:#{legend}#{stack}#{skipscale}"
-      args << "GPRINT:lst_#{vname_in}:#{format}%s last\\t"
-      args << "GPRINT:min_#{vname_in}:#{format}%s min\\t"
-      args << "GPRINT:avg_#{vname_in}:#{format}%s avg\\t"
-      args << "GPRINT:max_#{vname_in}:#{format}%s max"
+      if not options[:nocomment]
+        args << "GPRINT:vdef_#{vname_in}_lst:#{format}%s last\\t"
+        args << "GPRINT:vdef_#{vname_in}_min:#{format}%s min\\t"
+        args << "GPRINT:vdef_#{vname_in}_avg:#{format}%s avg\\t"
+        args << "GPRINT:vdef_#{vname_in}_max:#{format}%s max"
+      end
       lineno += 1
     end
     args += yaml[:opts] if yaml[:opts]

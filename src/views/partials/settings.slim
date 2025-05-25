@@ -3,13 +3,16 @@ details
   form#settings action=@uri
     p
       label Refresh interval:
-      input name="refresh" placeholder="none" value=(@query[:refresh] || nil)
+      input name="refresh" placeholder="none" value=@query[:refresh]
     p
       label Width:
-      input name="width" placeholder=Graphable::DEFAULT_GRAPH_WIDTH value=(@query[:width] || nil)
+      input name="width" placeholder=Graphable::DEFAULT_GRAPH_WIDTH value=@query[:width]
     p
       label Height:
-      input name="height" placeholder=Graphable::DEFAULT_GRAPH_HEIGHT value=(@query[:height] || nil)
+      input name="height" placeholder=Graphable::DEFAULT_GRAPH_HEIGHT value=@query[:height]
+    p
+      label Do not place comments:
+      input name="nocomment" type="checkbox" checked=@query[:nocomment] value="1"
     p
       button SAVE
       button type="button" onclick="location.href='#{@uri.path}'" RESET
