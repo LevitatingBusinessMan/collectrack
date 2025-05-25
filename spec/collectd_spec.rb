@@ -1,6 +1,14 @@
 require "./src/collectd"
 require "./spec/config_context"
 
+RSpec.describe Plugin do
+  describe "#split_dirname" do
+    it "can handle special characters " do
+      expect(Plugin.split_dirname "plugin-@$*-@$*").to eq ["plugin", "@$*-@$*"]
+    end
+  end
+end
+
 RSpec.describe Host, "host0000" do
   include_context "config"
   subject(:host) { Host.new("host0000") }

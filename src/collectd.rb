@@ -57,7 +57,7 @@ class Plugin
 
   # given a name like disk-dma-0 returns ["disk", "dma-0"]
   def self.split_dirname dirname
-    /^(?<name>\w+)(?:-(?<variant>[\w-]+))?$/.match(dirname).captures
+    /^(?<name>\w+)(?:-(?<variant>.+))?$/.match(dirname).captures
   end
 
   def initialize host, name, instances
