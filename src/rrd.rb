@@ -38,6 +38,7 @@ module Graphable
 
   DEFAULT_GRAPH_WIDTH = 600
   DEFAULT_GRAPH_HEIGHT = 250
+  DEFAULT_AGGREGATION = "avg"
 
   # may return nil
   def graph_yaml yaml, options={}
@@ -102,7 +103,7 @@ module Graphable
       legend = line[:legend] || line[:ds] || filename.delete_prefix("#{@plugin}-").delete_suffix(".rrd")
       legend = sprintf("%-#{max_legend_length}s", legend)
       color = line[:color] || colors.next_color
-      cf = line[:cf] || "AVERAGE"
+      cf = line[:cf] || options[:cf] || DEFAULT_AGGREGATION
       thickness = line[:thickness] || 1
       statement = yaml[:area] ? "AREA" : "LINE#{line[:thickness]}"
       stack = ":STACK" if yaml[:stacked]
@@ -110,12 +111,12 @@ module Graphable
       format = line[:format] || "%6.2lf"
 
       vname_in = "#{ds}#{lineno}"
-      vname_out = if line[:inverted] then "inv_#{vname_in}_avg" else "#{vname_in}_avg" end
+      vname_out = if line[:inverted] then "inv_#{vname_in}_#{cf}" else "#{vname_in}_#{cf}" end
 
       args << "DEF:#{vname_in}_min=#{file}:#{ds}:MIN"
       args << "DEF:#{vname_in}_avg=#{file}:#{ds}:AVERAGE"
       args << "DEF:#{vname_in}_max=#{file}:#{ds}:MAX"
-      args << "CDEF:inv_#{vname_in}_avg=#{vname_in}_avg,-1,*" if line[:inverted]
+      args << "CDEF:inv_#{vname_in}_#{cf}=#{vname_in}_#{cf},-1,*" if line[:inverted]
       args << "VDEF:vdef_#{vname_in}_min=#{vname_in}_min,MINIMUM"
       args << "VDEF:vdef_#{vname_in}_avg=#{vname_in}_avg,AVERAGE"
       args << "VDEF:vdef_#{vname_in}_max=#{vname_in}_max,MAXIMUM"
