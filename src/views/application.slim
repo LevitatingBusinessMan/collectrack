@@ -5,6 +5,8 @@ html
     /! Collect Rack #{COLLECTRACK_VERSION}
     style == File.read "./src/css/stylesheet.css"
     script == File.read "./src/javascript/refresh.js"
+    link rel="apple-touch-icon" sizes="128x128" href="icon.png"
   body
     h1 Welcome to <a href="/">Collect Rack</a>
     == yield
+    script == File.read "./src/javascript/darkmode.js"

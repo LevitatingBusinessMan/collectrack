@@ -69,6 +69,14 @@ module Graphable
     ]
     args << "--vertical-label=#{yaml[:vertical_label]}" if yaml[:vertical_label]
 
+    if options[:dark]
+      args << "--color=BACK#000000" 
+      args << "--color=CANVAS#222222"
+      args << "--color=SHADEA#dc143c"
+      args << "--color=SHADEB#dc143c"
+      args << "--color=FONT#dc143c"
+    end
+
     colors = Colors.new
 
     lines = yaml[:lines] || (@instance[yaml[:file]]&.default_lines if yaml[:file]) || @instance.default_file&.default_lines
