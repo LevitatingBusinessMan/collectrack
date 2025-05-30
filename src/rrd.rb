@@ -132,10 +132,10 @@ module Graphable
       args << "COMMENT:\\j" if not options[:nocomment]
       args << "#{statement}:#{vname_out}#{color}:#{legend}#{stack}#{skipscale}"
       if not options[:nocomment]
-        args << "GPRINT:vdef_#{vname_in}_lst:#{format}%s last\\t"
         args << "GPRINT:vdef_#{vname_in}_min:#{format}%s min\\t"
         args << "GPRINT:vdef_#{vname_in}_avg:#{format}%s avg\\t"
-        args << "GPRINT:vdef_#{vname_in}_max:#{format}%s max"
+        args << "GPRINT:vdef_#{vname_in}_max:#{format}%s max\\t"
+        args << "GPRINT:vdef_#{vname_in}_lst:#{format}%s last"
       end
       lineno += 1
     end
