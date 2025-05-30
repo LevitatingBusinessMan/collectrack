@@ -11,6 +11,9 @@ RSpec.describe Config, "test config" do
     <CollectRack>
       asdas asd
       CollectdMiddleware true
+      <Host rlyeh>
+        Overview load
+      </Host>
     </CollectRack>
 
     <Plugin unixsock>
@@ -76,6 +79,14 @@ RSpec.describe Config, "test config" do
     it { should_not be_nil }
     it "can find a block statement using its first argument" do
       expect(subject[:foo, "Bar"]).to_not be_nil
+    end
+  end
+
+  describe Block, "Host rlyeh" do
+    subject { Config[:collect_rack][:host, "rlyeh"] }
+    it { should_not be_nil }
+    it "has an overview" do
+      expect(subject[:overview]).to_not be_nil
     end
   end
 
