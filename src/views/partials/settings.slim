@@ -11,6 +11,14 @@ details
       label Height:
       input name="height" placeholder=Graphable::DEFAULT_GRAPH_HEIGHT value=@query[:height]
     p
+      label Aggregation:
+      select name="cf"
+        ruby:
+          current_cf = @query[:cf] || Graphable::DEFAULT_AGGREGATION
+        option value="min" selected=(current_cf == "min") minimum
+        option value="avg" selected=(current_cf == "avg") average
+        option value="max" selected=(current_cf == "max") maximum
+    p
       label Do not place comments:
       input name="nocomment" type="checkbox" checked=@query[:nocomment] value="1"
     p
