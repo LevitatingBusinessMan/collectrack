@@ -138,3 +138,7 @@ get "/favicon.ico" do
   File.open "favicon.ico"
 end
 
+get "/icon.png" do
+  content_type :png
+  File.open "icon.png"
+end
