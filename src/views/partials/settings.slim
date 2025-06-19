@@ -1,6 +1,7 @@
 details
   summary Settings
   form#settings action=@uri
+    input type="hidden" name="span" value=@query[:span]
     p
       label Refresh interval:
       input name="refresh" placeholder="none" value=@query[:refresh]
