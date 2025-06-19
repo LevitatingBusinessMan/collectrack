@@ -17,10 +17,13 @@ lines:
   - legend: cached
     file: memory-cached
   - legend: buffered
-    file: memory-bufferd
+    file: memory-buffered
   - legend: inactive
     file: memory-inactive
     color: "#EEEEEE"
-  - legend: available
-    file: memory-available
+  # - legend: available
+  #   file: memory-available
+  #   color: "#EEEEEE"
+  - legend: free
+    file: memory-free
     color: "#EEEEEE"
