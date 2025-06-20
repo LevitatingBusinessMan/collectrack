@@ -39,6 +39,7 @@ module Graphable
   DEFAULT_GRAPH_WIDTH = 600
   DEFAULT_GRAPH_HEIGHT = 250
   DEFAULT_AGGREGATION = "avg"
+  DEFAULT_SPAN = "6hour"
 
   # may return nil
   def graph_yaml yaml, options={}
@@ -55,7 +56,7 @@ module Graphable
     logger.debug yaml
     logger.debug options
 
-    span = options[:span] || "6h"
+    span = options[:span] || DEFAULT_SPAN
     span = "1#{span}" if not span[0].numeric?
 
     args = [
