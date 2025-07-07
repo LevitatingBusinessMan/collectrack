@@ -82,7 +82,7 @@ This was fixed upstream (https://github.com/oetiker/rrdtool-1.x/commit/cbb9a8198
 
 To fix this Collect Rack currently ships with a working RRD.so file in `libs/RRD.so`.
 This library was dynamically linked on an x86_64 OpenSUSE Tumbleweed installation and will likely not work on every environment.
-You may need to build git@github.com:oetiker/rrdtool-1.x.git[rrdtool] and then place the RRD.so ruby binding in `libs/`.
+You may need to build https://github.com/oetiker/rrdtool-1.x[rrdtool] and then place the RRD.so ruby binding in `libs/`.
 
 OpenSUSE has backported the patch (https://build.opensuse.org/requests/1277244[request 1277244]).
 
