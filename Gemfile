@@ -10,7 +10,6 @@ gem "puma", "~> 6.6"
 
 gem "slim", "~> 5.2"
 
-gem "tomlrb", "~> 2.0"
 
 gem "racc", "~> 1.8"
 

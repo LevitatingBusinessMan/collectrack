@@ -112,7 +112,6 @@ GEM
       standard
     temple (0.10.3)
     tilt (2.6.0)
-    tomlrb (2.0.3)
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
@@ -138,7 +137,6 @@ DEPENDENCIES
   slim (~> 5.2)
   stackprof (~> 0.2.27)
   standardrb (~> 1.0)
-  tomlrb (~> 2.0)
 
 BUNDLED WITH
    2.6.7
