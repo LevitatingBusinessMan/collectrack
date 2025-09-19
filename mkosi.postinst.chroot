@@ -1,0 +1,6 @@
+#!/bin/sh
+set -x
+
+cd /app
+bundle config set path /opt/bundle
+rm -rf /opt/bundle/ruby/*/cache

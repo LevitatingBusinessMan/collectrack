@@ -1,0 +1,16 @@
+#!/bin/sh
+set -x
+
+mkdir $DESTDIR/app
+cp -r $SRCDIR/* $DESTDIR/app
+cd $DESTDIR/app
+
+git clean -f
+
+bundle config set development true
+bundle config set without develpoment
+
+bundle install
+
+# bundle path is update in post install script
+

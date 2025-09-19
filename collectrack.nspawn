@@ -1,0 +1,14 @@
+[Exec]
+Boot=no
+WorkingDirectory=/app
+Parameters=bundle exec bin/puma -e production -b tcp://127.0.0.1:3344
+PrivateUsers=no
+
+[Files]
+BindReadOnly=/etc/collectd.conf
+BindReadOnly=/var/lib/collectd
+Bind=/run/collectd.sock
+
+[Network]
+VirtualEthernet=no
+
