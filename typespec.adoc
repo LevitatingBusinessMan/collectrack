@@ -4,16 +4,18 @@ This instructs how to draw one or more graphs per type.
 There may also be an overlayed configuration specific for the plugin.
 
 ```yaml
-plugins/interface.yaml
+# plugins/interface.yaml
 ---
 type: if_octets
 title: Traffic
 
-types/if_octets.yaml
+# types/if_octets.yaml
+---
 unit: Packets
 inverse: [rx]
 
-types/cpu.yaml
+# types/cpu.yaml
+---
 grouped: true
 stacked: true
 legend: Jiffies
@@ -36,6 +38,9 @@ Those plugins may optionally be split over multiple plugin instances. `plugin[-i
 A plugin or plugin instance has saved types.
 Those types may also be split under different instances. `type[-instance]`
 Those type or type instances contain either one dataset (ds) named `value` or multiple datasets.
+
+For instance, a system may have one `load` plugin, but multiple `cpu` plugin instances (`cpu-0`, `cpu-1` etc).
+The `load` plugin has a single type `load`. But the `cpu-x` plugin instances have multiple instances of the `cpu` type (`cpu-idle`, `cpu-wait` etc).
 
 = YAML Document SPEC
 Each yaml document describes how to draw one or more graphs for a type.
@@ -79,3 +84,6 @@ ds-names not included in the list will be appended randomly.
 
 ==== skipscale: [ds]
 List of ds-names that need `:skipscale` applied
+
+= See also
+- https://collectd.org/documentation/manpages/types.db.html[types.db(5)]
