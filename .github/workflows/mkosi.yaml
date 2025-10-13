@@ -1,0 +1,17 @@
+name: Build mkosi
+
+on: [push, pull_request, release]
+
+jobs:
+  mkosi:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: systemd/mkosi@v25.3
+      - name: Run mkosi
+        run: mkosi build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: collectrack_${{ github.ref_name }}.tar.xz
+          path: collectrack.tar.xz

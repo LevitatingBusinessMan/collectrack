@@ -4,12 +4,14 @@ on: [push, pull_request]
 
 jobs:
   rspec:
-    runs-on: ubuntu-latest
+    runs-on: opensuse-leap
 
     steps:
+      - name: Install ruby and node
+        run: |
+          zypper in -y ruby-devel nodejs22
+          zypper in -y -t pattern devel_basis
       - uses: actions/checkout@v4
-      - name: Install ruby
-        runt: apt-get update && apt-get install ruby bundler -y
       - name: Install dependencies
         run: bundle install
       - name: Run tests
