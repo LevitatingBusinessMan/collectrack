@@ -35,3 +35,13 @@ EOF
   `git commit -m "src/version.rb #{args[:version]}" --no-edit`
   `git tag #{args[:version]}`
 end
+
+desc "Generate a changelog"
+task :changelog, [:tag] do |t, args|
+  prev = `git describe --abbrev=0 --tags #{args[:tag]}^`.chomp
+  STDERR.puts "Identified #{prev} as previous commit"
+  puts <<~EOF
+  Commits in this release:
+  #{`git log --abbrev-commit --decorate --format=format:'* (%h) %s' #{prev}..#{args[:tag]}`}
+  EOF
+end

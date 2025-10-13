@@ -1,0 +1,90 @@
+name: Build artifacts
+
+on:
+  push:
+      branches: ['*']
+      tags: ['*']
+  pull_request:
+
+jobs:
+  mkosi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: systemd/mkosi@v25.3
+      - name: Run mkosi
+        run: mkosi build
+      - name: Rename tarball
+        run: mv collectrack.tar.xz collectrack-nspawn.tar.xz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nspawn-rootfs
+          path: collectrack-nspawn.tar.xz
+          if-no-files-found: error
+
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4
+      - name: Install dependencies
+        run: bundle install
+      - name: Rake vendor
+        run: rake vendor
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vendor
+          path: vendor.tar.xz
+          if-no-files-found: error
+
+  changelog:
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4
+      - name: Install dependencies
+        run: bundle install
+      - name: Rake changelog
+        run: rake changelog[${{ github.ref_name }}] > changelog.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: changelog
+          path: changelog.txt
+          if-no-files-found: error
+
+  create-draft-release:
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    needs: [mkosi, vendor, changelog]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v4
+        with:
+          name: nspawn-rootfs
+      - uses: actions/download-artifact@v4
+        with:
+          name: vendor
+      - uses: actions/download-artifact@v4
+        with:
+          name: changelog
+      - name: Checksum image
+        run: sha256sum collectrack-nspawn.tar.xz vendor.tar.xz > SHA256SUMS
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create ${{ github.ref_name }} --draft --title "${{ github.ref_name }}" -F changelog.txt
+          gh release upload ${{ github.ref_name }} collectrack-nspawn.tar.xz
+          gh release upload ${{ github.ref_name }} vendor.tar.xz
+          gh release upload ${{ github.ref_name }} SHA256SUMS
