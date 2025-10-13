@@ -7,11 +7,8 @@ cd $DESTDIR/app
 
 git clean -f
 
-bundle config set development true
+bundle config set deployment true
 bundle config set without develpoment
-
-BUNDLE_PATH="$DESTDIR/opt/bundle" bundle install
-
-bundle config set path /opt/bundle
-rm -rf /opt/bundle/ruby/*/cache
+bundle install
+rm -r vendor/bundle/*/*/cache
 

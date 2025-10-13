@@ -1,0 +1,16 @@
+= systemd-nspawn installation
+
+This is an experimental means of installing collectrack.
+
+```
+$ git clone https://github.com/LevitatingBusinessMan/collectrack.git
+$ cd collectrack
+$ mkosi build
+# importctl import-tar collectrack.tar.xz --class=machine
+# systemd-nspawn -M collectrack --chdir /app --bind-ro=/etc/collectd.conf --bind-ro=/var/lib/collectd --bind=/run/collectd.sock bin/puma -e production
+```
+
+Things that don't work:
+
+- exposing the port
+- read-only image
