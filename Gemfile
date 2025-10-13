@@ -10,7 +10,6 @@ gem "puma", "~> 6.6"
 
 gem "slim", "~> 5.2"
 
-
 gem "racc", "~> 1.8"
 
 gem "rake", "~> 13.2"
