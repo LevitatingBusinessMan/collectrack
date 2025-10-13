@@ -10,7 +10,9 @@ $ mkosi build
 # systemd-nspawn -M collectrack --chdir /app --bind-ro=/etc/collectd.conf --bind-ro=/var/lib/collectd --bind=/run/collectd.sock bin/puma -e production
 ```
 
-Things that don't work:
+Instead of using `systemd-nspawn` directly, you can also create a `collectrack.nspawn` file in `/etc/systemd/nspawn/`.
+The repository includes an example of such a `.nspawn` file.
 
-- exposing the port
+Things that currnetly don't work:
+
 - read-only image
