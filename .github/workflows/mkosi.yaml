@@ -1,6 +1,6 @@
 name: Build mkosi
 
-on: [push, pull_request]
+on: [push, pull_request, release]
 
 jobs:
   mkosi:
