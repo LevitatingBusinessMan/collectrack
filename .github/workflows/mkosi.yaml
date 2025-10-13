@@ -11,3 +11,6 @@ jobs:
       - uses: systemd/mkosi@v25.3
       - name: Run mkosi
         run: mkosi build
+      - uses: actions/upload-artifact@v4
+        with:
+          path: collectrack.tar.xz
