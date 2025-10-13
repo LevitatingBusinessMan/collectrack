@@ -16,3 +16,7 @@ The repository includes an example of such a `.nspawn` file.
 Things that currnetly don't work:
 
 - read-only image
+
+= See also
+- https://manpages.opensuse.org/Leap-16.0/systemd-container/systemd-importd.service.8.en.html[systemd-importd.service(8)]
+- https://manpages.opensuse.org/Tumbleweed/systemd-container/systemd-import-generator.8.en.html[systemd-import-generator(8)]
