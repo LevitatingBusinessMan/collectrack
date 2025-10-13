@@ -3,7 +3,7 @@ name: Build mkosi
 on: [push, pull_request]
 
 jobs:
-  rspec:
+  mkosi:
     runs-on: ubuntu-latest
 
     steps:
