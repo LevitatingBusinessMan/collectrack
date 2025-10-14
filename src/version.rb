@@ -1,2 +1,2 @@
-# generated with rake release[1.0.15]
-VERSION = "1.0.15"
+# generated with rake release[0.16.0-rc1]
+VERSION = "0.16.0-rc1"
