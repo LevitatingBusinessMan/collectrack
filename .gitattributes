@@ -9,3 +9,4 @@ export-ignore mkosi.local.conf
 export-ignore .gitignore
 export-ignore .rspec
 export-ignore Rakefile
+export-ignore icon.png
