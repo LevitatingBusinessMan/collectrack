@@ -9,7 +9,8 @@ WorkingDirectory=/opt/collectrack
 Environment=WEB_CONCURRENCY=auto
 ExecStart=/opt/collectrack/bin/puma -e production
 Restart=on-failure
-BindReadOnlyPaths=/etc/collectd.conf /var/lib/collectd
+WatchdogSec=10
+BindReadOnlyPaths=-/etc/collectd.conf /var/lib/collectd
 DynamicUser=no
 
 [Install]
