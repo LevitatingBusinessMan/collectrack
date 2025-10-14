@@ -71,7 +71,7 @@ module Graphable
     args << "--vertical-label=#{yaml[:vertical_label]}" if yaml[:vertical_label]
 
     if options[:dark]
-      args << "--color=BACK#000000" 
+      args << "--color=BACK#000000"
       args << "--color=CANVAS#222222"
       args << "--color=SHADEA#dc143c"
       args << "--color=SHADEB#dc143c"
@@ -164,7 +164,7 @@ class PluginInstance
   include Graphable
 
   def graph n, options={}
-    graph_yaml((effective_yaml(n) || return nil), options)
+    graph_yaml((effective_yaml(n) || return), options)
   end
 
   def graph_title n
@@ -179,7 +179,7 @@ class PluginInstance
   def graphs options={}
     effective_yamls.map {
       graph_yaml(it, options)
-    }.compact 
+    }.compact
   end
 
   # WARNING a default yamls requires reading RRD.info for each file
@@ -204,7 +204,7 @@ class PluginInstance
           it.merge({
             file: file.chomp,
             legend: caps["legend"]
-          }.compact) 
+          }.compact)
         }
       end
     end
@@ -278,4 +278,3 @@ class RRDFile
   end
 
 end
-
