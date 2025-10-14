@@ -1,14 +1,15 @@
 #!/bin/sh
-set -x
+set -x -e
 
-mkdir $DESTDIR/app
-cp -r $SRCDIR/* $DESTDIR/app
-cd $DESTDIR/app
+mkdir -p $DESTDIR/opt/collectrack
+git archive --format=tar.gz HEAD | tar -xzC $DESTDIR/opt/collectrack
+#cp -a $SRCDIR/. $DESTDIR/opt/collectrack
+cd $DESTDIR/opt/collectrack
 
-git clean -f
+mkdir -p $DESTDIR/etc/systemd/system/
+cp systemd/collectrack-portable.service $DESTDIR/etc/systemd/system/collectrack.service
 
 bundle config set deployment true
 bundle config set without develpoment
 bundle install
 rm -r vendor/bundle/*/*/cache
-

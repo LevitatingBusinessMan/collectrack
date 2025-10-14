@@ -1,0 +1,11 @@
+export-ignore .forgejo
+export-ignore .github
+export-ignore spec
+export-ignore .editorconfig
+export-ignore docs
+export-ignore DEVELOPMENT.adoc
+export-ignore mkosi.build.chroot
+export-ignore mkosi.local.conf
+export-ignore .gitignore
+export-ignore .rspec
+export-ignore Rakefile
