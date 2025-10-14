@@ -4,7 +4,7 @@ CollectRack can be installed as a https://systemd.io/PORTABLE_SERVICES/[Portable
 
 == Installation
 
-Find the latest release at https://github.com/LevitatingBusinessMan/collectrack/releases and download the portable rootfs (`collectrack_x.y.z-portable.tar.xz`) asset.
+Find the latest release at https://github.com/LevitatingBusinessMan/collectrack/releases/latest and download the portable rootfs (`collectrack_x.y.z-portable.tar.xz`) asset.
 
 Run the following commands as root:
 
