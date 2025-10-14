@@ -38,8 +38,8 @@ EOF
 end
 
 desc "Generate a changelog"
-task :changelog, [:tag] do |t, args|
-  prev = `git describe --abbrev=0 --tags #{args[:tag]}^`.chomp
+task :changelog, [:tag, :prev] do |t, args|
+  prev = args[:prev] || `git describe --abbrev=0 --tags #{args[:tag]}^`.chomp
   STDERR.puts "Identified #{prev} as previous commit"
   puts <<~EOF
   Commits in this release:
