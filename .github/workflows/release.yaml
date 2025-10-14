@@ -3,7 +3,7 @@ name: Build artifacts
 on:
   push:
       branches: ['*']
-      tags: ['*']
+      tags-ignore: ['latest']
   pull_request:
 
 jobs:
