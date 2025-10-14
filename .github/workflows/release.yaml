@@ -15,11 +15,11 @@ jobs:
       - name: Run mkosi
         run: mkosi build
       - name: Rename tarball
-        run: mv collectrack.tar.xz collectrack-nspawn.tar.xz
+        run: mv collectrack.tar.xz collectrack_${{ github.ref_name }}-portable.tar.xz
       - uses: actions/upload-artifact@v4
         with:
-          name: nspawn-rootfs
-          path: collectrack-nspawn.tar.xz
+          name: portable-rootfs
+          path: collectrack_${{ github.ref_name }}-portable.tar.xz
           if-no-files-found: error
 
   vendor:
@@ -71,7 +71,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/download-artifact@v4
         with:
-          name: nspawn-rootfs
+          name: portable-rootfs
       - uses: actions/download-artifact@v4
         with:
           name: vendor
@@ -79,12 +79,12 @@ jobs:
         with:
           name: changelog
       - name: Checksum image
-        run: sha256sum collectrack-nspawn.tar.xz vendor.tar.xz > SHA256SUMS
+        run: sha256sum collectrack_${{ github.ref_name }}-portable.tar.xz vendor.tar.xz > SHA256SUMS
       - name: Create draft release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create ${{ github.ref_name }} --draft --title "${{ github.ref_name }}" -F changelog.txt
-          gh release upload ${{ github.ref_name }} collectrack-nspawn.tar.xz
+          gh release upload ${{ github.ref_name }} collectrack_${{ github.ref_name }}-portable.tar.xz
           gh release upload ${{ github.ref_name }} vendor.tar.xz
           gh release upload ${{ github.ref_name }} SHA256SUMS
