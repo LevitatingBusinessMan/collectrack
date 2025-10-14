@@ -27,14 +27,18 @@ systemctl cat collectrack.service # view the current configuration
 systemctl edit collectrack.service # adjust as needed
 ```
 
-An example overwrite would be:
+An example overwrite could be:
 ```
 [Service]
 # Run as root for reading /etc/collectd.conf
 DynamicUser=no
 # Bind correct paths
 BindReadOnlyPaths=/usr/etc/collectd.conf /media/hdd/collectd
+# Point CollectRack to the collectd.conf
 Environment=COLLECTD_CONFIG=/usr/etc/collectd.conf
+# Listen on a different port
+ExecStart=
+ExecStart=/opt/collectrack/bin/puma -e production -p 8080
 ```
 
 For the `FLUSH` feature, collectrack needs write access to `/run/collectd.sock`. However, the `default` profile already mounts `/run` as writable.
