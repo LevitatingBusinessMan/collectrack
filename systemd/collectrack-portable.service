@@ -11,7 +11,7 @@ ExecStart=/opt/collectrack/bin/puma -e production
 Restart=on-failure
 WatchdogSec=10
 BindReadOnlyPaths=-/etc/collectd.conf /var/lib/collectd
-DynamicUser=no
+Group=collectd
 
 [Install]
 WantedBy=multi-user.target
