@@ -18,7 +18,7 @@ systemctl start collectrack.service
 ```
 
 == Configuring the service
-CollectRack needs read access to `/var/lib/collectd` and `/etc/collectd.conf`. The default `collectrack.service` configuration will attempt to mount these. If these directories don't exist on the host, the service will fail.
+CollectRack needs read access to `/var/lib/collectd` and `/etc/collectd.conf`. The default `collectrack.service` configuration will attempt to mount these. If these paths aren't readable, the `collectrack.service` will fail.
 
 To change this and other behaviour the `.service` file may be edited via an override:
 
@@ -27,11 +27,11 @@ systemctl cat collectrack.service # view the current configuration
 systemctl edit collectrack.service # adjust as needed
 ```
 
-An example overwrite could be:
+An example override could be:
 ```
 [Service]
-# Run as root for reading /etc/collectd.conf
-DynamicUser=no
+# Run as collectd group for reading /etc/collectd.conf
+Group=collectd
 # Bind correct paths
 BindReadOnlyPaths=/usr/etc/collectd.conf /media/hdd/collectd
 # Point CollectRack to the collectd.conf
@@ -40,6 +40,10 @@ Environment=COLLECTD_CONFIG=/usr/etc/collectd.conf
 ExecStart=
 ExecStart=/opt/collectrack/bin/puma -e production -p 8080
 ```
+
+Per default the service runs with `DynamicUser=yes` but also `Group=collectd`. So to allow read access to the collectd.conf you could do `groupadd collectd && chown :collectd /etc/collectd.conf`.
+
+If you keep running into permission issues, you can choose to attach the images with the "trusted" profile via the `-p` flag on `importctl(1)`.
 
 For the `FLUSH` feature, collectrack needs write access to `/run/collectd.sock`. However, the `default` profile already mounts `/run` as writable.
 
@@ -56,7 +60,7 @@ One could theoretically automate this process via periodic importctl calls.
 
 If you're images are not versioned, you can always get the current version via reading the HTTP headers: `curl -Is http://127.0.0.1:3344 | grep x-collectrack`.
 
-= See also
+== See also
 - https://systemd.io/PORTABLE_SERVICES/[Portable Services]
 - https://manpages.opensuse.org/Tumbleweed/systemd-container/importctl.1.en.html[importctl(1)]
 - https://manpages.opensuse.org/Tumbleweed/systemd-portable/portablectl.1.en.html[portablectl(1)]
