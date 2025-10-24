@@ -4,6 +4,19 @@ CollectRack can be installed as a https://systemd.io/PORTABLE_SERVICES/[Portable
 
 == Installation
 
+=== Automated installation
+Collectrack can be installed as a https://www.freedesktop.org/software/systemd/man/latest/sysupdate.d.html[sysupdate.d(8)] component. This allows for automatically downloading and mataining the latest portable release.
+
+You can execute the following install script to install the component.
+
+```
+curl  https://raw.githubusercontent.com/LevitatingBusinessMan/collectrack/refs/heads/master/scripts/portable-install.sh | sh
+```
+
+You can also manually download the `portable.target` file and place it at `/etc/sysupdate.collectrack.d`. See the install script for reference.
+
+=== Manual installation
+
 Find the latest release at https://github.com/LevitatingBusinessMan/collectrack/releases/latest and download the portable rootfs (`collectrack_x.y.z-portable.tar.xz`) asset.
 
 Run the following commands as root:
@@ -47,18 +60,16 @@ If you keep running into permission issues, you can choose to attach the images 
 
 For the `FLUSH` feature, collectrack needs write access to `/run/collectd.sock`. However, the `default` profile already mounts `/run` as writable.
 
-== Updating
-To update collectrack just install and enable a new portable rootfs.
+=== Using a unix socket
+Use the following systemd override.
 ```
-importctl -P import-tar collectrack_new.tar.xz --verify=checksum
-portablectl detach --now --enable collectrack_old
-portablectl attach --now --enable collectrack_new
-portablectl remove collectrack_old
+[Service]
+ExecStart=
+ExecStart=/opt/collectrack/bin/puma -e production -b unix:/run/collectrack/collectrack.sock
+RuntimeDirectory=collectrack
 ```
 
-One could theoretically automate this process via periodic importctl calls.
-
-If you're images are not versioned, you can always get the current version via reading the HTTP headers: `curl -Is http://127.0.0.1:3344 | grep x-collectrack`.
+If you're unsure of what version you're using, you can get the current version of a running instance via reading the HTTP headers: `curl -Is http://127.0.0.1:3344 | grep x-collectrack`.
 
 == See also
 - https://systemd.io/PORTABLE_SERVICES/[Portable Services]
