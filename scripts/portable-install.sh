@@ -28,6 +28,7 @@ if [[ "$filesystem" != btrfs ]]; then
   echo Installing onto any filesystem other than btrfs is currently untested.
   exit 1
 fi
+
 echo Elevating privileges via run0
 run0 sh <<EOF
   set -e
@@ -38,6 +39,7 @@ run0 sh <<EOF
   echo Updating collectrack component via systemd-sysupdate
   /lib/systemd/systemd-sysupdate -C collectrack update
 EOF
+
 echo -e Collectrack portable installation complete
 echo -e To update collectrack, run ${GREEN}/lib/systemd/systemd-sysupdate -C collectrack update${NC}
 echo -e View installed portables with ${GREEN}portablectl list${NC}
