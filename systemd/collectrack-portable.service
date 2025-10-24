@@ -12,7 +12,6 @@ Restart=on-failure
 WatchdogSec=10
 BindReadOnlyPaths=-/etc/collectd.conf /var/lib/collectd
 Group=collectd
-ReadWritePaths=/var/cache
 
 [Install]
 WantedBy=multi-user.target
