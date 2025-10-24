@@ -1,7 +1,7 @@
 h2 #{link("/", ".")}/#{link(@host)}/#{link(@plugin)}/#{@instance}
 ul.inline
   - for instance in @plugin.instances.sort_by { it.name.to_i || it.name }
-    li.inline= link(instance)
+    li.inline class=(@instance == instance ? "bold" : "") = link(instance)
 
 == slim :'partials/spans', layout: nil
 
