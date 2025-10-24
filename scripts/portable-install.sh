@@ -30,6 +30,8 @@ run0 sh <<EOF
   echo Updating collectrack component via systemd-sysupdate
   /lib/systemd/systemd-sysupdate -C collectrack update
 EOF
-echo -e To update, run run0 ${GREEN}/lib/systemd/systemd-sysupdate -C collectrack update${NC}
+echo -e Collectrack portable installation complete
+echo -e To update collectrack, run ${GREEN}/lib/systemd/systemd-sysupdate -C collectrack update${NC}
 echo -e View installed portables with ${GREEN}portablectl list${NC}
-echo -e To uninstall, remove ${RED}/etc/sysupdate.collectrack.d/ and portables${NC}
+echo -e Collectrack may be started with ${GREEN}portable attach --now collectrack${NC}
+echo -e To uninstall, remove ${RED}/etc/sysupdate.collectrack.d/${NC} and ${RED}portables${NC}

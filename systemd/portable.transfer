@@ -12,3 +12,4 @@ Type=subvolume
 Path=/var/lib/portables
 MatchPattern=collectrack_@v
 CurrentSymlink=collectrack
+ReadOnly=true
