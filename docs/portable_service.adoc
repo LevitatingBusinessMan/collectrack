@@ -69,7 +69,17 @@ ExecStart=/opt/collectrack/bin/puma -e production -b unix:/run/collectrack/colle
 RuntimeDirectory=collectrack
 ```
 
-If you're unsure of what version you're using, you can get the current version of a running instance via reading the HTTP headers: `curl -Is http://127.0.0.1:3344 | grep x-collectrack`.
+== Updating
+When using the https://www.freedesktop.org/software/systemd/man/latest/sysupdate.d.html[sysupdate.d(8)] target you do the following:
+
+```
+/lib/systemd/systemd-sysupdate -C collectrack update
+portablectl reattach --now collectrack
+```
+
+The current version will always be tracked via a symlink at `/var/lib/portables/collectrack`.
+
+You can view the version of a running instance via reading the HTTP headers: `curl -Is http://127.0.0.1:3344 | grep x-collectrack`.
 
 == See also
 - https://systemd.io/PORTABLE_SERVICES/[Portable Services]
