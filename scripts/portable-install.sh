@@ -11,6 +11,14 @@ if [[ $actual_systemd_version -lt $minimum_systemd_version ]]; then
   exit 1
 fi
 echo Systemd version: $actual_systemd_version
+if [[ ! -f /bin/portablectl ]]; then
+  echo Error: /bin/portablectl not present, you may need to install systemd-portable
+  exit 1
+fi
+if [[ ! -f /lib/systemd/systemd-sysupdate ]]; then
+  echo Error: /lib/systemd/systemd-sysupdate not present, you may need to install experimental systemd features
+  exit 1
+fi
 if [[ ! -d /var/lib/portables ]]; then
   echo Error: /var/lib/portables directory does not exist
   exit 1
@@ -34,4 +42,4 @@ echo -e Collectrack portable installation complete
 echo -e To update collectrack, run ${GREEN}/lib/systemd/systemd-sysupdate -C collectrack update${NC}
 echo -e View installed portables with ${GREEN}portablectl list${NC}
 echo -e Collectrack may be started with ${GREEN}portable attach --now collectrack${NC}
-echo -e To uninstall, remove ${RED}/etc/sysupdate.collectrack.d/${NC} and ${RED}portables${NC}
+echo -e To uninstall, remove ${RED}/etc/sysupdate.collectrack.d/${NC} and installed portables
