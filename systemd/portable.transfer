@@ -1,0 +1,14 @@
+[Transfer]
+ChangeLog=https://github.com/LevitatingBusinessMan/collectrack/releases/tag/@v
+Verify=no
+
+[Source]
+Type=url-tar
+Path=https://github.com/LevitatingBusinessMan/collectrack/releases/latest/download/
+MatchPattern=collectrack_@v-portable.tar.xz
+
+[Target]
+Type=subvolume
+Path=/var/lib/portables
+MatchPattern=collectrack_@v
+CurrentSymlink=collectrack
