@@ -3,4 +3,3 @@ title: CPU-#{@name} frequency
 vertical_label: Hz
 lines:
   - legend: frequency
-    thickness: 2
