@@ -13,6 +13,7 @@ WatchdogSec=10
 BindReadOnlyPaths=-/etc/collectd.conf /var/lib/collectd
 Group=collectd
 CacheDirectory=fontconfig
+RuntimeDirectory=collectrack
 
 [Install]
 WantedBy=multi-user.target
