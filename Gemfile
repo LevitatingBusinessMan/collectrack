@@ -16,9 +16,9 @@ gem "collectd", "~> 0.0.15"
 
 gem "concurrent-ruby", "~> 1.3"
 
-gem "rake", "~> 13.2" , group: :development
+gem "racc", "~> 1.8"
 
-gem "racc", "~> 1.8" , group: :development
+gem "rake", "~> 13.2" , group: :development
 
 gem "rack-mini-profiler", "~> 3.3", group: :development
 
