@@ -12,7 +12,7 @@ title: Traffic
 # types/if_octets.yaml
 ---
 unit: Packets
-inverse: [rx]
+inverted: [rx]
 
 # types/cpu.yaml
 ---
@@ -40,7 +40,7 @@ Those types may also be split under different instances. `type[-instance]`
 Those type or type instances contain either one dataset (ds) named `value` or multiple datasets.
 
 For instance, a system may have one `load` plugin, but multiple `cpu` plugin instances (`cpu-0`, `cpu-1` etc).
-The `load` plugin has a single type `load`. But the `cpu-x` plugin instances have multiple instances of the `cpu` type (`cpu-idle`, `cpu-wait` etc).
+The `load` plugin has a single type `load` with multiple datasets (`shortterm`, `midterm` etc.). But the `cpu-x` plugin instances have multiple instances of the `cpu` type (`cpu-idle`, `cpu-wait` etc).
 
 = YAML Document SPEC
 Each yaml document describes how to draw one or more graphs for a type.
@@ -81,6 +81,9 @@ Value should be a hash where the key is the `ds-name` and value an rrdgraph comp
 An order for type instances to be plotted in.
 Requires that `group` be true.
 ds-names not included in the list will be appended randomly.
+
+==== inverted: [ds]
+What ds-names or type-instances should be drawn inverted.
 
 ==== skipscale: [ds]
 List of ds-names that need `:skipscale` applied
