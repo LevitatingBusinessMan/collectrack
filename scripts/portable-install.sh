@@ -43,5 +43,5 @@ EOF
 echo -e Collectrack portable installation complete
 echo -e To update collectrack, run ${GREEN}/lib/systemd/systemd-sysupdate -C collectrack update${NC}
 echo -e View installed portables with ${GREEN}portablectl list${NC}
-echo -e Collectrack may be started with ${GREEN}portable attach --now collectrack${NC}
+echo -e Collectrack may be started with ${GREEN}portablectl attach --now collectrack${NC}
 echo -e To uninstall, remove ${RED}/etc/sysupdate.collectrack.d/${NC} and installed portables
