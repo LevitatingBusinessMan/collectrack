@@ -12,6 +12,7 @@ Restart=on-failure
 WatchdogSec=10
 BindReadOnlyPaths=-/etc/collectd.conf /var/lib/collectd
 Group=collectd
+CacheDirectory=fontconfig
 
 [Install]
 WantedBy=multi-user.target
