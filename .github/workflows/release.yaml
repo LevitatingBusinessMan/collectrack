@@ -7,8 +7,10 @@ on:
   pull_request:
 
 jobs:
-  mkosi:
+  mkosi-portable:
     runs-on: ubuntu-latest
+    outputs:
+      portable_filename: ${{ steps.filename.outputs.portable_filename }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -73,7 +75,7 @@ jobs:
   create-draft-release:
     runs-on: ubuntu-latest
     if: github.ref_type == 'tag'
-    needs: [mkosi, vendor, changelog]
+    needs: [mkosi-portable, vendor, changelog]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/download-artifact@v4
@@ -86,12 +88,12 @@ jobs:
         with:
           name: changelog
       - name: Checksum image
-        run: sha256sum ${{ needs.mkosi.outputs.portable_filename }} vendor.tar.xz > SHA256SUMS
+        run: sha256sum ${{ needs.mkosi-portable.outputs.portable_filename }} vendor.tar.xz > SHA256SUMS
       - name: Create draft release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create ${{ github.ref_name }} --draft --title "${{ github.ref_name }}" -F changelog.txt
-          gh release upload ${{ github.ref_name }} ${{ needs.mkosi.outputs.portable_filename }}
+          gh release upload ${{ github.ref_name }} ${{ needs.mkosi-portable.outputs.portable_filename }}
           gh release upload ${{ github.ref_name }} vendor.tar.xz
           gh release upload ${{ github.ref_name }} SHA256SUMS
