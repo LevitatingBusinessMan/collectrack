@@ -18,12 +18,15 @@ jobs:
       - uses: systemd/mkosi@v25.3
       - name: Run mkosi
         run: mkosi build
+      - name: Calculate portable filename
+        id: filename
+        run: echo portable_filename=collectrack_$(git describe --tags --always | sed 's/-\([0-9]*\)-g/.r\1.g/')-portable.tar.xz >> "$GITHUB_OUTPUT"
       - name: Rename tarball
-        run: mv collectrack.tar.xz collectrack_$(git describe --tags --always | sed 's/-\([0-9]*\)-g/.r\1.g/')-portable.tar.xz
+        run: mv collectrack.tar.xz ${{ steps.filename.outputs.portable_filename }}
       - uses: actions/upload-artifact@v4
         with:
           name: portable-rootfs
-          path: collectrack_${{ github.ref_name }}-portable.tar.xz
+          path: ${{ steps.filename.outputs.portable_filename }}
           if-no-files-found: error
 
   vendor:
@@ -83,12 +86,12 @@ jobs:
         with:
           name: changelog
       - name: Checksum image
-        run: sha256sum collectrack_${{ github.ref_name }}-portable.tar.xz vendor.tar.xz > SHA256SUMS
+        run: sha256sum ${{ needs.mkosi.outputs.portable_filename }} vendor.tar.xz > SHA256SUMS
       - name: Create draft release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create ${{ github.ref_name }} --draft --title "${{ github.ref_name }}" -F changelog.txt
-          gh release upload ${{ github.ref_name }} collectrack_${{ github.ref_name }}-portable.tar.xz
+          gh release upload ${{ github.ref_name }} ${{ needs.mkosi.outputs.portable_filename }}
           gh release upload ${{ github.ref_name }} vendor.tar.xz
           gh release upload ${{ github.ref_name }} SHA256SUMS
