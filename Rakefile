@@ -34,7 +34,6 @@ EOF
   `git add src/version.rb`
   `git commit -m "src/version.rb #{args[:version]}" --no-edit`
   `git tag #{args[:version]}`
-  `git tag -f latest`
 end
 
 desc "Generate a changelog"
