@@ -11,11 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-tags: true
+          ref: ${{ github.ref }}
+          fetch-depth: 0
       - uses: systemd/mkosi@v25.3
       - name: Run mkosi
         run: mkosi build
       - name: Rename tarball
-        run: mv collectrack.tar.xz collectrack_${{ github.ref_name }}-portable.tar.xz
+        run: mv collectrack.tar.xz collectrack_$(git describe --tags --always | sed 's/-\([0-9]*\)-g/.r\1.g/')-portable.tar.xz
       - uses: actions/upload-artifact@v4
         with:
           name: portable-rootfs
