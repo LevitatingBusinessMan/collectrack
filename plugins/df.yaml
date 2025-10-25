@@ -1,0 +1,27 @@
+---
+title: Disk usage (#{self})
+stacked: true
+area: true
+vertical_label: Bytes
+lines:
+  - legend: used
+    file: df_complex-used
+  - legend: reserved
+    file: df_complex-reserved
+  - legend: free
+    file: df_complex-free
+    color: "#EEEEEE"
+---
+title: Disk usage percentage (#{self})
+opts: ["--upper-limit=100", "--lower-limit=0", "--rigid"]
+vertical_label: Percent
+stacked: true
+area: true
+lines:
+  - legend: used
+    file: percent_bytes-used
+  - legend: reserved
+    file: percent_bytes-reserved
+  - legend: free
+    file: percent_bytes-free
+    color: "#EEEEEE"
