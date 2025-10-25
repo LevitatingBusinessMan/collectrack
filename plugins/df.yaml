@@ -3,6 +3,7 @@ title: Disk usage (#{self})
 stacked: true
 area: true
 vertical_label: Bytes
+opts: ["--lower-limit=0", "-M", "--rigid"]
 lines:
   - legend: used
     file: df_complex-used
