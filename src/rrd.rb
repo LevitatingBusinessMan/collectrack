@@ -66,7 +66,8 @@ module Graphable
       "--title=#{evalstr yaml[:title]} on #{@host}",
       "--width=#{options[:width] || DEFAULT_GRAPH_WIDTH}",
       "--height=#{options[:height] || DEFAULT_GRAPH_HEIGHT}",
-      "--full-size-mode"
+      "--font=DEFAULT:#{options[:font] || "0"}",
+      "--full-size-mode",
     ]
     args << "--vertical-label=#{yaml[:vertical_label]}" if yaml[:vertical_label]
 

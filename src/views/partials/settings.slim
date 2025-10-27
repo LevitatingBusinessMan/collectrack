@@ -9,7 +9,7 @@ details#settings
       input#refresh name="refresh" placeholder="none" value=@query[:refresh]
       span.defaults
         button.default type="button" onclick="$('#refresh').value = ''" none
-        button.default type="button" onclick="$('#refresh').value = 10" 10
+        button.default type="button" onclick="$('#refresh').value = #{Config.interval}" = Config.interval
     p
       label Width:
       input#width name="width" placeholder=Graphable::DEFAULT_GRAPH_WIDTH value=@query[:width]
@@ -17,6 +17,7 @@ details#settings
         button.default type="button" onclick="$('#width').value = ''; $('#height').value = ''" default
         button.default type="button" onclick="$('#width').value = 400; $('#height').value = 200; $('#comments').checked = 1" small
         button.default type="button" onclick="$('#width').value = 1200; $('#height').value = 400" big
+        button.default type="button" onclick="$('#width').value = 2000; $('#height').value = 1000; $('#font').value = 16" bigger
     p
       label Height:
       input#height name="height" placeholder=Graphable::DEFAULT_GRAPH_HEIGHT value=@query[:height]
@@ -28,6 +29,11 @@ details#settings
         option value="min" selected=(current_cf == "min") minimum
         option value="avg" selected=(current_cf == "avg") average
         option value="max" selected=(current_cf == "max") maximum
+    p
+      label Font size:
+      input#font name="font" placeholder="none" value=@query[:font]
+      span.defaults
+        button.default type="button" onclick="$('#font').value = ''" default
     p
       label Do not place comments:
       input#comments name="nocomment" type="checkbox" checked=@query[:nocomment] value="1"
