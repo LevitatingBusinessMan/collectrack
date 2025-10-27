@@ -1,4 +1,4 @@
-details
+details#settings
   summary Settings
   form#settings action=@uri
     p
@@ -6,13 +6,20 @@ details
       input name="span" placeholder=Graphable::DEFAULT_SPAN value=@query[:span]
     p
       label Refresh interval:
-      input name="refresh" placeholder="none" value=@query[:refresh]
+      input#refresh name="refresh" placeholder="none" value=@query[:refresh]
+      span.defaults
+        button.default type="button" onclick="$('#refresh').value = ''" none
+        button.default type="button" onclick="$('#refresh').value = 10" 10
     p
       label Width:
-      input name="width" placeholder=Graphable::DEFAULT_GRAPH_WIDTH value=@query[:width]
+      input#width name="width" placeholder=Graphable::DEFAULT_GRAPH_WIDTH value=@query[:width]
+      span.defaults
+        button.default type="button" onclick="$('#width').value = ''; $('#height').value = ''" default
+        button.default type="button" onclick="$('#width').value = 400; $('#height').value = 200; $('#comments').checked = 1" small
+        button.default type="button" onclick="$('#width').value = 1200; $('#height').value = 400" big
     p
       label Height:
-      input name="height" placeholder=Graphable::DEFAULT_GRAPH_HEIGHT value=@query[:height]
+      input#height name="height" placeholder=Graphable::DEFAULT_GRAPH_HEIGHT value=@query[:height]
     p
       label Aggregation:
       select name="cf"
@@ -23,7 +30,7 @@ details
         option value="max" selected=(current_cf == "max") maximum
     p
       label Do not place comments:
-      input name="nocomment" type="checkbox" checked=@query[:nocomment] value="1"
+      input#comments name="nocomment" type="checkbox" checked=@query[:nocomment] value="1"
     p
       button SAVE
       button type="button" onclick="location.href='#{@uri.path}'" RESET

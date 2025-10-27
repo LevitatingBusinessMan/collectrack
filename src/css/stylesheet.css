@@ -53,3 +53,7 @@ pre#code {
 .bold {
   font-weight: bold;
 }
+
+form#settings .defaults {
+  margin-left: 5px;
+}
