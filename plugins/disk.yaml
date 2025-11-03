@@ -2,6 +2,7 @@
 title: "Time spent doing I/O (#{self})"
 vertical_label: Milliseconds
 file: disk_io_time
+opts: ["--upper-limit=1000"]
 lines:
   - ds: io_time
 ---
