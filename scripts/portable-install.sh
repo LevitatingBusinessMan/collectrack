@@ -40,6 +40,7 @@ run0 sh <<EOF
   /lib/systemd/systemd-sysupdate -C collectrack update
 EOF
 
+echo
 echo -e Collectrack portable installation complete
 echo -e To update collectrack, run ${GREEN}/lib/systemd/systemd-sysupdate -C collectrack update${NC}
 echo -e View installed portables with ${GREEN}portablectl list${NC}
