@@ -56,7 +56,7 @@ ExecStart=/opt/collectrack/bin/puma -e production -p 8080
 
 Per default the service runs with `DynamicUser=yes` but also `Group=collectd`. So to allow read access to the collectd.conf you could do `groupadd collectd && chown :collectd /etc/collectd.conf`.
 
-If you keep running into permission issues, you can choose to attach the images with the "trusted" profile via the `-p` flag on `importctl(1)`.
+If you keep running into permission issues, you can choose to attach the images with the "trusted" profile via the `-p` flag on `portablectl(1)`.
 
 For the `FLUSH` feature, collectrack needs write access to `/run/collectd.sock`. However, the `default` profile already mounts `/run` as writable.
 The path and permissions for the socket are configured in the `Plugin unixsock` section of `collectd.conf`.
