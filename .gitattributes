@@ -10,3 +10,4 @@ export-ignore .rspec
 export-ignore Rakefile
 export-ignore icon.png
 export-ignore scripts
+export-ignore RELEASING.md

@@ -1,0 +1,18 @@
+To release Collectrack, run `rake release x.y.z`.
+Then push the commit and tags to github.
+
+The Github CI will build a draft release with an automatically generated changelog and artifacts.
+Please add a short explenation of the changes. 
+
+A vendor tarball can be made using `rake vendor` and used for packaging.
+This may be useful for offline build systems.
+
+The OpenSUSE package specifically may be updated by (optionally) the vendor tarball and running the following fish script:
+
+```fish
+#!/usr/bin/env fish
+osc rm (basename (pwd))-*{.obscpio,.tar}
+osc service ra
+osc add (basename (pwd))-*{.obscpio,.tar}
+osc ci
+```
