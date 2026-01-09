@@ -19,7 +19,7 @@ end
 
 desc "Generate vendor tarball"
 task :vendor do
-  `BUNDLE_DEPLOYMENT=true bundle cache --all-platforms`
+  `BUNDLE_DEPLOYMENT=true BUNDLE_WITHOUT=deployment bundle cache --no-install`
   `tar cJf vendor.tar.xz vendor`
   FileUtils.rm_r "vendor"
 end
