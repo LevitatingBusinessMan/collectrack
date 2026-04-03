@@ -8,7 +8,7 @@ Path=https://github.com/LevitatingBusinessMan/collectrack/releases/latest/downlo
 MatchPattern=collectrack_@v-portable.tar.xz
 
 [Target]
-Type=subvolume
+Type=directory
 Path=/var/lib/portables
 MatchPattern=collectrack_@v
 CurrentSymlink=collectrack
