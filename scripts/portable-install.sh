@@ -36,13 +36,13 @@ run0 sh <<EOF
   mkdir -vp /etc/sysupdate.collectrack.d/
   echo Installing /etc/sysupdate.collectrack.d/portable.target
   curl --fail-with-body -L -o /etc/sysupdate.collectrack.d/portable.transfer https://raw.githubusercontent.com/LevitatingBusinessMan/collectrack/refs/heads/master/systemd/portable.transfer
-  echo Updating collectrack component via systemd-sysupdate
-  /lib/systemd/systemd-sysupdate -C collectrack update
+  echo Updating collectrack component via updatectl
+  updatectl update components:collectrack
 EOF
 
 echo
 echo -e Collectrack portable installation complete
-echo -e To update collectrack, run ${GREEN}/lib/systemd/systemd-sysupdate -C collectrack update${NC}
+echo -e To update collectrack, run ${GREEN}updatectl update components:collectrack${NC}
 echo -e View installed portables with ${GREEN}portablectl list${NC}
 echo -e Collectrack may be started with ${GREEN}portablectl attach --now collectrack${NC}
 echo -e To uninstall, remove ${RED}/etc/sysupdate.collectrack.d/${NC} and installed portables using ${RED}portablectl remove${NC}

@@ -74,7 +74,7 @@ RuntimeDirectory=collectrack
 When using the https://www.freedesktop.org/software/systemd/man/latest/sysupdate.d.html[sysupdate.d(8)] target you do the following:
 
 ```
-/lib/systemd/systemd-sysupdate -C collectrack update
+updatectl update components:collectrack
 portablectl reattach --now collectrack
 ```
 
