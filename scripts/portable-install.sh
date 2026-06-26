@@ -32,10 +32,8 @@ fi
 echo Elevating privileges via run0
 run0 sh <<EOF
   set -e
-  echo Creating directory /etc/sysupdate.collectrack.d/
-  mkdir -vp /etc/sysupdate.collectrack.d/
   echo Installing /etc/sysupdate.collectrack.d/portable.transfer
-  curl --fail-with-body -L -o /etc/sysupdate.collectrack.d/portable.transfer https://raw.githubusercontent.com/LevitatingBusinessMan/collectrack/refs/heads/master/systemd/portable.transfer
+  curl --fail-with-body -L -o /etc/sysupdate.collectrack.d/portable.transfer --create-dirs https://raw.githubusercontent.com/LevitatingBusinessMan/collectrack/refs/heads/master/systemd/portable.transfer
   echo Updating collectrack component via updatectl
   updatectl update components:collectrack
 EOF
